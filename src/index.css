@@ -1,0 +1,230 @@
+/*
+ * ResQPH design system — Red & White edition
+ *
+ * Fonts
+ *   Bebas Neue      — condensed all-caps display (impact, urgency)
+ *   Outfit          — geometric humanist sans, clean at every size
+ *   JetBrains Mono  — coordinates, codes, status labels
+ *
+ * Palette: rescue red (#D62828) on pure white. Dark surfaces use a
+ * deep red-tinted near-black — never brown, never grey.
+ *
+ * Semantic token layers
+ *   --color-*    → role-based decisions  (brand, status)
+ *   --surface-*  → background hierarchy
+ *   --text-*     → foreground hierarchy
+ *   --border-*   → strokes & dividers
+ *   Raw hex      → only inside THIS file
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* ── Primitives (raw hex – never used in component CSS) ───────────── */
+:root {
+  --_white:        #ffffff;
+  --_off-white:    #fafafa;
+  --_red-50:       #fff1f1;
+  --_red-100:      #ffd6d6;
+  --_red-300:      #f47171;
+  --_red-400:      #e84040;
+  --_red-500:      #d62828;   /* brand */
+  --_red-600:      #b71c1c;
+  --_red-700:      #921212;
+  --_red-900:      #4a0808;
+
+  --_dark-base:    #120808;   /* near-black, red-tinted */
+  --_dark-1:       #1a0c0c;
+  --_dark-2:       #210f0f;
+  --_dark-3:       #2c1414;
+  --_dark-4:       #3a1a1a;
+
+  --_green-400:    #22c55e;
+  --_amber-400:    #f59e0b;
+  --_blue-400:     #60a5fa;
+
+  /* ── Semantic: Brand ─────────────────────────────────────────────── */
+  --color-brand:          var(--_red-500);
+  --color-brand-hover:    var(--_red-400);
+  --color-brand-deep:     var(--_red-700);
+  --color-brand-subtle:   rgb(214 40 40 / 10%);
+  --color-brand-border:   rgb(214 40 40 / 35%);
+  --color-brand-glow:     rgb(214 40 40 / 28%);
+
+  /* ── Semantic: Status ────────────────────────────────────────────── */
+  --color-danger:          var(--_red-400);
+  --color-danger-text:     var(--_red-300);
+  --color-danger-surface:  rgb(232 64 64 / 12%);
+  --color-danger-border:   rgb(232 64 64 / 32%);
+
+  --color-success:         var(--_green-400);
+  --color-success-surface: rgb(34 197 94 / 12%);
+  --color-success-border:  rgb(34 197 94 / 28%);
+
+  --color-warning:         var(--_amber-400);
+  --color-warning-surface: rgb(245 158 11 / 12%);
+  --color-warning-border:  rgb(245 158 11 / 28%);
+
+  --color-info:            var(--_blue-400);
+  --color-info-surface:    rgb(96 165 250 / 12%);
+  --color-info-border:     rgb(96 165 250 / 28%);
+
+  /* ── Semantic: Surfaces (dark default) ───────────────────────────── */
+  --surface-base:          var(--_dark-base);
+  --surface-raised:        var(--_dark-1);
+  --surface-elevated:      var(--_dark-2);
+  --surface-overlay:       var(--_dark-3);
+
+  /* Light band (how-it-works section) */
+  --surface-light:         var(--_white);
+  --surface-light-raised:  var(--_off-white);
+  --surface-light-border:  rgb(214 40 40 / 12%);
+
+  /* ── Semantic: Text (on dark) ────────────────────────────────────── */
+  --text-primary:          var(--_white);
+  --text-secondary:        rgb(255 255 255 / 72%);
+  --text-tertiary:         rgb(255 255 255 / 46%);
+  --text-disabled:         rgb(255 255 255 / 26%);
+
+  /* Text on light surfaces */
+  --text-on-light:           #120808;
+  --text-on-light-secondary: #5a2424;
+  --text-on-light-tertiary:  #8a4040;
+
+  /* ── Semantic: Borders (on dark) ─────────────────────────────────── */
+  --border-subtle:   rgb(255 255 255 / 8%);
+  --border-default:  rgb(255 255 255 / 14%);
+  --border-strong:   rgb(255 255 255 / 24%);
+
+  /* ── Fonts ───────────────────────────────────────────────────────── */
+  --font-display: 'Bebas Neue', 'Arial Narrow', 'Impact', sans-serif;
+  --font-body:    'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+
+  /* ── Layout & motion ─────────────────────────────────────────────── */
+  --shell: min(1200px, calc(100% - 48px));
+  --ease:  cubic-bezier(0.22, 0.68, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── Base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  color-scheme: dark;
+  background-color: var(--surface-base);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  line-height: 1.65;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-primary);
+  background-color: var(--surface-base);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Bebas Neue is all-caps by nature — no weight axis, single face */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.0;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+p   { margin: 0; }
+a   { color: inherit; text-decoration: none; }
+
+button, input, textarea, select { font: inherit; color: inherit; }
+img, svg { display: block; max-width: 100%; }
+
+::selection {
+  color: var(--_white);
+  background: var(--color-brand);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand-hover);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Shared field-operations theme: quiet surfaces, high contrast, one clear emergency accent. */
+:root {
+  color-scheme: light;
+  --_off-white: #f7f8f6;
+  --_red-50: #fff1f0;
+  --_red-100: #ffd9d4;
+  --_red-300: #e96b61;
+  --_red-400: #d94b40;
+  --_red-500: #c9362d;
+  --_red-600: #a92b25;
+  --_red-700: #81231f;
+  --_dark-base: #f3f5f2;
+  --_dark-1: #ffffff;
+  --_dark-2: #eef1ee;
+  --_dark-3: #e6ebe7;
+  --_dark-4: #d8e0da;
+  --_green-400: #2f7d5a;
+  --_amber-400: #ad6d12;
+  --_blue-400: #2e6d9d;
+  --color-brand: var(--_red-500);
+  --color-brand-hover: var(--_red-600);
+  --color-brand-deep: var(--_red-700);
+  --color-brand-subtle: rgb(201 54 45 / 9%);
+  --color-brand-border: rgb(201 54 45 / 26%);
+  --color-brand-glow: rgb(201 54 45 / 18%);
+  --color-danger: var(--_red-500);
+  --color-danger-text: var(--_red-700);
+  --color-danger-surface: rgb(201 54 45 / 9%);
+  --color-danger-border: rgb(201 54 45 / 24%);
+  --color-success: var(--_green-400);
+  --color-success-surface: rgb(47 125 90 / 9%);
+  --color-success-border: rgb(47 125 90 / 22%);
+  --color-warning: var(--_amber-400);
+  --color-warning-surface: rgb(173 109 18 / 10%);
+  --color-warning-border: rgb(173 109 18 / 24%);
+  --color-info: var(--_blue-400);
+  --color-info-surface: rgb(46 109 157 / 9%);
+  --color-info-border: rgb(46 109 157 / 22%);
+  --surface-base: var(--_dark-base);
+  --surface-raised: var(--_dark-1);
+  --surface-elevated: var(--_dark-2);
+  --surface-overlay: var(--_dark-1);
+  --surface-light: #ffffff;
+  --surface-light-raised: var(--_off-white);
+  --surface-light-border: #dfe5e0;
+  --text-primary: #17201c;
+  --text-secondary: #53625b;
+  --text-tertiary: #7a8981;
+  --text-disabled: #a9b3ad;
+  --text-on-light: #17201c;
+  --text-on-light-secondary: #53625b;
+  --text-on-light-tertiary: #7a8981;
+  --border-subtle: #e5eae6;
+  --border-default: #d5ded7;
+  --border-strong: #b8c6bc;
+  --font-display: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+}
+
+body { color-scheme: light; background: var(--surface-base); color: var(--text-primary); }
+h1, h2, h3, h4, h5, h6 { font-weight: 600; letter-spacing: -0.025em; }
