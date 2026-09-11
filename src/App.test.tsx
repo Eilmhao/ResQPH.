@@ -36,24 +36,24 @@ describe('App', () => {
 
   it('renders the landing page at /', () => {
     renderApp('/')
-    expect(screen.getByRole('heading', { name: /real people/i })).toBeInTheDocument()
-    expect(screen.getByText(/connecting affected communities/i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /ResQPH/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Get Started/i })).toBeInTheDocument()
   })
 
   it('renders the login page at /login', () => {
     renderApp('/login')
-    expect(screen.getByRole('heading', { name: /welcome back/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Sign in with email/i })).toBeInTheDocument()
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
   })
 
   it('renders the signup page at /signup', () => {
     renderApp('/signup')
-    expect(screen.getByRole('heading', { name: /get started/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Create an account/i })).toBeInTheDocument()
     expect(screen.getByLabelText(/full name/i)).toBeInTheDocument()
   })
 
   it('redirects /dashboard to /login when not authenticated', () => {
     renderApp('/dashboard')
-    expect(screen.getByRole('heading', { name: /welcome back/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Sign in with email/i })).toBeInTheDocument()
   })
 })

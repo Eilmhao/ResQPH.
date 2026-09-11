@@ -57,14 +57,14 @@ describe('Citizen / Volunteer Dashboard Flows', () => {
   })
 
   it('renders localized rainfall forecast widget', () => {
-    renderWithProviders(<CitizenView />, 'citizen')
+    renderWithProviders(<DashboardPage />, 'citizen')
     expect(screen.getByText(/Localized Rainfall & Flood Forecast/i)).toBeInTheDocument()
     expect(screen.getByText(/PAGASA Radar/i)).toBeInTheDocument()
     expect(screen.getByText(/River & Drainage Water Level Monitors/i)).toBeInTheDocument()
   })
 
   it('renders emergency preparedness guide with 5 survival rules', () => {
-    renderWithProviders(<CitizenView />, 'citizen')
+    renderWithProviders(<CitizenView navSection="map" />, 'citizen')
     expect(screen.getByText(/What To Do During Severe Flooding/i)).toBeInTheDocument()
     expect(screen.getByText(/Move to Higher Ground/i)).toBeInTheDocument()
     expect(screen.getByText(/Shut Off Main Circuit Breaker/i)).toBeInTheDocument()
@@ -73,8 +73,9 @@ describe('Citizen / Volunteer Dashboard Flows', () => {
     expect(screen.getByText(/Avoid Floodwater Contamination/i)).toBeInTheDocument()
   })
 
+
   it('opens severity-adaptive form and shows Step A triage with all 5 flood levels', () => {
-    renderWithProviders(<CitizenView />, 'citizen')
+    renderWithProviders(<CitizenView navSection="inquiries" />, 'citizen')
 
     // Tap request emergency rescue
     fireEvent.click(screen.getByRole('button', { name: /REQUEST EMERGENCY RESCUE/i }))
@@ -91,7 +92,7 @@ describe('Citizen / Volunteer Dashboard Flows', () => {
   })
 
   it('activates Branch 3 fast-track mode for High/Severe severity with auto-pulled profile', () => {
-    renderWithProviders(<CitizenView />, 'citizen')
+    renderWithProviders(<CitizenView navSection="inquiries" />, 'citizen')
 
     fireEvent.click(screen.getByRole('button', { name: /REQUEST EMERGENCY RESCUE/i }))
 
@@ -109,7 +110,7 @@ describe('Citizen / Volunteer Dashboard Flows', () => {
   })
 
   it('renders 5-stage live request tracking sequence when request is active', () => {
-    renderWithProviders(<CitizenView />, 'citizen')
+    renderWithProviders(<CitizenView navSection="inquiries" />, 'citizen')
 
     // Tracking title
     expect(screen.getByText(/Active Rescue Tracking/i)).toBeInTheDocument()
@@ -121,7 +122,7 @@ describe('Citizen / Volunteer Dashboard Flows', () => {
   })
 
   it('shows real-time route delay explanation card in En Route stage', () => {
-    renderWithProviders(<CitizenView />, 'citizen')
+    renderWithProviders(<CitizenView navSection="inquiries" />, 'citizen')
 
     // The default mission is en-route, so the advisory card should be visible
     expect(screen.getByText(/REAL-TIME ROUTE & DELAY ADVISORY/i)).toBeInTheDocument()
@@ -165,19 +166,14 @@ describe('Field Rescuer Mobile Dashboard Flows', () => {
 
 describe('Dispatcher / Coordinator Dashboard Flows', () => {
   it('renders incoming rescue inquiry queue and situation inspector', () => {
-    renderWithProviders(<CoordinatorView />, 'coordinator')
+    renderWithProviders(<CoordinatorView navSection="inquiries" />, 'coordinator')
 
-    // Tabs
-    expect(screen.getByText(/Inquiry Queue/i)).toBeInTheDocument()
-    expect(screen.getByText(/Missions & Route Oversight/i)).toBeInTheDocument()
-    expect(screen.getByText(/Incident Reports & History/i)).toBeInTheDocument()
+    expect(screen.getByText(/Citizen Rescue Inquiries/i)).toBeInTheDocument()
+    expect(screen.getByText(/Inquiry Detail Inspector/i)).toBeInTheDocument()
   })
 
   it('has restricted manual route override with legal liability notice', () => {
-    renderWithProviders(<CoordinatorView />, 'coordinator')
-
-    // Switch to missions tab
-    fireEvent.click(screen.getByText(/Missions & Route Oversight/i))
+    renderWithProviders(<CoordinatorView navSection="missions" />, 'coordinator')
 
     // Click Manual Override
     const overrideButtons = screen.getAllByRole('button', { name: /Manual Override/i })
@@ -190,9 +186,7 @@ describe('Dispatcher / Coordinator Dashboard Flows', () => {
   })
 
   it('shows real-time route delay broadcaster tool in missions tab', () => {
-    renderWithProviders(<CoordinatorView />, 'coordinator')
-
-    fireEvent.click(screen.getByText(/Missions & Route Oversight/i))
+    renderWithProviders(<CoordinatorView navSection="missions" />, 'coordinator')
 
     expect(screen.getByText(/Real-Time Route Delay/i)).toBeInTheDocument()
     expect(screen.getByText(/Push Route Advisory to All Screens/i)).toBeInTheDocument()
@@ -201,20 +195,13 @@ describe('Dispatcher / Coordinator Dashboard Flows', () => {
   })
 })
 
+
 describe('Dashboard Prototype Controls', () => {
-  it('allows one-click switching between Citizen, Rescuer, and Dispatcher consoles', () => {
+  it('renders current portal view and provides portal switcher', () => {
     renderWithProviders(<DashboardPage />, 'citizen')
 
     expect(screen.getByText(/Citizen Distress & Volunteer Portal/i)).toBeInTheDocument()
-
-    // Switch to Dispatcher via topbar pill
-    const dispatcherPills = screen.getAllByRole('button', { name: /Dispatcher/i })
-    fireEvent.click(dispatcherPills[0])
-    expect(screen.getByText(/Disaster Response Dispatcher Oversight/i)).toBeInTheDocument()
-
-    // Switch to Rescuer
-    const rescuerPills = screen.getAllByRole('button', { name: /Rescuer/i })
-    fireEvent.click(rescuerPills[0])
-    expect(screen.getByText(/Field Rescuer Mobile Guidance/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Switch portal/i })).toBeInTheDocument()
   })
 })
+

@@ -4,60 +4,74 @@ import { ResqLogo } from '../../components/brand/ResqLogo'
 import './auth.css'
 
 interface AuthLayoutProps {
-  title: string
-  subtitle: string
+  title?: string
+  subtitle?: string
   children: ReactNode
-  footer: ReactNode
+  footer?: ReactNode
+  iconBadge?: ReactNode
+  hideHeader?: boolean
 }
 
-export function AuthLayout({ title, subtitle, children, footer }: AuthLayoutProps) {
+export function AuthLayout({
+  title,
+  subtitle,
+  children,
+  footer,
+  iconBadge,
+  hideHeader = false,
+}: AuthLayoutProps) {
   return (
-    <div className={`auth ${title === 'Get started' ? 'auth--signup' : 'auth--login'}`}>
-      <Link to="/" className="auth__floating-brand">
-        <ResqLogo size={24} />
-        <span>ResQPH</span>
-      </Link>
-      <div className="auth__photo-bg" aria-hidden="true">
-        <div className="auth__photo auth__photo--left">
-          <img src="/resqph-flood-rescue.png" alt="" />
-        </div>
-        <div className="auth__photo-overlay" />
+    <div className="auth-sky-page">
+      {/* ── Sky & Clouds Realistic Background ── */}
+      <div className="auth-sky-bg" aria-hidden="true">
+        <div className="auth-sky-gradient" />
+        <img
+          className="auth-clouds-img"
+          src="https://images.unsplash.com/photo-1534088568595-a066f410bcda?auto=format&fit=crop&w=1920&q=80"
+          alt=""
+          loading="eager"
+        />
+        <div className="auth-clouds-tint" />
       </div>
-      {/* Editorial brand panel */}
-      <aside className="auth__aside" aria-hidden="true">
-        <div className="auth__aside-scene" />
-        <div className="auth__aside-content">
-          <Link to="/" className="auth__brand" aria-hidden="false">
-            <ResqLogo size={30} />
-            <span>ResQPH</span>
-          </Link>
-          <p className="auth__aside-quote">
-            Real People.
-            <br />
-            Real Help.
-          </p>
-          <p className="auth__aside-sub">
-            Connecting affected communities with verified volunteers and rescue
-            teams — when every second matters.
-          </p>
-          <div className="auth__signal-grid">
-            <span><strong>01</strong> Flood-aware routes</span>
-            <span><strong>02</strong> Coordinated response</span>
-          </div>
-        </div>
-      </aside>
 
-      {/* Form panel */}
-      <main className="auth__panel">
-        <div className="auth__form-wrap">
-          <Link to="/" className="auth__brand auth__brand--mobile">
-            <ResqLogo size={26} />
-            <span>ResQPH</span>
-          </Link>
-          <h1 className="auth__title">{title}</h1>
-          <p className="auth__subtitle">{subtitle}</p>
-          {children}
-          <div className="auth__footer">{footer}</div>
+      {/* ── Glowing Concentric Radial Rings (radar/beacon aura) ── */}
+      <div className="auth-radial-rings" aria-hidden="true">
+        <svg viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="500" cy="500" r="260" stroke="rgba(255, 255, 255, 0.45)" strokeWidth="1" strokeDasharray="3 4" />
+          <circle cx="500" cy="500" r="370" stroke="rgba(255, 255, 255, 0.35)" strokeWidth="1" />
+          <circle cx="500" cy="500" r="490" stroke="rgba(255, 255, 255, 0.22)" strokeWidth="1" />
+        </svg>
+      </div>
+
+      {/* ── Top-Left Brand ("ResQPH" logo badge) ── */}
+      <header className="auth-top-brand">
+        <Link to="/" className="auth-brand-link">
+          <div className="auth-brand-badge">
+            <ResqLogo size={22} />
+          </div>
+          <span className="auth-brand-name">ResQPH</span>
+        </Link>
+      </header>
+
+      {/* ── Central Glass Card ── */}
+      <main className="auth-card-container">
+        <div className="auth-glass-card">
+          {iconBadge && (
+            <div className="auth-icon-badge" aria-hidden="true">
+              {iconBadge}
+            </div>
+          )}
+
+          {!hideHeader && title && (
+            <div className="auth-card-header">
+              <h1 className="auth-card-title">{title}</h1>
+              {subtitle && <p className="auth-card-subtitle">{subtitle}</p>}
+            </div>
+          )}
+
+          <div className="auth-card-body">{children}</div>
+
+          {footer && <div className="auth-card-footer">{footer}</div>}
         </div>
       </main>
     </div>
