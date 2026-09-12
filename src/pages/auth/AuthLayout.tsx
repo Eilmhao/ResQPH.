@@ -1,79 +1,91 @@
+import { useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
-import { Link } from 'react-router-dom'
-import { ResqLogo } from '../../components/brand/ResqLogo'
 import './auth.css'
 
+const SLIDES = [
+  '/resqph-flood-rescue.png',
+  '/ResQPHposter.jpg',
+  '/ManilaMap.jpg',
+  '/LiveTracker.jpg',
+]
+
 interface AuthLayoutProps {
-  title?: string
-  subtitle?: string
   children: ReactNode
-  footer?: ReactNode
-  iconBadge?: ReactNode
-  hideHeader?: boolean
+  rawContainer?: boolean
 }
 
-export function AuthLayout({
-  title,
-  subtitle,
-  children,
-  footer,
-  iconBadge,
-  hideHeader = false,
-}: AuthLayoutProps) {
+export function AuthLayout({ children }: AuthLayoutProps) {
+  const [currentSlide, setCurrentSlide] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prevIndex) => (prevIndex + 1) % SLIDES.length)
+    }, 4500)
+    return () => clearInterval(timer)
+  }, [])
+
+  const nextSlide = () => {
+    setCurrentSlide((prevIndex) => (prevIndex + 1) % SLIDES.length)
+  }
+
+  const prevSlide = () => {
+    setCurrentSlide((prevIndex) => (prevIndex - 1 + SLIDES.length) % SLIDES.length)
+  }
+
   return (
     <div className="auth-sky-page">
-      {/* ── Sky & Clouds Realistic Background ── */}
-      <div className="auth-sky-bg" aria-hidden="true">
-        <div className="auth-sky-gradient" />
-        <img
-          className="auth-clouds-img"
-          src="https://images.unsplash.com/photo-1534088568595-a066f410bcda?auto=format&fit=crop&w=1920&q=80"
-          alt=""
-          loading="eager"
-        />
-        <div className="auth-clouds-tint" />
+      {/* Brand Logo - Upper Right */}
+      <div className="auth-top-brand">
+        <span className="auth-brand-name">ResQPH</span>
       </div>
 
-      {/* ── Glowing Concentric Radial Rings (radar/beacon aura) ── */}
-      <div className="auth-radial-rings" aria-hidden="true">
-        <svg viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="500" cy="500" r="260" stroke="rgba(255, 255, 255, 0.45)" strokeWidth="1" strokeDasharray="3 4" />
-          <circle cx="500" cy="500" r="370" stroke="rgba(255, 255, 255, 0.35)" strokeWidth="1" />
-          <circle cx="500" cy="500" r="490" stroke="rgba(255, 255, 255, 0.22)" strokeWidth="1" />
-        </svg>
+      {/* LEFT SIDE: Slideshow Section */}
+      <div className="auth-left-section">
+        {/* Render stacked slides for smooth opacity cross-fading */}
+        {SLIDES.map((slide, index) => (
+          <div
+            key={slide}
+            className={`auth-hero-layer auth-hero-blur ${
+              index === currentSlide ? 'is-active' : ''
+            }`}
+            style={{ backgroundImage: `url(${slide})` }}
+          />
+        ))}
+
+        {SLIDES.map((slide, index) => (
+          <div
+            key={`crisp-${slide}`}
+            className={`auth-hero-layer auth-hero-crisp ${
+              index === currentSlide ? 'is-active' : ''
+            }`}
+            style={{ backgroundImage: `url(${slide})` }}
+          />
+        ))}
+
+        {/* Navigation Arrow Controls */}
+        <button
+          type="button"
+          className="slideshow-arrow arrow-left"
+          onClick={prevSlide}
+          aria-label="Previous slide"
+        >
+          &#10094;
+        </button>
+
+        <button
+          type="button"
+          className="slideshow-arrow arrow-right"
+          onClick={nextSlide}
+          aria-label="Next slide"
+        >
+          &#10095;
+        </button>
       </div>
 
-      {/* ── Top-Left Brand ("ResQPH" logo badge) ── */}
-      <header className="auth-top-brand">
-        <Link to="/" className="auth-brand-link">
-          <div className="auth-brand-badge">
-            <ResqLogo size={22} />
-          </div>
-          <span className="auth-brand-name">ResQPH</span>
-        </Link>
-      </header>
-
-      {/* ── Central Glass Card ── */}
-      <main className="auth-card-container">
-        <div className="auth-glass-card">
-          {iconBadge && (
-            <div className="auth-icon-badge" aria-hidden="true">
-              {iconBadge}
-            </div>
-          )}
-
-          {!hideHeader && title && (
-            <div className="auth-card-header">
-              <h1 className="auth-card-title">{title}</h1>
-              {subtitle && <p className="auth-card-subtitle">{subtitle}</p>}
-            </div>
-          )}
-
-          <div className="auth-card-body">{children}</div>
-
-          {footer && <div className="auth-card-footer">{footer}</div>}
-        </div>
-      </main>
+      {/* RIGHT SIDE: Login Card Container */}
+      <div className="auth-right-section">
+        <div className="auth-card-wrapper">{children}</div>
+      </div>
     </div>
   )
 }
