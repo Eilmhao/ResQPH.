@@ -2,7 +2,7 @@
  * Single line-art icon family used across the marketing site and app.
  * Consistent 24x24 stroke so every feature/step reads as one set.
  */
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 
 export type IconName =
   | 'alert'
@@ -38,13 +38,18 @@ export type IconName =
   | 'aid'
   | 'droplet'
   | 'arrow-up-right'
+  | 'arrow-right'
+  | 'wind'
+  | 'humidity'
   | 'map-fold'
   | 'broadcast'
   | 'bell'
 
-interface IconProps {
+export interface IconProps {
   name: IconName
   size?: number
+  className?: string
+  style?: CSSProperties
 }
 
 const paths: Record<IconName, ReactNode> = {
@@ -236,6 +241,24 @@ const paths: Record<IconName, ReactNode> = {
       <polyline points="7 7 17 7 17 17" />
     </>
   ),
+  'arrow-right': (
+    <>
+      <line x1="5" y1="12" x2="19" y2="12" />
+      <polyline points="12 5 19 12 12 19" />
+    </>
+  ),
+  wind: (
+    <>
+      <path d="M17.7 7.7A2.5 2.5 0 1 1 20 10H2" />
+      <path d="M19.7 13.7A2.5 2.5 0 1 1 22 16H2" />
+      <path d="M15.7 19.7A2.5 2.5 0 1 1 18 22H2" />
+    </>
+  ),
+  humidity: (
+    <>
+      <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+    </>
+  ),
   'map-fold': (
     <>
       <path d="M9 2L1 6v14l8-4 8 4 8-4V2l-8 4-8-4z" />
@@ -257,7 +280,7 @@ const paths: Record<IconName, ReactNode> = {
   ),
 }
 
-export function Icon({ name, size = 22 }: IconProps) {
+export function Icon({ name, size = 22, className, style }: IconProps) {
   return (
     <svg
       width={size}
@@ -271,6 +294,8 @@ export function Icon({ name, size = 22 }: IconProps) {
       aria-hidden="true"
       focusable="false"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      style={style}
     >
       {paths[name]}
     </svg>
