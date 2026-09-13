@@ -33,78 +33,86 @@ export function LoginPage() {
   }
 
   return (
-    <AuthLayout rawContainer>
-      <div className="card">
-        <form className="form card2" onSubmit={handleSubmit} noValidate>
-          <h1 id="heading">Login</h1>
-
-          {/* Segmented Portal Role Chooser */}
-          <RoleChooser value={role} onChange={setRole} />
-
-          {/* Email Field */}
-          <div className="field">
-            <input
-              type="email"
-              className="input-field"
-              placeholder="Enter your Email"
-              aria-label="Email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-
-          {/* Password Field */}
-          <div className="field">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              className="input-field"
-              placeholder="Enter password"
-              aria-label="Password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button
-              type="button"
-              className="password-toggle-btn"
-              onClick={() => setShowPassword((visible) => !visible)}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
-            >
-              <Icon name={showPassword ? 'eye-off' : 'eye'} size={18} />
-            </button>
-          </div>
-
-          {error ? (
-            <p className="form-error-msg" role="alert">
-              {error}
-            </p>
-          ) : null}
-
-          {/* Main Centered Login Button */}
-          <button type="submit" className="button1">
-            Login
+    <AuthLayout
+      title="Login"
+      subtitle="Hey enter your details to sign in to your account"
+      footer={
+        <div className="auth-sub-links-col">
+          <button
+            type="button"
+            className="auth-text-btn muted"
+            onClick={() => alert('For prototype demo: enter any email & password to sign in immediately.')}
+          >
+            Having trouble to sign in?
           </button>
-
-          {/* Plain Text Links Row */}
-          <div className="auth-sub-links">
+          <p className="auth-signup-switch">
+            Don't have an account?{' '}
             <button
               type="button"
-              className="auth-sub-link-btn"
-              onClick={() => alert('For prototype demo: enter any email & password to sign in immediately.')}
-            >
-              Forgot password?
-            </button>
-            <button
-              type="button"
-              className="auth-sub-link-btn"
+              className="auth-text-btn highlight"
               onClick={() => navigate('/signup')}
             >
-              Create new account
+              Sign Up Now
             </button>
-          </div>
-        </form>
-      </div>
+          </p>
+        </div>
+      }
+    >
+      <form className="auth-clean-form" onSubmit={handleSubmit} noValidate>
+        {/* Segmented Portal Role Chooser */}
+        <RoleChooser value={role} onChange={setRole} />
+
+        {/* Email Field with Pill Border and Icon */}
+        <div className="auth-pill-field">
+          <span className="auth-pill-icon">
+            <Icon name="user" size={17} />
+          </span>
+          <input
+            type="email"
+            className="auth-pill-input"
+            placeholder="Enter your username/email"
+            aria-label="Email"
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
+        {/* Password Field with Pill Border and Icon */}
+        <div className="auth-pill-field">
+          <span className="auth-pill-icon">
+            <Icon name="shield" size={17} />
+          </span>
+          <input
+            type={showPassword ? 'text' : 'password'}
+            className="auth-pill-input"
+            placeholder="Enter your password"
+            aria-label="Password"
+            autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button
+            type="button"
+            className="auth-pill-toggle"
+            onClick={() => setShowPassword((visible) => !visible)}
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+          >
+            <Icon name={showPassword ? 'eye-off' : 'eye'} size={17} />
+          </button>
+        </div>
+
+        {error ? (
+          <p className="auth-error-alert" role="alert">
+            {error}
+          </p>
+        ) : null}
+
+        {/* Main Red Login In Button */}
+        <button type="submit" className="auth-btn-pill-submit">
+          Log In
+        </button>
+      </form>
     </AuthLayout>
   )
 }

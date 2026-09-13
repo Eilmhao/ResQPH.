@@ -14,7 +14,7 @@ const STORAGE_KEY = 'resqph.auth.user'
 interface AuthContextValue {
   user: AuthUser | null
   login: (input: { email: string; role: UserRole; name?: string }) => void
-  signup: (input: ProfileUpdate & { role: UserRole }) => void
+  signup: (input: ProfileUpdate & { role: UserRole; locationPermission?: boolean }) => void
   updateProfile: (input: ProfileUpdate) => void
   logout: () => void
 }
@@ -57,17 +57,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser({ email, role, name: name?.trim() || nameFromEmail(email) })
   }, [])
 
-  const signup = useCallback<AuthContextValue['signup']>(({ name, email, role, ...profile }) => {
-    setUser({ name: name.trim() || nameFromEmail(email), email, role, ...profile })
+  const signup = useCallback<AuthContextValue['signup']>(({
+    name,
+    email,
+    role,
+    phone,
+    avatarUrl,
+    emergencyContact,
+    medicalInfo,
+    locationPermission,
+  }) => {
+    setUser({
+      name: name.trim() || nameFromEmail(email),
+      email: email.trim(),
+      role,
+      phone: phone?.trim() || undefined,
+      avatarUrl: avatarUrl || undefined,
+      emergencyContact: emergencyContact ?? undefined,
+      medicalInfo: medicalInfo ?? undefined,
+      locationPermission: locationPermission ?? false,
+    })
   }, [])
 
   const updateProfile = useCallback<AuthContextValue['updateProfile']>((input) => {
-    setUser((current) => current ? {
-      ...current,
-      ...input,
-      name: input.name.trim() || current.name,
-      email: input.email.trim() || current.email,
-    } : current)
+    setUser((current) =>
+      current
+        ? {
+            ...current,
+            ...input,
+            name: input.name.trim() || current.name,
+            email: input.email.trim() || current.email,
+          }
+        : current,
+    )
   }, [])
 
   const logout = useCallback(() => setUser(null), [])

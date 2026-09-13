@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Button } from '../../../components/ui/Button'
 import { Icon } from '../../../components/art/Icon'
 import { Modal } from '../../../components/ui/Modal'
@@ -10,7 +10,6 @@ import {
   EmergencyHotlinesModal,
   EmergencyPreparednessGuide,
   Section,
-  StatCard,
   VulnerabilitiesBadges,
   WeatherAlertBanner,
   SEVERITY_CONFIG,
@@ -18,11 +17,18 @@ import {
 
 import type { NavSection } from './navTypes'
 
-export function CitizenView({ navSection = 'overview' }: { navSection?: NavSection }) {
+export function CitizenView({
+  navSection = 'overview',
+  onNavigateTab,
+  onOpenProfile: _onOpenProfile,
+}: {
+  navSection?: NavSection
+  onNavigateTab?: (section: NavSection) => void
+  onOpenProfile?: () => void
+}) {
   const {
     activeCitizenRequest,
     missions,
-    hourlyForecast,
     createRescueRequest,
     updateRequestStatus,
     submitHazardReport,
@@ -60,7 +66,58 @@ export function CitizenView({ navSection = 'overview' }: { navSection?: NavSecti
   const [hazardPhoto, setHazardPhoto] = useState(false)
   const [hazardSubmittedAlert, setHazardSubmittedAlert] = useState(false)
 
-  // Determine Branch
+  // Hold-to-send SOS state
+  const [isHolding, setIsHolding] = useState(false)
+  const [holdProgress, setHoldProgress] = useState(0)
+  const holdTimerRef = useRef<number | null>(null)
+  const holdStartRef = useRef<number>(0)
+
+  function startHold() {
+    setIsHolding(true)
+    setHoldProgress(0)
+    holdStartRef.current = Date.now()
+
+    if (holdTimerRef.current) {
+      window.clearInterval(holdTimerRef.current)
+    }
+
+    const interval = window.setInterval(() => {
+      const elapsed = Date.now() - holdStartRef.current
+      const progress = Math.min(elapsed / 1000, 1)
+      setHoldProgress(progress)
+      if (progress >= 1) {
+        window.clearInterval(interval)
+        holdTimerRef.current = null
+        setIsHolding(false)
+        setHoldProgress(0)
+        handleStartRequest()
+      }
+    }, 40)
+    holdTimerRef.current = interval
+  }
+
+  function cancelHold() {
+    if (holdTimerRef.current) {
+      window.clearInterval(holdTimerRef.current)
+      holdTimerRef.current = null
+    }
+    setIsHolding(false)
+    setHoldProgress(0)
+  }
+
+  function handleSosClick() {
+    cancelHold()
+    handleStartRequest()
+  }
+
+  function handleQuickService(defaultSeverity: SeverityLevel, medical = false) {
+    setStepA_severity(defaultSeverity)
+    setHasMedical(medical)
+    if (medical) {
+      setMedicalDetails('Urgent medical support requested via Medical Aid service.')
+    }
+    handleStartRequest()
+  }
   const isBranch1 = stepA_severity === 'low' || stepA_severity === 'low-moderate'
   const isBranch2 = stepA_severity === 'moderate'
   const isBranch3 = stepA_severity === 'high' || stepA_severity === 'severe'
@@ -184,46 +241,304 @@ export function CitizenView({ navSection = 'overview' }: { navSection?: NavSecti
 
       {/* ── OVERVIEW ─────────────────────────────────────────────────────── */}
       {navSection === 'overview' && (
-        <>
-          <div className="stat-row" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
-            <StatCard
-              label="My request status"
-              value={activeReq ? activeReq.status.toUpperCase() : 'STANDBY'}
-              icon="alert"
-              accent={Boolean(activeReq && activeReq.status !== 'completed')}
-              subtext={activeReq ? `${activeReq.id} · ${activeReq.severity.toUpperCase()}` : 'No active distress'}
-            />
-            <StatCard
-              label="Safe route status"
-              value={activeMission?.activeRouteName || 'Jhocson St. Safe Corridor'}
-              icon="route"
-              subtext={`Loyola St. avoided (${activeMission?.suggestedRoute.impassable.waterDepth || '1.4m'} flood)`}
-            />
-            <StatCard
-              label="PAGASA Flood Alert"
-              value={hourlyForecast[0]?.floodRisk === 'Severe' ? 'RED' : 'ORANGE'}
-              icon="shield"
-              subtext={`${hourlyForecast[0]?.rainfallRate || 28.4} mm/hr intense rain`}
-            />
+        <div className="citizen-mockup-overview">
+          {/* 1. Location Card */}
+          <div className="citizen-loc-card">
+            <div className="citizen-loc-main">
+              <span className="citizen-loc-dart" aria-hidden="true">
+                <Icon name="navigation" size={17} />
+              </span>
+              <div className="citizen-loc-text">
+                <span className="citizen-loc-name">Brgy. Tumana, Marikina City</span>
+                <span className="citizen-loc-coords font-mono">14.6532 N · 121.0912 E</span>
+              </div>
+            </div>
+            <div className="citizen-loc-gps-pill">
+              <span className="citizen-loc-gps-dot" />
+              <span>GPS Lock</span>
+            </div>
           </div>
 
-          <div className="action-buttons-hero">
-            <Button
-              variant="primary"
-              size="lg"
-              className="btn-danger-emergency"
-              onClick={handleStartRequest}
+          {/* Active distress quick bar if citizen has pending/active request */}
+          {activeReq && activeReq.status !== 'completed' && activeReq.status !== 'cancelled' && (
+            <div
+              className="citizen-active-distress-banner"
+              role="button"
+              tabIndex={0}
+              onClick={() => onNavigateTab?.('inquiries')}
             >
-              <Icon name="alert" size={20} />
-              <span>REQUEST EMERGENCY RESCUE</span>
-            </Button>
-            <Button variant="outline" size="lg" onClick={() => setShowHazardModal(true)}>
+              <div className="distress-banner-left">
+                <span className="distress-banner-pulse" />
+                <span>
+                  <strong>Distress Signal {activeReq.id}:</strong> Rescuers {activeReq.status.toUpperCase()} ({currentEtaMinutes}m ETA)
+                </span>
+              </div>
+              <span className="distress-banner-action">View Telemetry →</span>
+            </div>
+          )}
+
+          {/* 2. Hero SOS Card */}
+          <div className="citizen-sos-card">
+            <div className="citizen-sos-backdrop-img" style={{ backgroundImage: "url('/philippine-flood-rescue.jpg')" }} />
+            <div className="citizen-sos-overlay" />
+
+            <div className="citizen-sos-channel-pill">
+              <span className="citizen-channel-dot" />
+              <span>Emergency Channel Open</span>
+            </div>
+
+            <div className="citizen-sos-btn-container">
+              <button
+                type="button"
+                className={`citizen-sos-circle-btn ${isHolding ? 'is-holding' : ''}`}
+                onMouseDown={startHold}
+                onMouseUp={cancelHold}
+                onMouseLeave={cancelHold}
+                onTouchStart={startHold}
+                onTouchEnd={cancelHold}
+                onClick={handleSosClick}
+                aria-label="REQUEST EMERGENCY RESCUE"
+              >
+                <span className="citizen-sos-title">SOS</span>
+                <span className="citizen-sos-sub">HOLD TO SEND</span>
+                {isHolding && (
+                  <svg className="citizen-sos-ring-progress" viewBox="0 0 160 160">
+                    <circle
+                      cx="80"
+                      cy="80"
+                      r="76"
+                      strokeDasharray="477"
+                      strokeDashoffset={477 * (1 - holdProgress)}
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
+
+            <p className="citizen-sos-info-text">
+              Sends your location, household size, and hazard type to the nearest response unit.
+            </p>
+
+            <button
+              type="button"
+              className="citizen-sos-hotline-btn"
+              onClick={() => setShowHotlinesModal(true)}
+            >
+              <Icon name="phone" size={15} />
+              <span>Call 911 hotline</span>
+            </button>
+          </div>
+
+          {/* 3. Section: REQUEST ASSISTANCE (4 Services) */}
+          <section className="citizen-block-section">
+            <div className="citizen-block-head">
+              <h3 className="citizen-block-title">REQUEST ASSISTANCE</h3>
+              <span className="citizen-block-count">4 SERVICES</span>
+            </div>
+
+            <div className="citizen-services-2x2">
+              <button
+                type="button"
+                className="citizen-service-btn"
+                onClick={() => handleQuickService('severe')}
+              >
+                <div className="citizen-service-icon-circle">
+                  <Icon name="waves" size={20} />
+                </div>
+                <div className="citizen-service-info">
+                  <span className="citizen-service-title">Flood Rescue</span>
+                  <span className="citizen-service-meta">BOAT TEAM</span>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                className="citizen-service-btn"
+                onClick={() => handleQuickService('moderate')}
+              >
+                <div className="citizen-service-icon-circle">
+                  <Icon name="truck" size={20} />
+                </div>
+                <div className="citizen-service-info">
+                  <span className="citizen-service-title">Evacuation</span>
+                  <span className="citizen-service-meta">TRANSPORT</span>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                className="citizen-service-btn"
+                onClick={() => handleQuickService('high', true)}
+              >
+                <div className="citizen-service-icon-circle">
+                  <Icon name="aid" size={20} />
+                </div>
+                <div className="citizen-service-info">
+                  <span className="citizen-service-title">Medical Aid</span>
+                  <span className="citizen-service-meta">FIRST RESPONSE</span>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                className="citizen-service-btn"
+                onClick={() => handleQuickService('low-moderate')}
+              >
+                <div className="citizen-service-icon-circle">
+                  <Icon name="droplet" size={20} />
+                </div>
+                <div className="citizen-service-info">
+                  <span className="citizen-service-title">Relief Goods</span>
+                  <span className="citizen-service-meta">WATER / FOOD</span>
+                </div>
+              </button>
+            </div>
+          </section>
+
+          {/* 4. Section: NEAREST RESPONDERS */}
+          <section className="citizen-block-section">
+            <div className="citizen-block-head">
+              <h3 className="citizen-block-title">NEAREST RESPONDERS</h3>
+              <button
+                type="button"
+                className="citizen-block-link"
+                onClick={() => onNavigateTab?.('map')}
+              >
+                <span>Hazard map</span>
+                <Icon name="arrow-up-right" size={13} />
+              </button>
+            </div>
+
+            <div className="citizen-responders-stack">
+              <div className="citizen-responder-row">
+                <div className="citizen-responder-left">
+                  <div className="citizen-responder-icon-circle">
+                    <Icon name="map-fold" size={18} />
+                  </div>
+                  <div className="citizen-responder-info">
+                    <span className="citizen-responder-heading">Rescue Team Alpha</span>
+                    <span className="citizen-responder-distance font-mono">1.2 KM AWAY</span>
+                  </div>
+                </div>
+                <div className="citizen-eta-pill citizen-eta-pill--green font-mono">
+                  <span className="citizen-eta-dot" />
+                  <span>ETA 6 min</span>
+                </div>
+              </div>
+
+              <div className="citizen-responder-row">
+                <div className="citizen-responder-left">
+                  <div className="citizen-responder-icon-circle">
+                    <Icon name="boat" size={18} />
+                  </div>
+                  <div className="citizen-responder-info">
+                    <span className="citizen-responder-heading">Coast Guard Boat 4</span>
+                    <span className="citizen-responder-distance font-mono">3.4 KM AWAY</span>
+                  </div>
+                </div>
+                <div className="citizen-eta-pill citizen-eta-pill--blue font-mono">
+                  <span className="citizen-eta-dot" />
+                  <span>ETA 11 min</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* 5. Section: LIVE ALERTS */}
+          <section className="citizen-block-section">
+            <div className="citizen-block-head">
+              <h3 className="citizen-block-title">LIVE ALERTS</h3>
+              <span className="citizen-block-count">AUTO-UPDATING</span>
+            </div>
+
+            <div className="citizen-alerts-stack">
+              <div
+                className="citizen-alert-box"
+                role="button"
+                tabIndex={0}
+                onClick={() => onNavigateTab?.('inquiries')}
+              >
+                <div className="citizen-alert-top-row">
+                  <span className="citizen-alert-type-pill citizen-alert-type-pill--critical">
+                    <span className="citizen-alert-dot" />
+                    <span>Critical</span>
+                  </span>
+                  <span className="citizen-alert-time-tag font-mono">2 MIN AGO</span>
+                </div>
+                <div className="citizen-alert-content-row">
+                  <span className="citizen-alert-icon-wrap citizen-alert-icon-wrap--critical">
+                    <Icon name="warning" size={18} />
+                  </span>
+                  <div className="citizen-alert-text-block">
+                    <h4 className="citizen-alert-title">Marikina River past 2nd alarm</h4>
+                    <p className="citizen-alert-desc">Barangay Tumana · rising 0.4 m/hr</p>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className="citizen-alert-box"
+                role="button"
+                tabIndex={0}
+                onClick={() => onNavigateTab?.('inquiries')}
+              >
+                <div className="citizen-alert-top-row">
+                  <span className="citizen-alert-type-pill citizen-alert-type-pill--warning">
+                    <span className="citizen-alert-dot" />
+                    <span>Warning</span>
+                  </span>
+                  <span className="citizen-alert-time-tag font-mono">18 MIN AGO</span>
+                </div>
+                <div className="citizen-alert-content-row">
+                  <span className="citizen-alert-icon-wrap citizen-alert-icon-wrap--warning">
+                    <Icon name="broadcast" size={18} />
+                  </span>
+                  <div className="citizen-alert-text-block">
+                    <h4 className="citizen-alert-title">Typhoon Signal No. 2 raised</h4>
+                    <p className="citizen-alert-desc">Metro Manila · sustained 95 km/h</p>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className="citizen-alert-box"
+                role="button"
+                tabIndex={0}
+                onClick={() => onNavigateTab?.('inquiries')}
+              >
+                <div className="citizen-alert-top-row">
+                  <span className="citizen-alert-type-pill citizen-alert-type-pill--advisory">
+                    <span className="citizen-alert-dot" />
+                    <span>Advisory</span>
+                  </span>
+                  <span className="citizen-alert-time-tag font-mono">41 MIN AGO</span>
+                </div>
+                <div className="citizen-alert-content-row">
+                  <span className="citizen-alert-icon-wrap citizen-alert-icon-wrap--advisory">
+                    <Icon name="bell" size={18} />
+                  </span>
+                  <div className="citizen-alert-text-block">
+                    <h4 className="citizen-alert-title">Evacuation center at 70% capacity</h4>
+                    <p className="citizen-alert-desc">Concepcion Elementary School</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Volunteer Hazard Reporting shortcut */}
+          <div className="citizen-volunteer-footer-action">
+            <Button
+              variant="outline"
+              size="lg"
+              className="citizen-volunteer-btn"
+              onClick={() => setShowHazardModal(true)}
+            >
               <Icon name="report" size={18} />
               <span>REPORT LOCAL HAZARD (VOLUNTEER)</span>
             </Button>
           </div>
-
-        </>
+        </div>
       )}
 
       {/* ── INQUIRIES ────────────────────────────────────────────────────── */}

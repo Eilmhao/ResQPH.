@@ -1,19 +1,36 @@
 export type UserRole = 'citizen' | 'coordinator' | 'rescuer'
 
+export interface EmergencyContact {
+  name: string
+  relationship: string
+  phone: string
+}
+
+export interface MedicalInfo {
+  conditions?: string
+  allergies?: string
+  specialAssistance?: string
+}
+
 export interface AuthUser {
   name: string
   email: string
   role: UserRole
   avatarUrl?: string
   phone?: string
-  isStudent?: boolean
-  emergencyContactName?: string
-  emergencyContactPhone?: string
-  homeArea?: string
+  emergencyContact?: EmergencyContact
+  medicalInfo?: MedicalInfo
+  locationPermission?: boolean
 }
 
-export type ProfileUpdate = Pick<AuthUser, 'name' | 'email'> &
-  Partial<Pick<AuthUser, 'avatarUrl' | 'phone' | 'isStudent' | 'emergencyContactName' | 'emergencyContactPhone' | 'homeArea'>>
+export type ProfileUpdate = {
+  name: string
+  email: string
+  phone?: string
+  avatarUrl?: string
+  emergencyContact?: EmergencyContact
+  medicalInfo?: MedicalInfo
+}
 
 export const ROLE_LABELS: Record<UserRole, string> = {
   citizen: 'Citizen',

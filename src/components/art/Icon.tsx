@@ -32,6 +32,15 @@ export type IconName =
   | 'refresh'
   | 'eye'
   | 'eye-off'
+  | 'navigation'
+  | 'waves'
+  | 'truck'
+  | 'aid'
+  | 'droplet'
+  | 'arrow-up-right'
+  | 'map-fold'
+  | 'broadcast'
+  | 'bell'
 
 interface IconProps {
   name: IconName
@@ -189,6 +198,61 @@ const paths: Record<IconName, ReactNode> = {
       <path d="m3 3 18 18" />
       <path d="M10.6 7.2A10.7 10.7 0 0 1 12 7c6.1 0 9.5 5 9.5 5a16 16 0 0 1-3.1 3.2" />
       <path d="M6.2 6.8C3.8 8.2 2.5 12 2.5 12s3.4 5 9.5 5c.8 0 1.5-.1 2.2-.3" />
+    </>
+  ),
+  navigation: (
+    <>
+      <polygon points="3 11 22 2 13 21 11 13 3 11" />
+    </>
+  ),
+  waves: (
+    <>
+      <path d="M2 12c.6-2.4 1.4-4 2-4s1.4 1.6 2 4c.6 2.4 1.4 4 2 4s1.4-1.6 2-4c.6-2.4 1.4-4 2-4s1.4 1.6 2 4c.6 2.4 1.4 4 2 4s1.4-1.6 2-4c.6-2.4 1.4-4 2-4" />
+    </>
+  ),
+  truck: (
+    <>
+      <path d="M1 3h15v13H1z" />
+      <path d="M16 8h4l3 3v5h-7V8z" />
+      <circle cx="5.5" cy="18.5" r="2.5" />
+      <circle cx="18.5" cy="18.5" r="2.5" />
+    </>
+  ),
+  aid: (
+    <>
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+      <path d="M12 8v8" />
+      <path d="M8 12h8" />
+    </>
+  ),
+  droplet: (
+    <>
+      <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+    </>
+  ),
+  'arrow-up-right': (
+    <>
+      <line x1="7" y1="17" x2="17" y2="7" />
+      <polyline points="7 7 17 7 17 17" />
+    </>
+  ),
+  'map-fold': (
+    <>
+      <path d="M9 2L1 6v14l8-4 8 4 8-4V2l-8 4-8-4z" />
+      <polyline points="9 2 9 20" />
+      <polyline points="17 6 17 24" />
+    </>
+  ),
+  broadcast: (
+    <>
+      <circle cx="12" cy="12" r="2" />
+      <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14" />
+    </>
+  ),
+  bell: (
+    <>
+      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
     </>
   ),
 }

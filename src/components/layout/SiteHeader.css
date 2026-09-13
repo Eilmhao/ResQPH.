@@ -23,6 +23,12 @@
   color: var(--text-primary);
 }
 
+.site-header__logo-img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
 .site-header__nav {
   display: flex;
   gap: 30px;

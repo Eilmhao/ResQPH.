@@ -42,7 +42,7 @@ describe('App', () => {
 
   it('renders the login page at /login', () => {
     renderApp('/login')
-    expect(screen.getByRole('heading', { name: /Sign in with email/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Login/i })).toBeInTheDocument()
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
   })
 
@@ -54,6 +54,6 @@ describe('App', () => {
 
   it('redirects /dashboard to /login when not authenticated', () => {
     renderApp('/dashboard')
-    expect(screen.getByRole('heading', { name: /Sign in with email/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Login/i })).toBeInTheDocument()
   })
 })

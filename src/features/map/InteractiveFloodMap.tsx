@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 import { Icon } from '../../components/art/Icon'
 import './map.css'
 
@@ -12,6 +14,27 @@ interface MapProps {
   etaMinutes?: number
 }
 
+const TILE_PROVIDERS = {
+  osm: {
+    name: 'OpenStreetMap',
+    url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors',
+    maxZoom: 19,
+  },
+  dark: {
+    name: 'Tactical Dark OSM',
+    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors &copy; CARTO',
+    maxZoom: 19,
+  },
+  satellite: {
+    name: 'Satellite View',
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, OpenStreetMap contributors',
+    maxZoom: 19,
+  },
+}
+
 export function InteractiveFloodMap({
   activeStage = 'en-route',
   showAlternatives = true,
@@ -20,25 +43,310 @@ export function InteractiveFloodMap({
   routeExplanation = 'Rescue Team arrival: 9 minutes. All possible shortcuts are flooded and needs to head another alternative routes "Loyola St.".',
   etaMinutes = 9,
 }: MapProps) {
-  const [mapLayerMode, setMapLayerMode] = useState<'tactical' | 'satellite'>('tactical')
+  const mapContainerRef = useRef<HTMLDivElement>(null)
+  const mapInstanceRef = useRef<L.Map | null>(null)
+  const currentTileLayerRef = useRef<L.TileLayer | null>(null)
+  const overlaysLayerGroupRef = useRef<L.LayerGroup | null>(null)
+
+  const [mapLayerMode, setMapLayerMode] = useState<'osm' | 'dark' | 'satellite'>('osm')
   const [showFloodDepthLayer, setShowFloodDepthLayer] = useState(true)
-  const [showWaterways] = useState(true)
-  const [showHazardPins] = useState(true)
 
-  // Simulation position based on stage
-  const vehicleProgress =
+  // Citizen distress target (Brgy. Tumana, Marikina City)
+  const citizenTarget: [number, number] = [14.6532, 121.0912]
+
+  // Safe corridor coordinates avoiding flooded lowlands
+  const safeCorridorCoords: [number, number][] = [
+    [14.6380, 121.0740], // Dispatch Hub
+    [14.6425, 121.0785], // High Ground Elevation
+    [14.6468, 121.0832], // Waypoint 2
+    [14.6502, 121.0875], // Approach Corridor
+    [14.6532, 121.0912], // Target Destination
+  ]
+
+  // Alternative Detour coordinates
+  const detourCoords: [number, number][] = [
+    [14.6380, 121.0740],
+    [14.6410, 121.0820],
+    [14.6480, 121.0930],
+    [14.6532, 121.0912],
+  ]
+
+  // Impassable Street Segment (Loyola St.)
+  const impassableStreetCoords: [number, number][] = [
+    [14.6450, 121.0810],
+    [14.6485, 121.0865],
+    [14.6515, 121.0898],
+  ]
+
+  // Flood Inundation polygon zones (NOAH Hydrodynamic Model)
+  const severeFloodPolygon: [number, number][] = [
+    [14.6565, 121.0875],
+    [14.6545, 121.0945],
+    [14.6495, 121.0935],
+    [14.6475, 121.0860],
+    [14.6515, 121.0845],
+  ]
+
+  const moderateFloodPolygon: [number, number][] = [
+    [14.6460, 121.0790],
+    [14.6485, 121.0845],
+    [14.6440, 121.0860],
+    [14.6420, 121.0805],
+  ]
+
+  // Vehicle progress based on active stage
+  const progressIdx =
     activeStage === 'pending'
-      ? 0.05
+      ? 0
       : activeStage === 'assigned'
-        ? 0.2
+        ? 1
         : activeStage === 'en-route'
-          ? 0.58
-          : 0.95 // arrived or completed
+          ? 2
+          : activeStage === 'arrived'
+            ? 3
+            : 4
 
-  // Realistic Waypoints along España -> Jhocson safe corridor:
-  // Base (120, 75) -> España Turn (240, 150) -> Jhocson Entry (380, 210) -> Citizen Target (540, 220)
-  const boatX = 120 + (540 - 120) * vehicleProgress
-  const boatY = 75 + (220 - 75) * vehicleProgress
+  const boatCurrentPos = safeCorridorCoords[progressIdx]
+
+  // Initialize Leaflet Map with OpenStreetMap
+  useEffect(() => {
+    if (!mapContainerRef.current) return
+    if (mapInstanceRef.current) return
+
+    try {
+      // Fix default marker icon issues in Leaflet when bundled with Vite
+      delete (L.Icon.Default.prototype as any)._getIconUrl
+      L.Icon.Default.mergeOptions({
+        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+      })
+
+      const map = L.map(mapContainerRef.current, {
+        center: [14.6485, 121.0860],
+        zoom: 14,
+        zoomControl: false,
+      })
+
+      // Add OpenStreetMap base tile layer
+      const defaultProvider = TILE_PROVIDERS.osm
+      const initialTile = L.tileLayer(defaultProvider.url, {
+        attribution: defaultProvider.attribution,
+        maxZoom: defaultProvider.maxZoom,
+      }).addTo(map)
+      currentTileLayerRef.current = initialTile
+
+      // Add Zoom control at top-right
+      L.control.zoom({ position: 'topright' }).addTo(map)
+
+      // Add overlay group
+      const overlayGroup = L.layerGroup().addTo(map)
+      overlaysLayerGroupRef.current = overlayGroup
+
+      mapInstanceRef.current = map
+    } catch (err) {
+      console.warn('Leaflet map initialization notice (headless or test environment):', err)
+    }
+
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove()
+        mapInstanceRef.current = null
+      }
+    }
+  }, [])
+
+  // Switch Base Tile Layer when mapLayerMode changes
+  useEffect(() => {
+    const map = mapInstanceRef.current
+    if (!map) return
+
+    try {
+      if (currentTileLayerRef.current) {
+        map.removeLayer(currentTileLayerRef.current)
+      }
+
+      const provider = TILE_PROVIDERS[mapLayerMode]
+      const newTileLayer = L.tileLayer(provider.url, {
+        attribution: provider.attribution,
+        maxZoom: provider.maxZoom,
+      }).addTo(map)
+
+      currentTileLayerRef.current = newTileLayer
+    } catch (err) {
+      console.warn('Failed to switch tile layer:', err)
+    }
+  }, [mapLayerMode])
+
+  // Update Map Overlays (Markers, Polylines, Flood Polygons)
+  useEffect(() => {
+    const map = mapInstanceRef.current
+    const overlayGroup = overlaysLayerGroupRef.current
+    if (!map || !overlayGroup) return
+
+    try {
+      overlayGroup.clearLayers()
+
+      // 1. NOAH Hydrodynamic Flood Inundation Zones
+      if (showFloodDepthLayer) {
+        const severePoly = L.polygon(severeFloodPolygon, {
+          color: '#dc2626',
+          weight: 2,
+          fillColor: '#ef4444',
+          fillOpacity: 0.42,
+          dashArray: '4, 4',
+        }).bindPopup(`
+          <div class="leaflet-popup-flood">
+            <strong style="color:#ef4444;">CRITICAL FLOOD ZONE (>1.5m)</strong><br/>
+            <span>Marikina River Basin Overflow · Impassable to light vehicles</span>
+          </div>
+        `)
+        overlayGroup.addLayer(severePoly)
+
+        const moderatePoly = L.polygon(moderateFloodPolygon, {
+          color: '#f59e0b',
+          weight: 1.5,
+          fillColor: '#f59e0b',
+          fillOpacity: 0.32,
+        }).bindPopup(`
+          <div class="leaflet-popup-flood">
+            <strong style="color:#f59e0b;">MODERATE FLOOD PONDING (0.5m - 0.8m)</strong><br/>
+            <span>Knee-deep to waist-deep backflow</span>
+          </div>
+        `)
+        overlayGroup.addLayer(moderatePoly)
+      }
+
+      // 2. Safe Corridor Polyline (Green glowing line)
+      const safeLine = L.polyline(safeCorridorCoords, {
+        color: selectedRoute === 'primary' ? '#22c55e' : '#16a34a',
+        weight: selectedRoute === 'primary' ? 6 : 4,
+        opacity: 0.9,
+        dashArray: '8, 6',
+      }).bindPopup(`
+        <div class="leaflet-popup-route">
+          <strong style="color:#22c55e;">RECOMMENDED SAFE ROUTE</strong><br/>
+          <span>Jhocson St. Safe Corridor · Avoids Loyola flood barrier</span><br/>
+          <span>ETA: ${etaMinutes} minutes</span>
+        </div>
+      `)
+      safeLine.on('click', () => onSelectRoute?.('primary'))
+      overlayGroup.addLayer(safeLine)
+
+      // 3. Alternative Detour Polyline (Amber dashed line)
+      if (showAlternatives) {
+        const detourLine = L.polyline(detourCoords, {
+          color: selectedRoute === 'alternative' ? '#f59e0b' : 'rgba(245, 158, 11, 0.55)',
+          weight: selectedRoute === 'alternative' ? 6 : 3.5,
+          dashArray: '6, 6',
+        }).bindPopup(`
+          <div class="leaflet-popup-route">
+            <strong style="color:#f59e0b;">ALTERNATIVE DETOUR: GERARDO ST.</strong><br/>
+            <span>Moderate water ponding (0.4m) · Secondary route</span>
+          </div>
+        `)
+        detourLine.on('click', () => onSelectRoute?.('alternative'))
+        overlayGroup.addLayer(detourLine)
+      }
+
+      // 4. Impassable Loyola St. Barrier Polyline
+      const impassableLine = L.polyline(impassableStreetCoords, {
+        color: '#dc2626',
+        weight: 8,
+        opacity: 0.95,
+      }).bindPopup(`
+        <div class="leaflet-popup-route">
+          <strong style="color:#dc2626;">LOYOLA ST. — IMPASSABLE (1.4m DEPTH)</strong><br/>
+          <span>Road blocked by torrential water depth. Automatically avoided.</span>
+        </div>
+      `)
+      overlayGroup.addLayer(impassableLine)
+
+      // 5. Citizen Distress Beacon Marker
+      const citizenIcon = L.divIcon({
+        className: 'leaflet-custom-marker',
+        html: `
+          <div class="pin-beacon-wrapper">
+            <div class="pin-beacon-pulse"></div>
+            <div class="pin-beacon-center red-beacon">
+              <span>🚨</span>
+            </div>
+          </div>
+        `,
+        iconSize: [36, 36],
+        iconAnchor: [18, 18],
+      })
+
+      const citizenMarker = L.marker(citizenTarget, { icon: citizenIcon }).bindPopup(`
+        <div class="leaflet-popup-citizen">
+          <strong style="color:#ef4444;">DISTRESS TARGET (BRGY. TUMANA)</strong><br/>
+          <span>Coordinates: 14.6532° N, 121.0912° E</span><br/>
+          <span>Headcount: 4 persons · Chest-deep flood</span>
+        </div>
+      `)
+      overlayGroup.addLayer(citizenMarker)
+
+      // 6. Rescue Unit / Boat Marker
+      const boatIcon = L.divIcon({
+        className: 'leaflet-custom-marker',
+        html: `
+          <div class="pin-beacon-wrapper">
+            <div class="pin-beacon-center boat-beacon">
+              <span>🚤</span>
+            </div>
+          </div>
+        `,
+        iconSize: [34, 34],
+        iconAnchor: [17, 17],
+      })
+
+      const boatMarker = L.marker(boatCurrentPos, { icon: boatIcon }).bindPopup(`
+        <div class="leaflet-popup-rescuer">
+          <strong style="color:#38bdf8;">Rescue Team Alpha (Boat Unit)</strong><br/>
+          <span>Status: En Route · Safe Corridor</span><br/>
+          <span>ETA: ${etaMinutes} minutes</span>
+        </div>
+      `)
+      overlayGroup.addLayer(boatMarker)
+
+      // 7. Evacuation Center Marker (Concepcion / NU Gym)
+      const evacIcon = L.divIcon({
+        className: 'leaflet-custom-marker',
+        html: `
+          <div class="pin-beacon-wrapper">
+            <div class="pin-beacon-center evac-beacon">
+              <span>🏫</span>
+            </div>
+          </div>
+        `,
+        iconSize: [32, 32],
+        iconAnchor: [16, 16],
+      })
+
+      const evacMarker = L.marker([14.6510, 121.0990], { icon: evacIcon }).bindPopup(`
+        <div class="leaflet-popup-evac">
+          <strong style="color:#22c55e;">Evacuation Center (Concepcion Elementary)</strong><br/>
+          <span>Capacity: 70% occupied · Hot meals & medical staff</span>
+        </div>
+      `)
+      overlayGroup.addLayer(evacMarker)
+    } catch (err) {
+      console.warn('Error rendering Leaflet overlays:', err)
+    }
+  }, [
+    showFloodDepthLayer,
+    showAlternatives,
+    selectedRoute,
+    activeStage,
+    etaMinutes,
+    onSelectRoute,
+  ])
+
+  function handleRecenter() {
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.setView([14.6485, 121.0860], 14)
+    }
+  }
 
   return (
     <div className="flood-map-container" role="region" aria-label="Interactive Realistic Flood-Aware Rescue Map">
@@ -46,7 +354,7 @@ export function InteractiveFloodMap({
       <div className="flood-map-controls">
         <div className="flood-map-legend-items">
           <span className="legend-tag legend-study">
-            📍 Sampaloc, Manila GIS · 14.6042° N, 120.9946° E (WGS84)
+            🗺️ OpenStreetMap Live GIS · 14.6532° N, 121.0912° E
           </span>
           <span className="legend-tag legend-safe">
             ● Safe Transit (Jhocson Corridor · {etaMinutes}m ETA)
@@ -59,15 +367,25 @@ export function InteractiveFloodMap({
         <div className="flood-map-toggles">
           <button
             type="button"
-            className={`map-toggle-btn ${mapLayerMode === 'tactical' ? 'is-active' : ''}`}
-            onClick={() => setMapLayerMode('tactical')}
+            className={`map-toggle-btn ${mapLayerMode === 'osm' ? 'is-active' : ''}`}
+            onClick={() => setMapLayerMode('osm')}
+            title="Standard OpenStreetMap Cartography"
           >
-            Tactical GIS
+            OpenStreetMap
+          </button>
+          <button
+            type="button"
+            className={`map-toggle-btn ${mapLayerMode === 'dark' ? 'is-active' : ''}`}
+            onClick={() => setMapLayerMode('dark')}
+            title="Tactical Night Response OpenStreetMap"
+          >
+            Tactical Dark
           </button>
           <button
             type="button"
             className={`map-toggle-btn ${mapLayerMode === 'satellite' ? 'is-active' : ''}`}
             onClick={() => setMapLayerMode('satellite')}
+            title="Satellite Aerial Imagery"
           >
             Satellite View
           </button>
@@ -75,8 +393,17 @@ export function InteractiveFloodMap({
             type="button"
             className={`map-toggle-btn ${showFloodDepthLayer ? 'is-active' : ''}`}
             onClick={() => setShowFloodDepthLayer((v) => !v)}
+            title="Toggle UP NOAH Hydrodynamic Inundation Contours"
           >
             NOAH Flood Depth: {showFloodDepthLayer ? 'ON' : 'OFF'}
+          </button>
+          <button
+            type="button"
+            className="map-toggle-btn"
+            onClick={handleRecenter}
+            title="Recenter Map on Target"
+          >
+            Recenter
           </button>
         </div>
       </div>
@@ -93,265 +420,14 @@ export function InteractiveFloodMap({
         <span className="banner-eta-badge font-mono">ETA: {etaMinutes} MINS</span>
       </div>
 
-      {/* SVG Vector Canvas with Realistic Cartography */}
-      <div className={`flood-map-canvas ${mapLayerMode === 'satellite' ? 'canvas-satellite' : ''}`}>
-        <svg viewBox="0 0 860 480" preserveAspectRatio="xMidYMid meet" className="flood-map-svg">
-          <defs>
-            {/* NOAH Hydrodynamic flood hazard zones */}
-            <linearGradient id="floodHighDepth" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#ef4444" stopOpacity="0.55" />
-              <stop offset="70%" stopColor="#b91c1c" stopOpacity="0.68" />
-              <stop offset="100%" stopColor="#7f1d1d" stopOpacity="0.3" />
-            </linearGradient>
-
-            <linearGradient id="floodMedDepth" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.45" />
-              <stop offset="80%" stopColor="#d97706" stopOpacity="0.5" />
-              <stop offset="100%" stopColor="#b45309" stopOpacity="0.15" />
-            </linearGradient>
-
-            <linearGradient id="floodLowDepth" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="#0284c7" stopOpacity="0.15" />
-            </linearGradient>
-
-            {/* Impassable cross-hatch pattern */}
-            <pattern id="impassableCross" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-              <rect width="7" height="14" fill="#dc2626" />
-              <rect x="7" width="7" height="14" fill="#180a0a" />
-            </pattern>
-
-            {/* Grid background texture */}
-            <pattern id="gisGrid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
-            </pattern>
-          </defs>
-
-          {/* Map Base Surface */}
-          <rect width="860" height="480" fill={mapLayerMode === 'satellite' ? '#121614' : '#140c0c'} />
-          <rect width="860" height="480" fill="url(#gisGrid)" />
-
-          {/* Estero de Sampaloc & Natural Drainage Canals */}
-          {showWaterways && (
-            <g className="waterways-layer">
-              <path
-                d="M 60 460 Q 200 390 340 370 T 560 380 T 820 440"
-                fill="none"
-                stroke="#0284c7"
-                strokeWidth="16"
-                strokeOpacity="0.45"
-                strokeLinecap="round"
-              />
-              <path
-                d="M 60 460 Q 200 390 340 370 T 560 380 T 820 440"
-                fill="none"
-                stroke="#38bdf8"
-                strokeWidth="4"
-                strokeOpacity="0.8"
-                strokeDasharray="8 6"
-              />
-              <text x="340" y="360" fill="#7dd3fc" fontSize="9" fontFamily="var(--font-mono)" opacity="0.85">
-                ESTERO DE SAMPALOC (DRAINAGE CANAL · 2.35m WATER LEVEL CRITICAL)
-              </text>
-            </g>
-          )}
-
-          {/* Urban City Blocks & Realistic Building Footprints */}
-          <g fill={mapLayerMode === 'satellite' ? '#1e2420' : '#1c1010'} stroke="rgba(255,255,255,0.06)" strokeWidth="0.8">
-            {/* UST Field & Campus Quad */}
-            <rect x="40" y="35" width="170" height="95" rx="4" fill={mapLayerMode === 'satellite' ? '#172e20' : '#221414'} />
-            <rect x="55" y="45" width="60" height="40" rx="2" fill="rgba(255,255,255,0.05)" />
-            <rect x="125" y="45" width="70" height="70" rx="2" fill="rgba(96,165,250,0.08)" />
-
-            {/* National University Campus Quad */}
-            <rect x="255" y="35" width="190" height="95" rx="4" fill={mapLayerMode === 'satellite' ? '#1e2832' : '#261212'} />
-            <rect x="270" y="45" width="75" height="50" rx="2" fill="rgba(239,68,68,0.12)" />
-            <rect x="355" y="45" width="75" height="75" rx="2" fill="rgba(255,255,255,0.04)" />
-
-            {/* Sampaloc Evacuation Center Complex (NU Gymnasium) */}
-            <rect x="485" y="35" width="170" height="95" rx="4" fill="#13231a" stroke="#22c55e" strokeWidth="1" />
-            <rect x="500" y="45" width="140" height="75" rx="3" fill="rgba(34,197,94,0.12)" />
-
-            {/* Eastern Mixed Residential Blocks */}
-            <rect x="695" y="35" width="130" height="95" rx="4" />
-
-            {/* Central Residential Subdivisions (Between España & Loyola) */}
-            <rect x="40" y="165" width="170" height="95" rx="3" />
-            <rect x="255" y="165" width="190" height="95" rx="3" />
-            <rect x="485" y="165" width="170" height="95" rx="3" />
-            <rect x="695" y="165" width="130" height="95" rx="3" />
-
-            {/* South District Blocks (Loyola - Earnshaw corridor) */}
-            <rect x="40" y="295" width="170" height="95" rx="3" />
-            <rect x="255" y="295" width="190" height="95" rx="3" />
-            <rect x="485" y="295" width="170" height="95" rx="3" />
-            <rect x="695" y="295" width="130" height="95" rx="3" />
-          </g>
-
-          {/* UP NOAH / LiPAD Flood Depth Inundation Contours */}
-          {showFloodDepthLayer && (
-            <g className="noah-flood-polygons">
-              {/* Loyola Street Severe Inundation Zone (>1.5m) */}
-              <path
-                d="M 230 265 Q 380 230 520 255 Q 670 295 620 340 Q 460 360 310 345 Z"
-                fill="url(#floodHighDepth)"
-                stroke="#dc2626"
-                strokeWidth="1.5"
-                strokeDasharray="4 2"
-              />
-              <text x="360" y="315" fill="#fca5a5" fontSize="10" fontFamily="var(--font-mono)" fontWeight="bold">
-                SEVERE FLOODING (WATER DEPTH: 1.40m – 1.85m)
-              </text>
-
-              {/* España Waist-Deep Overflow Basin (0.5m - 0.9m) */}
-              <ellipse cx="320" cy="148" rx="220" ry="38" fill="url(#floodMedDepth)" />
-
-              {/* Gutter / Low ponding zones */}
-              <ellipse cx="690" cy="230" rx="90" ry="40" fill="url(#floodLowDepth)" />
-            </g>
-          )}
-
-          {/* Road Network Primary Arterials & Corridors */}
-          <g strokeLinecap="round" strokeLinejoin="round">
-            {/* ESPAÑA BOULEVARD (Major Multi-lane Arterial) */}
-            <line x1="20" y1="145" x2="840" y2="145" stroke="#331c1c" strokeWidth="26" />
-            <line x1="20" y1="145" x2="840" y2="145" stroke="#4a2525" strokeWidth="20" />
-            <line x1="20" y1="145" x2="840" y2="145" stroke="#f59e0b" strokeWidth="2" strokeDasharray="10 8" opacity="0.6" />
-
-            {/* LACSON AVENUE (Flyover & Arterial) */}
-            <line x1="675" y1="20" x2="675" y2="460" stroke="#331c1c" strokeWidth="22" />
-            <line x1="675" y1="20" x2="675" y2="460" stroke="#4a2525" strokeWidth="16" />
-
-            {/* DALUPAN STREET */}
-            <line x1="230" y1="20" x2="230" y2="460" stroke="#291515" strokeWidth="14" />
-
-            {/* GERARDO STREET (Detour Route with Moderate Flood) */}
-            <path
-              d="M 230 145 L 465 145 L 465 220 L 540 220"
-              fill="none"
-              stroke="#291515"
-              strokeWidth="14"
-            />
-            {showAlternatives && (
-              <path
-                d="M 230 145 L 465 145 L 465 220 L 540 220"
-                fill="none"
-                stroke={selectedRoute === 'alternative' ? '#f59e0b' : '#f59e0b88'}
-                strokeWidth={selectedRoute === 'alternative' ? 6 : 4}
-                strokeDasharray="6 4"
-                className="route-detour-line"
-                onClick={() => onSelectRoute?.('alternative')}
-                style={{ cursor: 'pointer' }}
-              />
-            )}
-
-            {/* LOYOLA STREET (BLOCKED / IMPASSABLE ROAD) */}
-            <line x1="230" y1="280" x2="675" y2="280" stroke="#571111" strokeWidth="18" />
-            <line x1="235" y1="280" x2="670" y2="280" stroke="url(#impassableCross)" strokeWidth="14" />
-
-            {/* JHOCSON STREET (SAFE CORRIDOR RECOMMENDED) */}
-            <path
-              d="M 120 75 L 230 75 L 230 145 L 230 220 L 540 220"
-              fill="none"
-              stroke="#22c55e"
-              strokeWidth="8"
-              className="route-safe-corridor"
-              onClick={() => onSelectRoute?.('primary')}
-              style={{ cursor: 'pointer' }}
-            />
-          </g>
-
-          {/* Road Name Typography */}
-          <g fill="#ffffff" opacity="0.8" fontSize="10.5" fontFamily="var(--font-mono)">
-            <text x="25" y="140" fontWeight="bold">ESPAÑA BLVD (MAIN ARTERIAL)</text>
-            <text x="685" y="45" transform="rotate(90 685 45)" fontWeight="bold">LACSON AVE</text>
-            <text x="245" y="214" fill="#4ade80" fontWeight="bold">JHOCSON ST (SAFE CORRIDOR · ELEVATION 4.2M)</text>
-            <text x="245" y="274" fill="#f87171" fontWeight="bold">LOYOLA ST [IMPASSABLE: 1.40M WATER DEPTH]</text>
-            <text x="475" y="165" fill="#fbbf24">GERARDO ST [DETOUR]</text>
-          </g>
-
-          {/* Landmark Placeholders */}
-          <g fill="#ffffff" fontSize="10" fontFamily="var(--font-body)">
-            <text x="50" y="60" fontWeight="600" fill="#93c5fd">UST Field Compound</text>
-            <text x="265" y="60" fontWeight="600" fill="#fca5a5">National University (NU Manila)</text>
-            <text x="495" y="60" fontWeight="700" fill="#86efac">Sampaloc Evacuation Center (Gymnasium)</text>
-          </g>
-
-          {/* Loyola Street Hazard Barricade Icons */}
-          <g transform="translate(420, 268)">
-            <circle cx="12" cy="12" r="16" fill="#dc2626" stroke="#ffffff" strokeWidth="2" />
-            <path d="M6 6 L18 18 M18 6 L6 18" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" />
-            <g transform="translate(-65, -28)">
-              <rect width="160" height="22" rx="4" fill="#180a0a" stroke="#dc2626" strokeWidth="1" />
-              <text x="8" y="15" fill="#fca5a5" fontSize="9" fontFamily="var(--font-mono)" fontWeight="bold">
-                ⚠️ SHORTCUT FLOODED: 1.4M
-              </text>
-            </g>
-          </g>
-
-          {/* Crowdsourced Hazard Pins */}
-          {showHazardPins && (
-            <g className="hazard-markers">
-              {/* HZ-101 */}
-              <g transform="translate(300, 275)">
-                <circle cx="0" cy="0" r="9" fill="#dc2626" stroke="#fff" strokeWidth="1.5" />
-                <text x="0" y="3.5" textAnchor="middle" fill="#fff" fontSize="9" fontWeight="bold">!</text>
-              </g>
-              {/* HZ-102 */}
-              <g transform="translate(465, 145)">
-                <circle cx="0" cy="0" r="8" fill="#f59e0b" stroke="#fff" strokeWidth="1.5" />
-                <text x="0" y="3.5" textAnchor="middle" fill="#000" fontSize="8" fontWeight="bold">▲</text>
-              </g>
-            </g>
-          )}
-
-          {/* Rescue Unit Staging Base */}
-          <g transform="translate(105, 60)">
-            <rect x="0" y="0" width="28" height="28" rx="6" fill="#2563eb" stroke="#ffffff" strokeWidth="2" />
-            <text x="14" y="18" textAnchor="middle" fill="#ffffff" fontSize="11" fontWeight="bold">HQ</text>
-            <text x="14" y="42" textAnchor="middle" fill="#93c5fd" fontSize="8.5" fontFamily="var(--font-mono)">
-              Rescue Staging
-            </text>
-          </g>
-
-          {/* Citizen Victim Target Marker (Block 5 Lot 21 Jhocson St) */}
-          <g transform="translate(540, 220)">
-            <circle cx="0" cy="0" r="26" fill="none" stroke="#ef4444" strokeWidth="1.5" className="ping-ring" />
-            <circle cx="0" cy="0" r="14" fill="#dc2626" stroke="#ffffff" strokeWidth="2.5" />
-            <circle cx="0" cy="0" r="5" fill="#ffffff" />
-            {/* Distress Target Flag */}
-            <g transform="translate(20, -32)">
-              <rect width="150" height="46" rx="6" fill="#1e0c0c" stroke="#dc2626" strokeWidth="1.5" />
-              <text x="10" y="16" fill="#ffffff" fontSize="10" fontWeight="bold" fontFamily="var(--font-body)">
-                RQ-0042 · Maria Santos
-              </text>
-              <text x="10" y="30" fill="#fca5a5" fontSize="8.5" fontFamily="var(--font-mono)">
-                Block 5 Lot 21 Jhocson St.
-              </text>
-              <text x="10" y="41" fill="#fca5a5" fontSize="8" fontFamily="var(--font-mono)">
-                4 people (Infant + Senior)
-              </text>
-            </g>
-          </g>
-
-          {/* Realistic Moving Rescue Craft (Boat with Heading Beacon & Telemetry) */}
-          <g transform={`translate(${boatX}, ${boatY})`} className="rescue-boat-marker">
-            <circle cx="0" cy="0" r="22" fill="rgba(34, 197, 94, 0.25)" className="pulse-beacon" />
-            <circle cx="0" cy="0" r="14" fill="#16a34a" stroke="#ffffff" strokeWidth="2.5" />
-            <g transform="translate(-8, -8) scale(0.68)">
-              <path d="M2 19c2 0 3-1 5-1s3 1 5 1 3-1 5-1 3 1 5 1" stroke="#ffffff" strokeWidth="2" fill="none" />
-              <path d="M4 14l2-6h12l2 6z" stroke="#ffffff" strokeWidth="2" fill="#ffffff" />
-              <path d="M12 2v6" stroke="#ffffff" strokeWidth="2" />
-            </g>
-            {/* Real-time Telemetry Tag */}
-            <g transform="translate(18, -14)">
-              <rect width="118" height="24" rx="4" fill="#0c2317" stroke="#22c55e" strokeWidth="1" />
-              <text x="8" y="16" fill="#86efac" fontSize="8.5" fontWeight="bold" fontFamily="var(--font-mono)">
-                Team Alpha · {etaMinutes}m ETA
-              </text>
-            </g>
-          </g>
-        </svg>
+      {/* OpenStreetMap Live Leaflet Interactive Canvas */}
+      <div className="flood-map-leaflet-wrapper">
+        <div
+          ref={mapContainerRef}
+          className={`flood-map-leaflet-canvas ${mapLayerMode === 'dark' ? 'leaflet-theme-dark' : ''}`}
+          id="openmap-hazard-map"
+          style={{ width: '100%', height: '460px' }}
+        />
       </div>
 
       {/* Map Bottom Rationale Drawer */}

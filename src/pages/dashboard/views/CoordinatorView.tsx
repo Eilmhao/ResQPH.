@@ -32,7 +32,7 @@ export function CoordinatorView({ navSection = 'overview' }: { navSection?: NavS
   } = useMissions()
 
   // Selection & Modal states
-  const [selectedRequest, setSelectedRequest] = useState<RescueRequest | null>(null)
+  const [selectedRequest, setSelectedRequest] = useState<RescueRequest | null>(requests[0] || null)
   const [showAssignModal, setShowAssignModal] = useState(false)
   const [targetReqForAssign, setTargetReqForAssign] = useState<RescueRequest | null>(null)
 
@@ -57,9 +57,6 @@ export function CoordinatorView({ navSection = 'overview' }: { navSection?: NavS
   const [incidentNotes, setIncidentNotes] = useState<string>('All 4 family members in stable condition at NU Evacuation Center.')
   const [incidentSuggestions, setIncidentSuggestions] = useState<string>('Pre-position additional inflatable rubber boats near España Blvd during monsoon peak.')
 
-  // Check-in Message tool
-  const [checkinMessage, setCheckinMessage] = useState('')
-  const [checkinSentAlert, setCheckinSentAlert] = useState(false)
 
   // Dispatcher Route Delay & ETA Update tool
   const [delayMissionId, setDelayMissionId] = useState<string>('')
@@ -131,13 +128,6 @@ export function CoordinatorView({ navSection = 'overview' }: { navSection?: NavS
     setShowIncidentModal(false)
   }
 
-  function handleSendCitizenPing(e: React.FormEvent) {
-    e.preventDefault()
-    if (!checkinMessage.trim()) return
-    setCheckinSentAlert(true)
-    setCheckinMessage('')
-    setTimeout(() => setCheckinSentAlert(false), 4000)
-  }
 
   function handleSendDelayUpdate(e: React.FormEvent) {
     e.preventDefault()
@@ -213,32 +203,6 @@ export function CoordinatorView({ navSection = 'overview' }: { navSection?: NavS
           />
         </div>
 
-        {/* Quick status list of all missions on overview */}
-        {activeMissionsList.length > 0 && (
-          <Section title="Active Missions Summary" subtitle="Navigate to Missions for full telemetry and routing controls.">
-            <div className="item-list">
-              {activeMissionsList.map((mis) => {
-                const req = requests.find((r) => r.id === mis.requestId)
-                return (
-                  <div key={mis.id} className="item-card">
-                    <span className="item-card__icon"><Icon name="boat" size={18} /></span>
-                    <div className="item-card__body">
-                      <div className="item-card__head">
-                        <span className="item-card__title">{mis.id}</span>
-                        <StatusBadge status={mis.status} />
-                      </div>
-                      <div className="item-card__meta">
-                        <span>📍 {req?.location.address}</span>
-                        <span>🛣️ {mis.activeRouteName}</span>
-                        <span>⏱️ ETA {mis.etaMinutes} min</span>
-                      </div>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </Section>
-        )}
         </>
       )}
 
@@ -588,29 +552,6 @@ export function CoordinatorView({ navSection = 'overview' }: { navSection?: NavS
               </form>
             </div>
 
-            {/* Legacy Dispatcher to Citizen Check-in messaging tool */}
-            <div className="dispatcher-checkin-tool">
-              <h5>Dispatcher Broadcast / Citizen Check-In</h5>
-              <p>Send proactive status check-in or safety instruction to active citizen request.</p>
-
-              {checkinSentAlert && (
-                <div className="alert-banner-success" style={{ padding: '8px 12px', fontSize: '0.8rem' }}>
-                  ✓ Status update broadcasted to Citizen app!
-                </div>
-              )}
-
-              <form onSubmit={handleSendCitizenPing} className="checkin-form">
-                <input
-                  type="text"
-                  placeholder="E.g., Rescue boat is 300m away on Jhocson St. Please signal from balcony."
-                  value={checkinMessage}
-                  onChange={(e) => setCheckinMessage(e.target.value)}
-                />
-                <Button variant="primary" size="sm" type="submit">
-                  Send Ping
-                </Button>
-              </form>
-            </div>
           </Section>
 
           {/* Interactive Routing Oversight Map */}

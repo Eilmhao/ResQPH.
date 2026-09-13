@@ -246,6 +246,98 @@
 
 @media (max-width: 760px) {
   .flood-map-canvas { aspect-ratio: 4 / 3; }
+  .flood-map-leaflet-canvas { height: 380px; }
   .map-realtime-routing-banner { flex-direction: column; align-items: flex-start; }
   .explanation-row { flex-direction: column; gap: 4px; }
 }
+
+/* Leaflet OpenStreetMap Container & Styles */
+.flood-map-leaflet-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 460px;
+  background: #140c0c;
+  overflow: hidden;
+}
+
+.flood-map-leaflet-canvas {
+  width: 100%;
+  height: 460px;
+  z-index: 1;
+}
+
+.leaflet-theme-dark .leaflet-tile {
+  filter: brightness(0.7) invert(1) contrast(3) hue-rotate(200deg) saturate(0.35);
+}
+
+/* Custom Marker Beacons */
+.pin-beacon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+.pin-beacon-pulse {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgb(239 68 68 / 40%);
+  animation: pingAnimation 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.pin-beacon-center {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  border: 2px solid #ffffff;
+}
+
+.pin-beacon-center.red-beacon {
+  background: #dc2626;
+}
+
+.pin-beacon-center.boat-beacon {
+  background: #16a34a;
+  border-color: #ffffff;
+}
+
+.pin-beacon-center.evac-beacon {
+  background: #2563eb;
+  border-color: #ffffff;
+}
+
+/* Leaflet Popups */
+.leaflet-popup-content-wrapper {
+  background: #180a0a !important;
+  color: #f1f5f9 !important;
+  border: 1px solid #331515 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.8rem !important;
+  line-height: 1.4 !important;
+}
+
+.leaflet-popup-tip {
+  background: #180a0a !important;
+  border: 1px solid #331515 !important;
+}
+
+.leaflet-popup-flood,
+.leaflet-popup-route,
+.leaflet-popup-citizen,
+.leaflet-popup-rescuer,
+.leaflet-popup-evac {
+  padding: 4px 2px;
+}
+

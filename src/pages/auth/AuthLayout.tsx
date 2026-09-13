@@ -1,90 +1,50 @@
-import { useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
 import './auth.css'
-
-const SLIDES = [
-  '/resqph-flood-rescue.png',
-  '/ResQPHposter.jpg',
-  '/ManilaMap.jpg',
-  '/LiveTracker.jpg',
-]
 
 interface AuthLayoutProps {
   children: ReactNode
   rawContainer?: boolean
+  title?: string
+  subtitle?: string
+  footer?: ReactNode
+  iconBadge?: ReactNode
+  hideHeader?: boolean
 }
 
-export function AuthLayout({ children }: AuthLayoutProps) {
-  const [currentSlide, setCurrentSlide] = useState(0)
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prevIndex) => (prevIndex + 1) % SLIDES.length)
-    }, 4500)
-    return () => clearInterval(timer)
-  }, [])
-
-  const nextSlide = () => {
-    setCurrentSlide((prevIndex) => (prevIndex + 1) % SLIDES.length)
-  }
-
-  const prevSlide = () => {
-    setCurrentSlide((prevIndex) => (prevIndex - 1 + SLIDES.length) % SLIDES.length)
-  }
-
+export function AuthLayout({
+  children,
+  rawContainer = false,
+  title,
+  subtitle,
+  footer,
+  hideHeader = false,
+}: AuthLayoutProps) {
   return (
-    <div className="auth-sky-page">
-      {/* Brand Logo - Upper Right */}
-      <div className="auth-top-brand">
-        <span className="auth-brand-name">ResQPH</span>
-      </div>
-
-      {/* LEFT SIDE: Slideshow Section */}
-      <div className="auth-left-section">
-        {/* Render stacked slides for smooth opacity cross-fading */}
-        {SLIDES.map((slide, index) => (
-          <div
-            key={slide}
-            className={`auth-hero-layer auth-hero-blur ${
-              index === currentSlide ? 'is-active' : ''
-            }`}
-            style={{ backgroundImage: `url(${slide})` }}
+    <div className="auth-mobile-page">
+      <div className="auth-phone-shell">
+        {/* Header with ResQPH logo */}
+        <div className="auth-hero-banner">
+          <img
+            src="/logo.png"
+            alt="ResQPH"
+            className="auth-hero-logo-img"
           />
-        ))}
+          <p className="auth-hero-wordmark">ResQ<span className="auth-hero-wordmark__p">P</span><span className="auth-hero-wordmark__h">H</span></p>
+        </div>
 
-        {SLIDES.map((slide, index) => (
-          <div
-            key={`crisp-${slide}`}
-            className={`auth-hero-layer auth-hero-crisp ${
-              index === currentSlide ? 'is-active' : ''
-            }`}
-            style={{ backgroundImage: `url(${slide})` }}
-          />
-        ))}
+        {/* Form area */}
+        <div className="auth-body-container">
+          {!hideHeader && title && (
+            <div className="auth-title-block">
+              <h1 className="auth-main-title">{title}</h1>
+              {subtitle && <p className="auth-main-subtitle">{subtitle}</p>}
+            </div>
+          )}
 
-        {/* Navigation Arrow Controls */}
-        <button
-          type="button"
-          className="slideshow-arrow arrow-left"
-          onClick={prevSlide}
-          aria-label="Previous slide"
-        >
-          &#10094;
-        </button>
+          {rawContainer ? children : <div className="auth-inner-content">{children}</div>}
 
-        <button
-          type="button"
-          className="slideshow-arrow arrow-right"
-          onClick={nextSlide}
-          aria-label="Next slide"
-        >
-          &#10095;
-        </button>
-      </div>
-
-      {/* RIGHT SIDE: Login Card Container */}
-      <div className="auth-right-section">
-        <div className="auth-card-wrapper">{children}</div>
+          {footer && <div className="auth-bottom-footer">{footer}</div>}
+        </div>
       </div>
     </div>
   )

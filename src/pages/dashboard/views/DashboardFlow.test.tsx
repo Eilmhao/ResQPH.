@@ -56,6 +56,52 @@ describe('Citizen / Volunteer Dashboard Flows', () => {
     expect(screen.queryByText(/Rescue teams deployed/i)).not.toBeInTheDocument()
   })
 
+  it('renders all sections and elements from the citizen mockup dashboard', () => {
+    renderWithProviders(<DashboardPage />, 'citizen')
+
+    // Header & Role
+    expect(screen.getByText('SIGNED IN AS CITIZEN')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'RESQPH' })).toBeInTheDocument()
+
+    // Location & GPS lock
+    expect(screen.getByText(/Brgy\. Tumana, Marikina City/i)).toBeInTheDocument()
+    expect(screen.getByText(/14\.6532 N · 121\.0912 E/i)).toBeInTheDocument()
+    expect(screen.getByText(/GPS Lock/i)).toBeInTheDocument()
+
+    // SOS Card
+    expect(screen.getByText(/Emergency Channel Open/i)).toBeInTheDocument()
+    expect(screen.getByText('SOS')).toBeInTheDocument()
+    expect(screen.getByText('HOLD TO SEND')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Call 911 hotline/i })).toBeInTheDocument()
+
+    // 4 Services
+    expect(screen.getByText('REQUEST ASSISTANCE')).toBeInTheDocument()
+    expect(screen.getByText('4 SERVICES')).toBeInTheDocument()
+    expect(screen.getByText('Flood Rescue')).toBeInTheDocument()
+    expect(screen.getByText('Evacuation')).toBeInTheDocument()
+    expect(screen.getByText('Medical Aid')).toBeInTheDocument()
+    expect(screen.getByText('Relief Goods')).toBeInTheDocument()
+
+    // Nearest Responders
+    expect(screen.getByText('NEAREST RESPONDERS')).toBeInTheDocument()
+    expect(screen.getByText(/Rescue Team Alpha/i)).toBeInTheDocument()
+    expect(screen.getByText(/ETA 6 min/i)).toBeInTheDocument()
+    expect(screen.getByText(/Coast Guard Boat 4/i)).toBeInTheDocument()
+    expect(screen.getByText(/ETA 11 min/i)).toBeInTheDocument()
+
+    // Live Alerts
+    expect(screen.getByText('LIVE ALERTS')).toBeInTheDocument()
+    expect(screen.getByText(/Marikina River past 2nd alarm/i)).toBeInTheDocument()
+    expect(screen.getByText(/Typhoon Signal No\. 2 raised/i)).toBeInTheDocument()
+    expect(screen.getByText(/Evacuation center at 70% capacity/i)).toBeInTheDocument()
+
+    // Bottom Navigation
+    expect(screen.getByRole('button', { name: 'HOME' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'MAP' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'ALERTS' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'PROFILE' })).toBeInTheDocument()
+  })
+
   it('renders localized rainfall forecast widget', () => {
     renderWithProviders(<DashboardPage />, 'citizen')
     expect(screen.getByText(/Localized Rainfall & Flood Forecast/i)).toBeInTheDocument()
@@ -72,6 +118,25 @@ describe('Citizen / Volunteer Dashboard Flows', () => {
     expect(screen.getByText(/Keep Distress Tracking Active/i)).toBeInTheDocument()
     expect(screen.getByText(/Avoid Floodwater Contamination/i)).toBeInTheDocument()
   })
+
+  it('renders OpenStreetMap interactive hazard map with telemetry and routing rationale', () => {
+    renderWithProviders(<CitizenView navSection="map" />, 'citizen')
+
+    // Verify OpenStreetMap HUD indicator and layer buttons
+    expect(screen.getByText(/OpenStreetMap Live GIS/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'OpenStreetMap' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Tactical Dark' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Satellite View' })).toBeInTheDocument()
+
+    // Verify OpenStreetMap container element
+    expect(document.getElementById('openmap-hazard-map')).toBeInTheDocument()
+
+    // Verify Hydrodynamic rationale drawer
+    expect(screen.getByText(/Hydrodynamic Flood Routing Engine Rationale/i)).toBeInTheDocument()
+    expect(screen.getByText(/AVOIDED SHORTCUT/i)).toBeInTheDocument()
+    expect(screen.getByText(/ACTIVE SAFE ROUTE/i)).toBeInTheDocument()
+  })
+
 
 
   it('opens severity-adaptive form and shows Step A triage with all 5 flood levels', () => {

@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { ResqLogo } from '../brand/ResqLogo'
 import { Button } from '../ui/Button'
 import { useAuth } from '../../features/auth/AuthContext'
 import './SiteHeader.css'
@@ -19,7 +18,7 @@ export function SiteHeader() {
     <header className="site-header" id="top">
       <div className="site-header__inner">
         <Link to="/" className="site-header__brand" aria-label="ResQPH home">
-          <ResqLogo size={30} />
+          <img src="/resqph-logo.png" alt="ResQPH logo" className="site-header__logo-img" />
           <span>ResQPH</span>
         </Link>
 

@@ -52,10 +52,8 @@ export function DashboardPage() {
   const [profileEmail, setProfileEmail] = useState('')
   const [profileAvatar, setProfileAvatar] = useState('')
   const [profilePhone, setProfilePhone] = useState('')
-  const [profileIsStudent, setProfileIsStudent] = useState(false)
   const [profileEmergencyName, setProfileEmergencyName] = useState('')
   const [profileEmergencyPhone, setProfileEmergencyPhone] = useState('')
-  const [profileHomeArea, setProfileHomeArea] = useState('')
   const [profileError, setProfileError] = useState('')
   const avatarInputRef = useRef<HTMLInputElement>(null)
 
@@ -88,10 +86,8 @@ export function DashboardPage() {
     setProfileEmail(user?.email ?? '')
     setProfileAvatar(user?.avatarUrl ?? '')
     setProfilePhone(user?.phone ?? '')
-    setProfileIsStudent(user?.isStudent ?? false)
-    setProfileEmergencyName(user?.emergencyContactName ?? '')
-    setProfileEmergencyPhone(user?.emergencyContactPhone ?? '')
-    setProfileHomeArea(user?.homeArea ?? '')
+    setProfileEmergencyName(user?.emergencyContact?.name ?? '')
+    setProfileEmergencyPhone(user?.emergencyContact?.phone ?? '')
     setProfileError('')
     setProfileOpen(true)
   }
@@ -119,10 +115,13 @@ export function DashboardPage() {
       email: profileEmail,
       avatarUrl: profileAvatar || undefined,
       phone: profilePhone.trim() || undefined,
-      isStudent: profileIsStudent,
-      emergencyContactName: profileEmergencyName.trim() || undefined,
-      emergencyContactPhone: profileEmergencyPhone.trim() || undefined,
-      homeArea: profileHomeArea.trim() || undefined,
+      emergencyContact: profileEmergencyName.trim() || profileEmergencyPhone.trim() 
+        ? {
+            name: profileEmergencyName.trim(),
+            phone: profileEmergencyPhone.trim(),
+            relationship: 'Emergency Contact',
+          }
+        : undefined,
     })
     setProfileOpen(false)
   }
@@ -284,10 +283,6 @@ export function DashboardPage() {
             <span>Phone number</span>
             <input type="tel" value={profilePhone} onChange={(event) => setProfilePhone(event.target.value)} autoComplete="tel" placeholder="For dispatch follow-up" />
           </label>
-          <label className="profile-form__checkbox">
-            <input type="checkbox" checked={profileIsStudent} onChange={(event) => setProfileIsStudent(event.target.checked)} />
-            <span>I am a student</span>
-          </label>
           <div className="profile-form__section-label">Emergency contact</div>
           <div className="profile-form__grid">
             <label className="profile-form__field">
@@ -299,10 +294,6 @@ export function DashboardPage() {
               <input type="tel" value={profileEmergencyPhone} onChange={(event) => setProfileEmergencyPhone(event.target.value)} autoComplete="tel" />
             </label>
           </div>
-          <label className="profile-form__field">
-            <span>Home area <small>(optional)</small></span>
-            <input value={profileHomeArea} onChange={(event) => setProfileHomeArea(event.target.value)} placeholder="Barangay or general area" />
-          </label>
           {profileError ? <p className="profile-form__error" role="alert">{profileError}</p> : null}
         </form>
       </Modal>
