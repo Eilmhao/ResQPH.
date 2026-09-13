@@ -4,49 +4,26 @@ import { useQuery } from '@tanstack/react-query'
 import { getApiHealth } from '../../api/health'
 import { useAuth } from '../../features/auth/AuthContext'
 import { ROLE_LABELS } from '../../features/auth/types'
-import { ResqLogo } from '../../components/brand/ResqLogo'
-import { Icon, type IconName } from '../../components/art/Icon'
+import { Icon } from '../../components/art/Icon'
 import { Button } from '../../components/ui/Button'
 import { Modal } from '../../components/ui/Modal'
-import { StatusPill, type StatusTone } from '../../components/ui/StatusPill'
-import { useMissions } from '../../features/missions/MissionContext'
 import { OfflineIndicator } from '../../features/offline/OfflineIndicator'
 import { CitizenView } from './views/CitizenView'
 import { CoordinatorView } from './views/CoordinatorView'
 import { RescuerView } from './views/RescuerView'
-import { LocalizedForecastWidget } from './views/shared'
+import { VolunteerView } from './views/VolunteerView'
 import type { NavSection } from './views/navTypes'
 import './dashboard.css'
 
-type NavItem = {
-  id: NavSection
-  icon: IconName
-  label: string
-  roles: ('citizen' | 'rescuer' | 'coordinator')[]
-}
-
-const NAV_ITEMS: NavItem[] = [
-  { id: 'overview',   icon: 'pin',        label: 'Overview',   roles: ['citizen', 'rescuer', 'coordinator'] },
-  { id: 'inquiries',  icon: 'alert',      label: 'Inquiries',  roles: ['citizen', 'coordinator'] },
-  { id: 'missions',   icon: 'route',      label: 'Missions',   roles: ['rescuer', 'coordinator'] },
-  { id: 'teams',      icon: 'volunteers', label: 'Teams',      roles: ['coordinator'] },
-  { id: 'incidents',  icon: 'shield',     label: 'Incidents',  roles: ['coordinator'] },
-  { id: 'map',        icon: 'shield',     label: 'Hazard Map', roles: ['citizen', 'rescuer', 'coordinator'] },
-]
-
 export function DashboardPage() {
   const { user, logout, updateProfile } = useAuth()
-  const {
-    isOffline,
-    toggleOffline,
-    resetToInitialData,
-    pendingSyncCount,
-    hourlyForecast,
-    waterStations,
-  } = useMissions()
   const navigate = useNavigate()
+  
+  // Sidebar & Role Switcher state
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeNav, setActiveNav] = useState<NavSection>('overview')
+  const [activeRole, setActiveRole] = useState<'citizen' | 'volunteer'>('citizen')
+
   const [profileOpen, setProfileOpen] = useState(false)
   const [profileName, setProfileName] = useState('')
   const [profileEmail, setProfileEmail] = useState('')
@@ -57,28 +34,30 @@ export function DashboardPage() {
   const [profileError, setProfileError] = useState('')
   const avatarInputRef = useRef<HTMLInputElement>(null)
 
-  const healthQuery = useQuery({ queryKey: ['api-health'], queryFn: getApiHealth })
-
-  const apiState: { tone: StatusTone; label: string; detail?: string } = healthQuery.isPending
-    ? { tone: 'pending', label: 'Checking API' }
-    : healthQuery.isError
-      ? { tone: 'offline', label: 'API offline' }
-      : { tone: 'online', label: 'API online', detail: `v${healthQuery.data?.version ?? '—'}` }
+  useQuery({ queryKey: ['api-health'], queryFn: getApiHealth })
 
   const view = useMemo(() => {
-    switch (user?.role) {
-      case 'coordinator':
-        return <CoordinatorView navSection={activeNav} />
-      case 'rescuer':
-        return <RescuerView navSection={activeNav} />
-      default:
-        return <CitizenView navSection={activeNav} />
+    if (user?.role === 'coordinator') {
+      return <CoordinatorView navSection={activeNav} />
     }
-  }, [user?.role, activeNav])
+    if (user?.role === 'rescuer') {
+      return <RescuerView navSection={activeNav} />
+    }
+
+    if (activeRole === 'volunteer') {
+      return <VolunteerView navSection={activeNav} onNavigateTab={(section) => setActiveNav(section)} />
+    }
+
+    return <CitizenView navSection={activeNav} onNavigateTab={(section) => setActiveNav(section)} />
+  }, [user?.role, activeRole, activeNav])
 
   function handleLogout() {
     logout()
     navigate('/', { replace: true })
+  }
+
+  function toggleRoleSwitch() {
+    setActiveRole((prev) => (prev === 'citizen' ? 'volunteer' : 'citizen'))
   }
 
   function openProfile() {
@@ -136,115 +115,156 @@ export function DashboardPage() {
 
   return (
     <div className={`dash${menuOpen ? ' dash--menu-open' : ''}`}>
-      <aside className="dash__side">
-        <div className="dash__brand">
-          <ResqLogo size={26} />
-          <span>ResQPH</span>
-        </div>
+      {/* SVG CLIP PATHS */}
+      <svg width="0" height="0" style={{ position: 'absolute' }}>
+        <defs>
+          <clipPath id="sidebar-wave" clipPathUnits="objectBoundingBox">
+            <path d="M 0,0 L 1,0 L 1,0.70 C 0.72,1.05 0.32,0.40 0,0.85 Z" />
+          </clipPath>
 
-        {/* Current role indicator */}
-        <div className="dash__role-indicator">
-          <span className="role-indicator-label">Logged in as</span>
-          <span className="role-indicator-value">{user.role === 'coordinator' ? 'Dispatcher / Coordinator' : ROLE_LABELS[user.role]}</span>
-          <button type="button" className="dash__switch-portal" onClick={() => navigate('/login')}>
-            Switch portal
-          </button>
-        </div>
+          <clipPath id="header-wave" clipPathUnits="objectBoundingBox">
+            <path d="M 0,0 L 1,0 L 1,0.82 C 0.75,1.0 0.30,0.70 0,0.88 Z" />
+          </clipPath>
+        </defs>
+      </svg>
 
-        <nav className="dash__nav" aria-label="Dashboard">
-          {NAV_ITEMS.filter((item) => item.roles.includes(user.role as any)).map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className={`dash__nav-item${activeNav === item.id ? ' is-active' : ''}`}
-              onClick={() => { setActiveNav(item.id); setMenuOpen(false) }}
-            >
-              <Icon name={item.icon} size={18} />
-              <span>{item.label}</span>
-            </button>
-          ))}
-        </nav>
+      {/* OVERLAY BACKDROP */}
+      {menuOpen && (
+        <div 
+          className="sidebar-backdrop" 
+          onClick={() => setMenuOpen(false)} 
+          aria-hidden="true" 
+        />
+      )}
 
-        {/* Prototype tools */}
-        <div className="dash__side-tools">
-          <button
-            type="button"
-            className={`tool-btn ${isOffline ? 'is-offline-active' : ''}`}
-            onClick={toggleOffline}
-            title="Simulate internet connectivity loss during storms"
-          >
-            <Icon name={isOffline ? 'wifi-off' : 'refresh'} size={15} />
-            <span>{isOffline ? 'Simulating Offline' : 'Test Offline Mode'}</span>
-          </button>
-
-          <button
-            type="button"
-            className="tool-btn"
-            onClick={resetToInitialData}
-            title="Reset requests and missions to initial mock scenario"
-          >
-            <Icon name="refresh" size={15} />
-            <span>Reset Demo Data</span>
-          </button>
-        </div>
-
-        <button className="dash__logout" type="button" onClick={handleLogout}>
-          <Icon name="logout" size={18} />
-          <span>Sign out</span>
-        </button>
-      </aside>
-
-      <div className="dash__main">
-        <header className="dash__topbar">
-          <button
-            className="dash__menu-btn"
-            type="button"
-            aria-label="Toggle navigation"
-            onClick={() => setMenuOpen((v) => !v)}
-          >
-            <Icon name="menu" size={20} />
-          </button>
-
-          <div className="dash__topbar-title">
-            <p className="dash__role-tag">
-              {ROLE_LABELS[user.role]} Console · Metro Manila Study Area
-            </p>
-            <h1>
-              {user.role === 'citizen' && 'Citizen Distress & Volunteer Portal'}
-              {user.role === 'rescuer' && 'Field Rescuer Mobile Guidance'}
-              {user.role === 'coordinator' && 'Disaster Response Dispatcher Oversight'}
-            </h1>
+      {/* SIDEBAR */}
+      <aside className={`dash__side neu-sidebar-white ${menuOpen ? 'is-open' : ''}`}>
+        <div className="sidebar-header-red">
+          <div className="brand-wrapper">
+            <div className="logo-image-container">
+              <img 
+                src="/resQPHLogo.png" 
+                alt="ResQPH Logo" 
+                className="brand-logo-img"
+              />
+            </div>
+            <span className="brand-title">ResQPH Portal</span>
           </div>
 
-          <div className="dash__topbar-right">
+          <button 
+            type="button" 
+            className="mobile-close-btn" 
+            onClick={() => setMenuOpen(false)}
+            aria-label="Close menu"
+          >
+            ✕
+          </button>
+        </div>
 
-            <StatusPill
-              tone={isOffline ? 'pending' : apiState.tone}
-              label={isOffline ? `Offline (${pendingSyncCount} queued)` : apiState.label}
-              detail={apiState.detail}
-            />
-            <button className="dash__topbar-logout" type="button" onClick={handleLogout}>
-              <Icon name="logout" size={16} />
-              <span>Log out</span>
+        <div className="sidebar-body">
+          <div className="user-role-container">
+            <span className="role-label">Logged in as</span>
+            <strong className="role-value">
+              {user.name || (user.role === 'coordinator' ? 'Dispatcher / Coordinator' : ROLE_LABELS[user.role])}
+            </strong>
+          </div>
+
+          <nav className="sidebar-nav-list">
+            <button
+              type="button"
+              className={`neu-nav-item ${activeNav === 'overview' ? 'is-active' : ''}`}
+              onClick={() => { setActiveNav('overview'); setMenuOpen(false) }}
+            >
+              <Icon name="pin" size={18} />
+              <span>Overview</span>
             </button>
-            <button className="dash__avatar dash__avatar-button" type="button" onClick={openProfile} aria-label="Edit profile">
+
+            {/* NAV ITEM: "Track SOS" FOR VOLUNTEER, "Inquiries" FOR CITIZEN */}
+            <button
+              type="button"
+              className={`neu-nav-item ${activeNav === 'inquiries' ? 'is-active' : ''}`}
+              onClick={() => { setActiveNav('inquiries'); setMenuOpen(false) }}
+            >
+              <Icon name="alert" size={18} />
+              <span>{activeRole === 'volunteer' ? 'Track SOS' : 'Inquiries'}</span>
+              
+              {activeRole === 'volunteer' && (
+                <span className="glowing-red-dot" title="Live SOS Activity" />
+              )}
+            </button>
+
+            <button
+              type="button"
+              className={`neu-nav-item ${activeNav === 'map' ? 'is-active' : ''}`}
+              onClick={() => { setActiveNav('map'); setMenuOpen(false) }}
+            >
+              <Icon name="shield" size={18} />
+              <span>Hazard Map</span>
+            </button>
+          </nav>
+        </div>
+
+        <div className="sidebar-footer">
+          <button className="neu-logout-btn" type="button" onClick={handleLogout}>
+            <Icon name="logout" size={18} />
+            <span>Sign Out</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* MAIN WORKSPACE */}
+      <div className="dash__main">
+        <header className="home-header-image">
+          <div className="header-left">
+            <button
+              className="neu-burger-white"
+              type="button"
+              aria-label="Toggle navigation menu"
+              onClick={() => setMenuOpen((prev) => !prev)}
+            >
+              <Icon name="menu" size={20} />
+            </button>
+            <h1 className="header-page-title">Home Dashboard</h1>
+          </div>
+
+          <div className="header-center">
+            <div className="neu-logo-badge">
+              <img 
+                src="/resQPHLogo.png" 
+                alt="ResQPH Logo" 
+                className="header-logo-img"
+              />
+            </div>
+          </div>
+
+          <div className="header-right">
+            <button 
+              type="button" 
+              className="neu-btn-role-switch"
+              onClick={toggleRoleSwitch}
+              title="Click to toggle active role view"
+            >
+              <span className={`role-option ${activeRole === 'citizen' ? 'is-active' : 'is-inactive'}`}>
+                Citizen
+              </span>
+              <span className="role-divider">/</span>
+              <span className={`role-option ${activeRole === 'volunteer' ? 'is-active' : 'is-inactive'}`}>
+                Volunteer
+              </span>
+            </button>
+
+            <button className="neu-avatar-badge" type="button" onClick={openProfile} aria-label="Edit profile">
               {user.avatarUrl ? <img src={user.avatarUrl} alt="" /> : initials || 'RQ'}
             </button>
           </div>
         </header>
 
-        {/* Offline notification banner if offline mode active */}
         <OfflineIndicator />
-
-        {user.role === 'citizen' && (
-          <div className="dash__weather-strip">
-            <LocalizedForecastWidget hourly={hourlyForecast} waterStations={waterStations} />
-          </div>
-        )}
 
         <main className="dash__content">{view}</main>
       </div>
 
+      {/* PROFILE MODAL */}
       <Modal
         isOpen={profileOpen}
         onClose={() => setProfileOpen(false)}

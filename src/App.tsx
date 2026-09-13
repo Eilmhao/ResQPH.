@@ -6,7 +6,7 @@ import { DashboardPage } from './pages/dashboard/DashboardPage'
 import { RequireAuth } from './features/auth/RequireAuth'
 import { MissionProvider } from './features/missions/MissionContext'
 
-function App() {
+export default function App() {
   return (
     <MissionProvider>
       <Routes>
@@ -14,7 +14,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route
-          path="/dashboard"
+          path="/dashboard/*"
           element={
             <RequireAuth>
               <DashboardPage />
@@ -25,5 +25,3 @@ function App() {
     </MissionProvider>
   )
 }
-
-export default App

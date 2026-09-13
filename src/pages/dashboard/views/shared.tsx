@@ -2,13 +2,14 @@ import { useState, type ReactNode } from 'react'
 import { Icon, type IconName } from '../../../components/art/Icon'
 import { Modal } from '../../../components/ui/Modal'
 import type {
-  ForecastHour,
   RequestStatus,
   SeverityLevel,
   Vulnerabilities,
-  WaterLevelStation,
 } from '../../../features/missions/types'
 import './shared.css'
+
+// Re-export the dedicated iOS-style weather widget from its standalone component
+export { LocalizedForecastWidget } from './shared/LocalizedForecastWidget'
 
 export interface StatCardData {
   label: string
@@ -307,73 +308,6 @@ export function EmergencyPreparednessGuide() {
             <p>{g.desc}</p>
           </div>
         ))}
-      </div>
-    </div>
-  )
-}
-
-/* ----------------------------------------------------------------- */
-/** Localized Hourly Rainfall & River Basin Forecast Widget */
-export function LocalizedForecastWidget({
-  hourly,
-  waterStations,
-}: {
-  hourly: ForecastHour[]
-  waterStations: WaterLevelStation[]
-}) {
-  return (
-    <div className="forecast-widget" role="region" aria-label="Rainfall & River Basin Forecast">
-      <div className="forecast-header">
-        <div>
-          <h3>Localized Rainfall & Flood Forecast</h3>
-          <p className="forecast-sub">
-            PAGASA Radar & River Basin Gauge Network · Sampaloc / España District
-          </p>
-        </div>
-        <span className="forecast-badge-live">● Live Radar Feed</span>
-      </div>
-
-      {/* Hourly timeline */}
-      <div className="forecast-timeline">
-        {hourly.map((h, i) => (
-          <div key={h.time} className={`forecast-col ${i === 0 ? 'is-now' : ''}`}>
-            <span className="forecast-time">{h.time}</span>
-            <div className="forecast-rain-bar-container">
-              <div
-                className={`forecast-rain-bar ${h.floodRisk === 'Severe' ? 'bar-severe' : h.floodRisk === 'High' ? 'bar-high' : 'bar-mod'}`}
-                style={{ height: `${Math.min(100, Math.max(20, h.rainfallRate * 2.5))}px` }}
-                title={`${h.rainfallRate} mm/hr`}
-              />
-            </div>
-            <span className="forecast-rate font-mono">{h.rainfallRate} mm/h</span>
-            <span className={`forecast-risk-pill risk-${h.floodRisk.toLowerCase()}`}>
-              {h.floodRisk}
-            </span>
-            <span className="forecast-wind font-mono">{h.windSpeedKmh} km/h</span>
-          </div>
-        ))}
-      </div>
-
-      {/* River / Drainage Water Level Stations */}
-      <div className="water-stations-tray">
-        <span className="tray-title">River & Drainage Water Level Monitors:</span>
-        <div className="water-stations-grid">
-          {waterStations.map((stn) => (
-            <div key={stn.name} className="water-stn-card">
-              <div className="water-stn-head">
-                <span className="stn-name">{stn.name}</span>
-                <span className={`stn-status-tag status-${stn.status.toLowerCase()}`}>
-                  {stn.status}
-                </span>
-              </div>
-              <div className="water-stn-metric">
-                <span className="stn-level font-mono">{stn.currentLevel}m</span>
-                <span className="stn-trend">Trend: {stn.trend}</span>
-                <span className="stn-alert font-mono">Alert: {stn.alertLevel}m / Crit: {stn.criticalLevel}m</span>
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   )
