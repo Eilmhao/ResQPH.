@@ -866,7 +866,25 @@
   color: var(--color-brand-deep);
 }
 
-.neu-red-card,
+.citizen-mockup-overview .neu-red-card {
+  background: #ffffff !important;
+  color: var(--text-primary) !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+.citizen-mockup-overview .neu-red-card strong {
+  color: var(--text-primary) !important;
+}
+
+.citizen-mockup-overview .neu-red-card .font-mono {
+  color: var(--text-muted) !important;
+}
+
+.citizen-mockup-overview .neu-red-card > span:not([class]) {
+  color: var(--text-secondary) !important;
+}
+
 .stat-card--accent,
 .incoming-mission-banner,
 .incoming-inquiry-alert-bar {

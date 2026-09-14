@@ -164,7 +164,7 @@ export function CitizenView({
                       style={{ padding: '1.25rem 1rem', display: 'flex', flexDirection: 'column', gap: '8px', borderRadius: '18px', cursor: 'pointer', textAlign: 'left', border: 'none' }}
                       onClick={() => handleStartRequest(service.name)}
                     >
-                      <div style={{ background: 'rgba(255, 255, 255, 0.15)', width: '38px', height: '38px', borderRadius: '12px', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ background: 'rgba(138, 3, 3, 0.1)', width: '38px', height: '38px', borderRadius: '12px', color: '#8A0303', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <Icon name={service.icon as any} size={18} />
                       </div>
                       <strong style={{ fontSize: '0.95rem', color: '#ffffff' }}>{service.name}</strong>
@@ -197,7 +197,7 @@ export function CitizenView({
                   ].map((responder) => (
                     <div key={responder.name} className="neu-red-card" style={{ padding: '1rem 1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', borderRadius: '18px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <div style={{ background: 'rgba(255, 255, 255, 0.15)', padding: '10px', borderRadius: '12px', color: '#ffffff' }}>
+                        <div style={{ background: 'rgba(138, 3, 3, 0.1)', padding: '10px', borderRadius: '12px', color: '#8A0303' }}>
                           <Icon name="map-fold" size={20} />
                         </div>
                         <div>
