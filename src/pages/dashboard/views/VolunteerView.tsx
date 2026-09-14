@@ -217,7 +217,7 @@ export function VolunteerView({
                     <div className="neu-red-card" style={{ padding: '1rem', borderRadius: '16px' }}>
                       <span style={{ display: 'block', fontSize: '0.72rem', fontWeight: 800, color: '#fca5a5', textTransform: 'uppercase' }}>Occupants & Priority</span>
                       <strong style={{ fontSize: '0.95rem', color: '#ffffff', display: 'flex', alignItems: 'center', gap: '6px', margin: '4px 0' }}>
-                        👤 {activeReq.headcount} citizens
+                        <Icon name="user" size={14} /> {activeReq.headcount} citizens
                       </strong>
                       <VulnerabilitiesBadges vulns={activeReq.vulnerabilities} />
                     </div>

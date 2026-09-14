@@ -239,10 +239,10 @@ export function CoordinatorView({ navSection = 'overview' }: { navSection?: NavS
                       <span>
                         <Icon name="pin" size={12} /> {req.location.address}
                       </span>
-                      <span>👤 {req.headcount} people</span>
+                      <span><Icon name="user" size={12} /> {req.headcount} people</span>
                       {req.medicalNeeds && (
                         <span style={{ color: 'var(--color-danger-text)', fontWeight: 600 }}>
-                          🩺 Medical Needed
+                          <Icon name="medical" size={12} /> Medical Needed
                         </span>
                       )}
                       <span>{req.submittedAt}</span>
@@ -337,9 +337,11 @@ export function CoordinatorView({ navSection = 'overview' }: { navSection?: NavS
                       className="inspector-value"
                       style={{ color: selectedRequest.medicalNeeds ? 'var(--color-danger-text)' : 'inherit' }}
                     >
-                      {selectedRequest.medicalNeeds
-                        ? `🚨 YES: ${selectedRequest.medicalDetails || 'Urgent medical assistance requested'}`
-                        : 'None reported'}
+                      {selectedRequest.medicalNeeds ? (
+                        <>
+                          <Icon name="alert" size={13} /> YES: {selectedRequest.medicalDetails || 'Urgent medical assistance requested'}
+                        </>
+                      ) : 'None reported'}
                     </span>
                   </div>
                 </div>
@@ -410,9 +412,9 @@ export function CoordinatorView({ navSection = 'overview' }: { navSection?: NavS
                         )}
                       </div>
                       <div className="item-card__meta">
-                        <span>📍 {req?.location.address}</span>
-                        <span>🛣️ Active: <strong>{mis.activeRouteName}</strong></span>
-                        <span>⏱️ ETA: {req?.eta || '5 mins'}</span>
+                        <span><Icon name="pin" size={12} /> {req?.location.address}</span>
+                        <span><Icon name="route" size={12} /> Active: <strong>{mis.activeRouteName}</strong></span>
+                        <span><Icon name="clock" size={12} /> ETA: {req?.eta || '5 mins'}</span>
                       </div>
 
                       {/* En Route Advisory Strip — visible only while mission is en-route */}
@@ -427,8 +429,8 @@ export function CoordinatorView({ navSection = 'overview' }: { navSection?: NavS
                             "{mis.routeDelayExplanation}"
                           </p>
                           <div className="advisory-strip-meta">
-                            <span>⏱️ Arrival target: <strong>{mis.etaMinutes} min</strong></span>
-                            <span>🛣️ Corridor: <strong>{mis.activeRouteName}</strong></span>
+                            <span><Icon name="clock" size={12} /> Arrival target: <strong>{mis.etaMinutes} min</strong></span>
+                            <span><Icon name="route" size={12} /> Corridor: <strong>{mis.activeRouteName}</strong></span>
                           </div>
                         </div>
                       )}
@@ -479,14 +481,14 @@ export function CoordinatorView({ navSection = 'overview' }: { navSection?: NavS
 
             {/* Dispatcher Real-Time Route Delay & ETA Broadcaster */}
             <div className="dispatcher-delay-updater">
-              <h5>🛣️ Real-Time Route Delay &amp; ETA Broadcaster</h5>
+              <h5><Icon name="broadcast" size={16} /> Real-Time Route Delay &amp; ETA Broadcaster</h5>
               <p>
                 Push a live route delay explanation to both the Citizen App and the active Rescue Team. This message appears as a constant advisory on the En Route screen for both parties.
               </p>
 
               {delaySentAlert && (
                 <div className="alert-banner-success" style={{ padding: '8px 12px', fontSize: '0.8rem' }}>
-                  ✓ Route delay advisory pushed to Citizen and Rescue Team views!
+                  <Icon name="check" size={14} /> Route delay advisory pushed to Citizen and Rescue Team views!
                 </div>
               )}
 
@@ -508,7 +510,7 @@ export function CoordinatorView({ navSection = 'overview' }: { navSection?: NavS
                       if (activeMissionsList[0]) setDelayMissionId(activeMissionsList[0].id)
                     }}
                   >
-                    ⚡ {preset.label}
+                    <Icon name="route" size={13} /> {preset.label}
                   </button>
                 ))}
               </div>
@@ -593,10 +595,10 @@ export function CoordinatorView({ navSection = 'overview' }: { navSection?: NavS
                   </div>
 
                   <div className="incident-metrics-row">
-                    <span>👤 Evacuated: <strong>{inc.evacuatedCount}</strong></span>
-                    <span>⚠️ Casualties: <strong>{inc.casualtiesCount}</strong></span>
-                    <span>🕒 Documented: <strong>{inc.documentedAt}</strong></span>
-                    <span>✍️ Officer: <strong>{inc.dispatcherName}</strong></span>
+                    <span><Icon name="user" size={12} /> Evacuated: <strong>{inc.evacuatedCount}</strong></span>
+                    <span><Icon name="warning" size={12} /> Casualties: <strong>{inc.casualtiesCount}</strong></span>
+                    <span><Icon name="clock" size={12} /> Documented: <strong>{inc.documentedAt}</strong></span>
+                    <span><Icon name="shield" size={12} /> Officer: <strong>{inc.dispatcherName}</strong></span>
                   </div>
 
                   <div className="incident-section">
@@ -633,7 +635,7 @@ export function CoordinatorView({ navSection = 'overview' }: { navSection?: NavS
                 <p className="fleet-type">{t.unitType} · {t.membersCount} Crew Members</p>
                 <div className="fleet-details">
                   <span>Lead: {t.leadRescuer}</span>
-                  <span>{t.hasMedicalUnit ? '🩺 Medical Unit Attached' : 'Standard First Aid'}</span>
+                  <span>{t.hasMedicalUnit ? <><Icon name="medical" size={12} /> Medical Unit Attached</> : 'Standard First Aid'}</span>
                   <span className="font-mono">{t.contactPhone}</span>
                 </div>
               </div>

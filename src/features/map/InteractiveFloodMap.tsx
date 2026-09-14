@@ -22,8 +22,8 @@ const TILE_PROVIDERS = {
     maxZoom: 19,
   },
   dark: {
-    name: 'Tactical Dark OSM',
-    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    name: 'Relief Map',
+    url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors &copy; CARTO',
     maxZoom: 19,
   },
@@ -33,6 +33,12 @@ const TILE_PROVIDERS = {
     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, OpenStreetMap contributors',
     maxZoom: 19,
   },
+}
+
+const markerSvg = {
+  alert: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5 22 20H2L12 3.5Z"/><path d="M12 10v4"/><circle cx="12" cy="17" r="0.8"/></svg>',
+  boat: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 19c2 0 3-1 5-1s3 1 5 1 3-1 5-1 3 1 5 1"/><path d="M4 14l2-6h12l2 6z"/><path d="M12 2v6"/></svg>',
+  shelter: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7"/><path d="M5 10.5V20h14v-9.5"/><path d="M9 20v-6h6v6"/></svg>',
 }
 
 export function InteractiveFloodMap({
@@ -266,10 +272,10 @@ export function InteractiveFloodMap({
       const citizenIcon = L.divIcon({
         className: 'leaflet-custom-marker',
         html: `
-          <div class="pin-beacon-wrapper">
+            <div class="pin-beacon-wrapper">
             <div class="pin-beacon-pulse"></div>
             <div class="pin-beacon-center red-beacon">
-              <span>🚨</span>
+              ${markerSvg.alert}
             </div>
           </div>
         `,
@@ -292,7 +298,7 @@ export function InteractiveFloodMap({
         html: `
           <div class="pin-beacon-wrapper">
             <div class="pin-beacon-center boat-beacon">
-              <span>🚤</span>
+              ${markerSvg.boat}
             </div>
           </div>
         `,
@@ -315,7 +321,7 @@ export function InteractiveFloodMap({
         html: `
           <div class="pin-beacon-wrapper">
             <div class="pin-beacon-center evac-beacon">
-              <span>🏫</span>
+              ${markerSvg.shelter}
             </div>
           </div>
         `,
@@ -354,13 +360,13 @@ export function InteractiveFloodMap({
       <div className="flood-map-controls">
         <div className="flood-map-legend-items">
           <span className="legend-tag legend-study">
-            🗺️ OpenStreetMap Live GIS · 14.6532° N, 121.0912° E
+            <Icon name="map-fold" size={13} /> OpenStreetMap Live GIS · 14.6532° N, 121.0912° E
           </span>
           <span className="legend-tag legend-safe">
-            ● Safe Transit (Jhocson Corridor · {etaMinutes}m ETA)
+            <Icon name="route" size={13} /> Safe Transit (Jhocson Corridor · {etaMinutes}m ETA)
           </span>
           <span className="legend-tag legend-impassable">
-            ✕ Loyola St. (Impassable: 1.4m Depth)
+            <Icon name="warning" size={13} /> Loyola St. (Impassable: 1.4m Depth)
           </span>
         </div>
 
@@ -377,9 +383,9 @@ export function InteractiveFloodMap({
             type="button"
             className={`map-toggle-btn ${mapLayerMode === 'dark' ? 'is-active' : ''}`}
             onClick={() => setMapLayerMode('dark')}
-            title="Tactical Night Response OpenStreetMap"
+            title="Light terrain and road cartography"
           >
-            Tactical Dark
+            Relief Map
           </button>
           <button
             type="button"
@@ -424,7 +430,7 @@ export function InteractiveFloodMap({
       <div className="flood-map-leaflet-wrapper">
         <div
           ref={mapContainerRef}
-          className={`flood-map-leaflet-canvas ${mapLayerMode === 'dark' ? 'leaflet-theme-dark' : ''}`}
+          className="flood-map-leaflet-canvas"
           id="openmap-hazard-map"
           style={{ width: '100%', height: '460px' }}
         />

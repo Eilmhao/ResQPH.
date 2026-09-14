@@ -157,7 +157,7 @@ export function DashboardPage() {
             onClick={() => setMenuOpen(false)}
             aria-label="Close menu"
           >
-            ✕
+            <Icon name="close" size={20} />
           </button>
         </div>
 

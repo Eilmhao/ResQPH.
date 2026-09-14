@@ -304,3 +304,47 @@ textarea,
 select {
   color-scheme: light;
 }
+
+/* Visual refresh: soft red brand system on white and light-grey surfaces. */
+:root {
+  --_off-white: #fbfaf8;
+  --_red-50: #fff3f1;
+  --_red-100: #ffe1dc;
+  --_red-300: #ee8176;
+  --_red-400: #df4b40;
+  --_red-500: #cf3028;
+  --_red-600: #aa251f;
+  --_red-700: #7d1d19;
+  --_dark-base: #f5f6f7;
+  --_dark-1: #ffffff;
+  --_dark-2: #f1f3f4;
+  --_dark-3: #e8ecef;
+  --_dark-4: #d9e0e4;
+  --_slate-600: #59636b;
+  --_slate-700: #34414a;
+  --_slate-800: #1d2a33;
+  --_slate-900: #101820;
+  --color-brand: #cf3028;
+  --color-brand-hover: #aa251f;
+  --color-brand-deep: #7d1d19;
+  --color-brand-subtle: rgb(207 48 40 / 8%);
+  --color-brand-border: rgb(207 48 40 / 18%);
+  --color-brand-glow: rgb(207 48 40 / 14%);
+  --surface-base: #f5f6f7;
+  --surface-raised: #ffffff;
+  --surface-elevated: #f1f3f4;
+  --surface-overlay: #ffffff;
+  --surface-light: #ffffff;
+  --surface-light-raised: #fbfaf8;
+  --surface-light-border: #e3e7ea;
+  --text-primary: #17222b;
+  --text-secondary: #59636b;
+  --text-tertiary: #7d8991;
+  --text-disabled: #a8b1b7;
+  --text-on-light: #17222b;
+  --text-on-light-secondary: #59636b;
+  --text-on-light-tertiary: #7d8991;
+  --border-subtle: #e8ecef;
+  --border-default: #dce3e7;
+  --border-strong: #bcc8cf;
+}

@@ -464,3 +464,59 @@
     width: 100%;
   }
 }
+
+/* Polished rescue-brand hero: photographic, calm, and red-led without flooding the screen. */
+.lp-root {
+  background: #f5f6f7;
+}
+
+.lp-bg-img {
+  opacity: 0.95;
+  filter: saturate(0.9) contrast(1.02) brightness(0.9);
+}
+
+.lp-bg-overlay {
+  background:
+    linear-gradient(90deg, rgb(12 18 24 / 82%) 0%, rgb(12 18 24 / 55%) 42%, rgb(255 255 255 / 12%) 100%),
+    linear-gradient(0deg, rgb(12 18 24 / 42%) 0%, rgb(12 18 24 / 10%) 54%, rgb(12 18 24 / 35%) 100%);
+}
+
+.lp-title__resq,
+.lp-title__p {
+  color: #fff;
+}
+
+.lp-title__h,
+.lp-tw-cursor {
+  color: #ff6a60;
+}
+
+.lp-tw-prefix {
+  color: rgb(255 255 255 / 70%);
+}
+
+.lp-tagline {
+  color: rgb(255 255 255 / 88%);
+}
+
+.lp-btn {
+  min-height: 48px;
+  border-radius: 8px;
+}
+
+.lp-btn--primary,
+.lp-btn--primary:hover {
+  background: var(--color-brand);
+}
+
+.lp-btn--secondary {
+  background: rgb(255 255 255 / 92%);
+  color: #17222b;
+}
+
+@media (max-width: 720px) {
+  .lp-bg-overlay {
+    background:
+      linear-gradient(0deg, rgb(12 18 24 / 84%) 0%, rgb(12 18 24 / 45%) 58%, rgb(12 18 24 / 46%) 100%);
+  }
+}

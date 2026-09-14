@@ -656,3 +656,178 @@
     gap: 4px;
   }
 }
+
+/* Final polish layer: flatter hierarchy, cleaner inline icon rows, fewer boxed accents. */
+.coordinator-view,
+.rescuer-view {
+  gap: 22px;
+}
+
+.stat-card,
+.dash-section,
+.preparedness-guide {
+  border-radius: 12px;
+}
+
+.dash-section {
+  padding: clamp(18px, 2.2vw, 26px);
+}
+
+.dash-section__head {
+  margin-bottom: 20px;
+}
+
+.dash-section__head h2 {
+  letter-spacing: -0.035em;
+}
+
+.stat-card,
+.dash-section {
+  box-shadow: 0 1px 0 rgb(16 24 32 / 4%);
+}
+
+.item-card,
+.inspector-panel,
+.target-card,
+.route-card,
+.incident-card,
+.team-fleet-card,
+.hotline-item,
+.guide-card,
+.dispatcher-delay-updater,
+.target-details-panel,
+.enroute-reroute-explanation-card,
+.impassable-alert-box,
+.medical-emergency-alert,
+.weather-alert-banner,
+.incoming-mission-banner,
+.incoming-inquiry-alert-bar,
+.fast-track-banner,
+.liability-warning-box,
+.alert-banner-success {
+  border-radius: 10px;
+  background: #f5f6f7;
+}
+
+.item-card.is-selected,
+.route-card.is-selected {
+  background: #ffffff;
+  box-shadow: inset 3px 0 0 var(--color-brand);
+}
+
+.item-card__icon,
+.stat-card__icon {
+  border-radius: 8px;
+}
+
+.item-card__meta span,
+.incident-metrics-row span,
+.fleet-details span,
+.route-metrics span,
+.advisory-strip-meta span,
+.reroute-eta-row span,
+.incoming-banner-badge,
+.mission-completed-tag,
+.dispatcher-delay-updater h5,
+.alert-banner-success {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.item-card__meta svg,
+.incident-metrics-row svg,
+.fleet-details svg,
+.route-metrics svg,
+.advisory-strip-meta svg,
+.reroute-eta-row svg {
+  color: var(--color-brand);
+  flex: 0 0 auto;
+}
+
+.incoming-mission-banner,
+.incoming-inquiry-alert-bar,
+.weather-alert-banner {
+  background: #ffffff;
+}
+
+.incoming-pulse-icon,
+.inquiry-pulse,
+.impassable-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: var(--color-brand-subtle);
+  color: var(--color-brand);
+  flex: 0 0 auto;
+}
+
+.medical-emergency-alert,
+.impassable-alert-box,
+.liability-warning-box {
+  background: #fff3f1;
+  color: var(--color-brand-deep);
+}
+
+.dispatcher-delay-updater {
+  padding: 18px;
+}
+
+.dispatcher-delay-updater h5 {
+  margin: 0 0 6px;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.delay-presets-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.preset-btn {
+  background: #ffffff;
+  color: var(--text-secondary);
+}
+
+.preset-btn:hover {
+  background: var(--color-brand-subtle);
+  color: var(--color-brand-deep);
+}
+
+.advisory-status-icon {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  flex: 0 0 auto;
+}
+
+.advisory-status-icon--standby {
+  background: var(--color-warning);
+}
+
+.advisory-status-icon--arrived {
+  background: var(--color-success);
+}
+
+.mission-completed-tag {
+  border-radius: 8px;
+  background: var(--color-success-surface);
+  color: var(--color-success);
+  padding: 8px 11px;
+  font-weight: 760;
+}
+
+.field input,
+.field textarea,
+.field select,
+.form-select,
+.profile-form__field input,
+.profile-form__field textarea,
+.profile-form__field select {
+  border-radius: 8px;
+  background: #eef2f4;
+}

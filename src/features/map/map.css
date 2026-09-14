@@ -266,10 +266,6 @@
   z-index: 1;
 }
 
-.leaflet-theme-dark .leaflet-tile {
-  filter: brightness(0.7) invert(1) contrast(3) hue-rotate(200deg) saturate(0.35);
-}
-
 /* Custom Marker Beacons */
 .pin-beacon-wrapper {
   position: relative;
@@ -386,5 +382,135 @@
   color: var(--text-primary) !important;
   border: 0 !important;
   box-shadow: 0 18px 42px rgb(20 32 39 / 18%) !important;
+}
+
+/* Light hazard-map treatment for clean rescue operations. */
+.flood-map-container {
+  border-radius: 12px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.flood-map-controls {
+  align-items: flex-start;
+  background: #ffffff;
+  padding: 14px 16px;
+}
+
+.flood-map-legend-items {
+  gap: 7px;
+}
+
+.legend-tag,
+.map-toggle-btn,
+.exp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 8px !important;
+}
+
+.legend-tag {
+  background: #f1f3f4;
+  color: var(--text-secondary);
+}
+
+.legend-study {
+  color: var(--text-primary);
+}
+
+.legend-safe {
+  color: #276749;
+  background: rgb(47 125 90 / 10%);
+}
+
+.legend-impassable {
+  color: var(--color-brand-deep);
+  background: var(--color-brand-subtle);
+}
+
+.flood-map-toggles {
+  gap: 8px;
+}
+
+.map-toggle-btn {
+  background: #f5f6f7;
+  color: var(--text-secondary);
+  min-height: 32px;
+}
+
+.map-toggle-btn:hover {
+  background: #eef2f4;
+  border-color: transparent;
+  color: var(--text-primary);
+}
+
+.map-toggle-btn.is-active {
+  background: var(--color-brand);
+  color: #ffffff;
+}
+
+.map-realtime-routing-banner {
+  background: #fff3f1;
+  color: var(--text-primary);
+}
+
+.banner-pulse-icon,
+.banner-text strong,
+.explanation-title svg {
+  color: var(--color-brand);
+}
+
+.banner-eta-badge {
+  border-radius: 8px;
+  background: var(--color-brand);
+}
+
+.flood-map-leaflet-wrapper,
+.flood-map-canvas {
+  background: #eef2f4;
+}
+
+.flood-map-explanation {
+  background: #ffffff;
+}
+
+.pin-beacon-center {
+  border: 2px solid #fff;
+  box-shadow: 0 8px 20px rgb(16 24 32 / 18%);
+}
+
+.pin-beacon-center svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pin-beacon-center svg circle {
+  fill: currentColor;
+  stroke: none;
+}
+
+.pin-beacon-center.red-beacon,
+.pin-beacon-center.boat-beacon,
+.pin-beacon-center.evac-beacon {
+  color: #ffffff;
+}
+
+.pin-beacon-center.boat-beacon {
+  background: #2f7d5a;
+}
+
+.pin-beacon-center.evac-beacon {
+  background: #2e6d9d;
+}
+
+.leaflet-control-zoom a {
+  border: 0 !important;
+  color: var(--text-primary) !important;
 }
 

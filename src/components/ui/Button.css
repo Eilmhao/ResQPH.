@@ -111,3 +111,21 @@
   background: var(--surface-elevated);
   color: var(--text-primary);
 }
+
+.btn {
+  border-radius: 8px;
+}
+
+.btn--primary,
+.btn--primary:hover:not(:disabled) {
+  background: var(--color-brand);
+}
+
+.btn--outline {
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px var(--border-default);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  background: #eef2f4;
+}

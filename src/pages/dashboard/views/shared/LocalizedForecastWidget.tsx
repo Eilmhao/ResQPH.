@@ -55,7 +55,7 @@ export function LocalizedForecastWidget({ hourly = [] }: LocalizedForecastWidget
           <div className="temp-cloud-wrapper">
             <h2 className="weather-temp">{currentWeather.temp}°</h2>
             <div className="inline-cloud-animated" aria-hidden="true">
-              <span className="cloud-icon">🌧️</span>
+              <Icon name="droplet" size={34} />
             </div>
           </div>
 
@@ -106,25 +106,25 @@ export function LocalizedForecastWidget({ hourly = [] }: LocalizedForecastWidget
             hourly.map((item, index) => (
               <div key={index} className="hourly-card neu-inset-card">
                 <span className="hourly-time">{item.time || `${index + 1} PM`}</span>
-                <span className="hourly-icon">🌧️</span>
+                <span className="hourly-icon"><Icon name="droplet" size={18} /></span>
                 <span className="hourly-temp">{item.temp ?? 28}°</span>
                 <span className="hourly-rain-pop">{item.rainMm ? `${item.rainMm}mm` : '80%'}</span>
               </div>
             ))
           ) : (
             [
-              { time: 'Now', temp: '29°', pop: '90%', icon: '🌧️' },
-              { time: '12 PM', temp: '29°', pop: '95%', icon: '⛈️' },
-              { time: '1 PM', temp: '30°', pop: '85%', icon: '🌧️' },
-              { time: '2 PM', temp: '31°', pop: '100%', icon: '⛈️' },
-              { time: '3 PM', temp: '30°', pop: '70%', icon: '🌧️' },
-              { time: '4 PM', temp: '28°', pop: '60%', icon: '🌦️' },
-              { time: '5 PM', temp: '26°', pop: '40%', icon: '☁️' },
-              { time: '6 PM', temp: '25°', pop: '20%', icon: '☁️' },
+              { time: 'Now', temp: '29°', pop: '90%', icon: 'droplet' },
+              { time: '12 PM', temp: '29°', pop: '95%', icon: 'alert' },
+              { time: '1 PM', temp: '30°', pop: '85%', icon: 'droplet' },
+              { time: '2 PM', temp: '31°', pop: '100%', icon: 'alert' },
+              { time: '3 PM', temp: '30°', pop: '70%', icon: 'droplet' },
+              { time: '4 PM', temp: '28°', pop: '60%', icon: 'wind' },
+              { time: '5 PM', temp: '26°', pop: '40%', icon: 'wind' },
+              { time: '6 PM', temp: '25°', pop: '20%', icon: 'wind' },
             ].map((item, idx) => (
               <div key={idx} className="hourly-card neu-inset-card">
                 <span className="hourly-time">{item.time}</span>
-                <span className="hourly-icon">{item.icon}</span>
+                <span className="hourly-icon"><Icon name={item.icon as 'droplet' | 'alert' | 'wind'} size={18} /></span>
                 <span className="hourly-temp">{item.temp}</span>
                 <span className="hourly-rain-pop">{item.pop}</span>
               </div>

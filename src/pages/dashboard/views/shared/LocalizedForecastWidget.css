@@ -338,3 +338,53 @@
 .ios-weather-container.red-theme-inset .hourly-scroll-container {
   scrollbar-width: none;
 }
+
+/* Weather widget refresh: photographic but light, with red reserved for warning state. */
+.ios-weather-container.red-theme-inset.compact-left {
+  background: #ffffff !important;
+  color: var(--text-primary);
+  border-radius: 12px;
+  padding: 1.2rem 1.35rem;
+  box-shadow: 0 1px 0 rgb(16 24 32 / 4%);
+}
+
+.weather-bg-image-layer {
+  opacity: 0.14;
+  mix-blend-mode: normal;
+}
+
+.ios-weather-container.red-theme-inset .weather-warning-banner {
+  background: #fff3f1 !important;
+  color: var(--color-brand-deep);
+  width: 100%;
+}
+
+.ios-weather-container.red-theme-inset .weather-location,
+.ios-weather-container.red-theme-inset .weather-temp,
+.ios-weather-container.red-theme-inset .weather-condition {
+  color: var(--text-primary);
+}
+
+.ios-weather-container.red-theme-inset .weather-sublocation,
+.ios-weather-container.red-theme-inset .weather-hi-lo,
+.ios-weather-container.red-theme-inset .hourly-title {
+  color: var(--text-secondary);
+}
+
+.inline-cloud-animated {
+  color: var(--color-brand);
+  animation: floatCloudNextToTemp 4s ease-in-out infinite alternate;
+}
+
+.ios-weather-container.red-theme-inset .weather-hourly-strip {
+  border-top-color: var(--border-subtle);
+}
+
+.ios-weather-container.red-theme-inset .hourly-card,
+.ios-weather-container.red-theme-inset .weather-metric-badge {
+  background: #f5f6f7 !important;
+}
+
+.ios-weather-container.red-theme-inset .hourly-icon {
+  color: var(--color-brand);
+}

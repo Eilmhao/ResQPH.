@@ -125,7 +125,7 @@ describe('Citizen / Volunteer Dashboard Flows', () => {
     // Verify OpenStreetMap HUD indicator and layer buttons
     expect(screen.getByText(/OpenStreetMap Live GIS/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'OpenStreetMap' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Tactical Dark' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Relief Map' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Satellite View' })).toBeInTheDocument()
 
     // Verify OpenStreetMap container element

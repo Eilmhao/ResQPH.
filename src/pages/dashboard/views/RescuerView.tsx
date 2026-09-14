@@ -109,12 +109,12 @@ export function RescuerView(_props: { navSection?: NavSection }) {
               <Icon name="alert" size={24} />
             </span>
             <div>
-              <div className="incoming-banner-badge">🚨 NEW RESCUE DISPATCH ASSIGNMENT</div>
+              <div className="incoming-banner-badge"><Icon name="alert" size={14} /> NEW RESCUE DISPATCH ASSIGNMENT</div>
               <h3>{mission.id} → {targetRequest.location.address}</h3>
               <p>
                 <strong>{targetRequest.headcount} Persons</strong> · Severity:{' '}
                 <strong>{targetRequest.severity.toUpperCase()}</strong> ({targetRequest.floodDepth})
-                {targetRequest.medicalNeeds ? ' · 🩺 ACTIVE MEDICAL NEED' : ''}
+                {targetRequest.medicalNeeds ? ' · ACTIVE MEDICAL NEED' : ''}
               </p>
             </div>
           </div>
@@ -204,7 +204,7 @@ export function RescuerView(_props: { navSection?: NavSection }) {
             )}
 
             {mission.status === 'completed' && (
-              <span className="mission-completed-tag">✓ Mission Completed</span>
+              <span className="mission-completed-tag"><Icon name="check" size={14} /> Mission Completed</span>
             )}
           </div>
         }
@@ -221,14 +221,14 @@ export function RescuerView(_props: { navSection?: NavSection }) {
               "{mission.routeDelayExplanation}"
             </p>
             <div className="reroute-eta-row">
-              <span>⏱️ Transit Target: <strong>{mission.etaMinutes} minutes</strong></span>
-              <span>🛣️ Active Corridor: <strong>{mission.activeRouteName}</strong></span>
+              <span><Icon name="clock" size={12} /> Transit Target: <strong>{mission.etaMinutes} minutes</strong></span>
+              <span><Icon name="route" size={12} /> Active Corridor: <strong>{mission.activeRouteName}</strong></span>
             </div>
           </div>
         ) : mission.status === 'assigned' ? (
           <div className="enroute-reroute-explanation-card enroute-advisory--standby">
             <div className="reroute-header">
-              <span className="advisory-status-icon">🟡</span>
+              <span className="advisory-status-icon advisory-status-icon--standby" />
               <span className="reroute-title">AWAITING DEPARTURE</span>
               <span className="reroute-source">Tap "EN ROUTE" above when craft is moving</span>
             </div>
@@ -240,7 +240,7 @@ export function RescuerView(_props: { navSection?: NavSection }) {
         ) : mission.status === 'arrived' ? (
           <div className="enroute-reroute-explanation-card enroute-advisory--arrived">
             <div className="reroute-header">
-              <span className="advisory-status-icon">🟢</span>
+              <span className="advisory-status-icon advisory-status-icon--arrived" />
               <span className="reroute-title">ARRIVED AT SCENE</span>
               <span className="reroute-source">Central Dispatch notified</span>
             </div>
@@ -256,7 +256,7 @@ export function RescuerView(_props: { navSection?: NavSection }) {
             <div className="medical-emergency-alert">
               <Icon name="medical" size={22} />
               <div>
-                <strong>🚨 HIGH PRIORITY MEDICAL ALERT AT TARGET</strong>
+                <strong>HIGH PRIORITY MEDICAL ALERT AT TARGET</strong>
                 <p>
                   {targetRequest.medicalDetails ||
                     'Urgent medical support required. Patient has respiratory distress requiring nebulizer & warming.'}
@@ -355,9 +355,9 @@ export function RescuerView(_props: { navSection?: NavSection }) {
             </div>
             <h4>{primaryRoute.name}</h4>
             <div className="route-metrics">
-              <span>⏱️ {primaryRoute.estimatedMinutes} mins transit</span>
-              <span>🌊 {primaryRoute.waterDepth}</span>
-              <span>⛰️ Elevation: {primaryRoute.elevation}</span>
+              <span><Icon name="clock" size={12} /> {primaryRoute.estimatedMinutes} mins transit</span>
+              <span><Icon name="waves" size={12} /> {primaryRoute.waterDepth}</span>
+              <span><Icon name="navigation" size={12} /> Elevation: {primaryRoute.elevation}</span>
             </div>
             <p className="route-explanation">{primaryRoute.explanation}</p>
           </div>
@@ -376,9 +376,9 @@ export function RescuerView(_props: { navSection?: NavSection }) {
             </div>
             <h4>{alternativeRoute.name}</h4>
             <div className="route-metrics">
-              <span>⏱️ {alternativeRoute.estimatedMinutes} mins transit</span>
-              <span>🌊 {alternativeRoute.waterDepth}</span>
-              <span>⛰️ Elevation: {alternativeRoute.elevation}</span>
+              <span><Icon name="clock" size={12} /> {alternativeRoute.estimatedMinutes} mins transit</span>
+              <span><Icon name="waves" size={12} /> {alternativeRoute.waterDepth}</span>
+              <span><Icon name="navigation" size={12} /> Elevation: {alternativeRoute.elevation}</span>
             </div>
             <p className="route-explanation">{alternativeRoute.explanation}</p>
           </div>
@@ -436,7 +436,7 @@ export function RescuerView(_props: { navSection?: NavSection }) {
               className="btn-danger-emergency"
               onClick={handleConfirmCompleted}
             >
-              ✓ Confirm Rescue Completed
+              <Icon name="check" size={16} /> Confirm Rescue Completed
             </Button>
           </div>
         </div>
