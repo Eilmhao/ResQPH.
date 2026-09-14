@@ -249,3 +249,58 @@ img, svg { display: block; max-width: 100%; }
 
 body { color-scheme: light; background: var(--surface-base); color: var(--text-primary); }
 h1, h2, h3, h4, h5, h6 { font-weight: 600; letter-spacing: -0.025em; }
+
+/* Production refresh: calm rescue UI with red reserved for urgency and action. */
+:root {
+  --_off-white: #f8f7f4;
+  --_red-50: #fff2f0;
+  --_red-100: #ffe0dc;
+  --_red-300: #e8796d;
+  --_red-400: #d94a3e;
+  --_red-500: #c8322b;
+  --_red-600: #a92722;
+  --_red-700: #7f211e;
+  --_dark-base: #f4f3ef;
+  --_dark-1: #ffffff;
+  --_dark-2: #edeee9;
+  --_dark-3: #e3e7e1;
+  --_dark-4: #ced8d2;
+  --_slate-600: #53615f;
+  --_slate-700: #303f46;
+  --_slate-800: #17242b;
+  --_slate-900: #0c1720;
+  --color-brand: #c8322b;
+  --color-brand-hover: #a92722;
+  --color-brand-deep: #7f211e;
+  --color-brand-subtle: rgb(200 50 43 / 8%);
+  --color-brand-border: rgb(200 50 43 / 20%);
+  --color-brand-glow: rgb(200 50 43 / 16%);
+  --surface-base: #f4f3ef;
+  --surface-raised: #ffffff;
+  --surface-elevated: #f8f7f4;
+  --surface-overlay: #ffffff;
+  --surface-light: #ffffff;
+  --surface-light-raised: #f8f7f4;
+  --surface-light-border: #dde3df;
+  --text-primary: #142027;
+  --text-secondary: #53615f;
+  --text-tertiary: #7b8783;
+  --text-disabled: #a8b1ad;
+  --text-on-light: #142027;
+  --text-on-light-secondary: #53615f;
+  --text-on-light-tertiary: #7b8783;
+  --border-subtle: #e7ebe6;
+  --border-default: #d8dfda;
+  --border-strong: #bac7c0;
+  --shell: min(1240px, calc(100% - 48px));
+}
+
+body {
+  line-height: 1.55;
+}
+
+input,
+textarea,
+select {
+  color-scheme: light;
+}

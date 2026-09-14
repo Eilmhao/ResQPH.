@@ -550,3 +550,203 @@
     height: 38px;
   }
 }
+
+.dash {
+  background: #f4f3ef;
+}
+
+.dash__main {
+  background:
+    linear-gradient(180deg, #f8f7f4 0%, #f4f3ef 280px, #eef1ed 100%);
+}
+
+.dash__content {
+  width: min(1220px, 100%);
+  margin: 0 auto;
+  padding: 28px clamp(18px, 3vw, 38px) 48px;
+}
+
+.sidebar-backdrop {
+  background: rgb(12 23 32 / 44%);
+  backdrop-filter: blur(2px);
+}
+
+.neu-sidebar-white {
+  width: 292px;
+  background: #fff !important;
+  box-shadow: 18px 0 50px rgb(20 32 39 / 13%);
+  border-right: 0;
+}
+
+.sidebar-header-red {
+  height: auto;
+  min-height: 120px;
+  padding: 24px 20px 28px;
+  background:
+    linear-gradient(135deg, rgb(20 32 39 / 94%), rgb(12 23 32 / 90%)),
+    url('/philippine-flood-rescue.jpg') center/cover no-repeat;
+  clip-path: none;
+}
+
+.logo-image-container,
+.neu-logo-badge {
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.brand-title {
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+}
+
+.mobile-close-btn {
+  opacity: 0.82;
+}
+
+.sidebar-body {
+  gap: 22px;
+  padding: 20px 18px 0;
+  margin-top: 0;
+}
+
+.user-role-container {
+  background: #f4f3ef;
+  border: 0;
+  border-radius: 12px;
+  box-shadow: none;
+  padding: 14px 15px;
+}
+
+.role-label {
+  color: #78857f;
+  letter-spacing: 0.08em;
+}
+
+.role-value {
+  color: #142027;
+  font-weight: 760;
+}
+
+.sidebar-nav-list {
+  gap: 6px;
+}
+
+.neu-nav-item,
+.neu-logout-btn {
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  box-shadow: none;
+  color: #53615f;
+  font-weight: 700;
+}
+
+.neu-nav-item:hover,
+.neu-logout-btn:hover {
+  background: #f4f3ef;
+  box-shadow: none;
+  transform: translateY(0);
+}
+
+.neu-nav-item.is-active,
+.neu-nav-item:active,
+.neu-logout-btn:active {
+  background: #17242b;
+  color: #fff;
+  box-shadow: none;
+}
+
+.home-header-image {
+  height: 86px;
+  padding: 0 clamp(18px, 3vw, 40px);
+  background: #17242b !important;
+  clip-path: none;
+}
+
+.header-page-title {
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  font-weight: 760;
+  text-shadow: none;
+  letter-spacing: -0.03em;
+}
+
+.neu-burger-white,
+.neu-btn-role-switch,
+.neu-avatar-badge {
+  border: 0;
+  box-shadow: none;
+}
+
+.neu-burger-white {
+  background: rgb(255 255 255 / 11%);
+  color: #fff;
+  border-radius: 10px;
+}
+
+.neu-btn-role-switch {
+  background: rgb(255 255 255 / 10%);
+  color: #fff;
+  border-radius: 10px;
+}
+
+.role-divider,
+.role-option.is-inactive {
+  color: rgb(255 255 255 / 48%);
+}
+
+.role-option.is-active {
+  color: #fff;
+}
+
+.neu-avatar-badge {
+  border: 2px solid rgb(255 255 255 / 25%);
+  background: #fff;
+  color: #17242b;
+}
+
+.neu-red-action-card {
+  background: #fff !important;
+  border: 0 !important;
+  border-radius: 16px !important;
+  box-shadow: none !important;
+}
+
+.neu-red-card {
+  background: #17242b !important;
+  border: 0 !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+
+.sos-button-neat {
+  background: var(--color-brand);
+  border: 0;
+  box-shadow: 0 12px 32px rgb(200 50 43 / 22%);
+}
+
+.sos-button-neat:active {
+  box-shadow: 0 6px 18px rgb(200 50 43 / 18%);
+}
+
+.glowing-emergency-pill {
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-brand-subtle);
+  color: var(--color-brand-deep);
+  animation: none;
+}
+
+.glowing-red-dot,
+.glowing-red-dot-live {
+  box-shadow: none;
+}
+
+@media (max-width: 768px) {
+  .dash__content {
+    padding: 20px 14px 34px;
+  }
+
+  .home-header-image {
+    height: 76px;
+  }
+}

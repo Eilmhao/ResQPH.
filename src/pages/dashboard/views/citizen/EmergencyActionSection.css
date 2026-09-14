@@ -264,3 +264,68 @@
     align-items: flex-start;
   }
 }
+
+.emergency-action-container.neu-white-action-card {
+  margin-top: 0;
+  border: 0;
+  border-radius: 18px;
+  background: #fff !important;
+  box-shadow: none;
+}
+
+.action-icon-badge.red-pulse {
+  border-radius: 10px;
+  background: var(--color-brand);
+  box-shadow: none;
+  animation: none;
+}
+
+.action-heading {
+  color: var(--text-primary);
+  font-weight: 760;
+}
+
+.action-subheading {
+  color: var(--text-secondary);
+}
+
+.action-buttons-grid {
+  gap: 12px;
+}
+
+.neu-action-btn {
+  border-radius: 12px;
+  box-shadow: none !important;
+}
+
+.neu-action-btn.primary-red {
+  background: var(--color-brand);
+}
+
+.neu-action-btn.primary-red:hover {
+  background: var(--color-brand-hover);
+}
+
+.neu-action-btn.secondary-red-outline {
+  border: 0;
+  background: #f4f3ef;
+  color: var(--text-primary);
+}
+
+.btn-icon-wrapper.white-glow,
+.btn-icon-wrapper.red-soft-bg {
+  border: 0;
+  border-radius: 10px;
+}
+
+.action-footer-note.neu-red-inset-box {
+  border: 0;
+  border-radius: 12px;
+  background: #f8f7f4;
+  box-shadow: none;
+}
+
+.live-status-pill {
+  border: 0;
+  border-radius: 7px;
+}

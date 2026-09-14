@@ -287,3 +287,54 @@
     gap: 4px;
   }
 }
+
+.ios-weather-container.red-theme-inset.compact-left {
+  width: 100%;
+  border-radius: 18px;
+  background: #17242b !important;
+  box-shadow: none;
+  padding: 1.35rem 1.45rem;
+}
+
+.weather-bg-image-layer {
+  opacity: 0.08;
+  mix-blend-mode: normal;
+}
+
+.neu-inset-card {
+  border: 0;
+  border-radius: 12px;
+  box-shadow: none;
+  background: rgb(255 255 255 / 92%) !important;
+}
+
+.ios-weather-container.red-theme-inset .weather-warning-banner {
+  color: var(--color-brand-deep);
+}
+
+.ios-weather-container.red-theme-inset .weather-warning-banner svg,
+.ios-weather-container.red-theme-inset .weather-metric-badge svg {
+  color: var(--color-brand);
+}
+
+.ios-weather-container.red-theme-inset .weather-location {
+  font-size: 1.2rem;
+  text-shadow: none;
+}
+
+.ios-weather-container.red-theme-inset .weather-temp {
+  font-size: clamp(2.6rem, 6vw, 3.4rem);
+  text-shadow: none;
+}
+
+.inline-cloud-animated {
+  filter: none;
+}
+
+.ios-weather-container.red-theme-inset .weather-hourly-strip {
+  border-top-color: rgb(255 255 255 / 12%);
+}
+
+.ios-weather-container.red-theme-inset .hourly-scroll-container {
+  scrollbar-width: none;
+}

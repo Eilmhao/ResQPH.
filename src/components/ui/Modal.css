@@ -91,3 +91,38 @@
   from { opacity: 0; transform: translateY(12px) scale(0.98); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
+
+.modal-backdrop {
+  background: rgb(12 23 32 / 58%);
+  backdrop-filter: blur(2px);
+}
+
+.modal-card {
+  max-width: min(620px, calc(100vw - 32px));
+  border: 0;
+  border-radius: 18px;
+  background: #fff;
+  color: var(--text-primary);
+  box-shadow: 0 28px 80px rgb(20 32 39 / 22%);
+}
+
+.modal-header,
+.modal-footer {
+  background: #fff;
+  border-color: var(--border-subtle);
+}
+
+.modal-title {
+  font-family: var(--font-body);
+  font-weight: 760;
+  letter-spacing: -0.03em;
+}
+
+.modal-subtitle {
+  color: var(--text-secondary);
+}
+
+.modal-close {
+  background: #f3f5f2;
+  color: var(--text-secondary);
+}
