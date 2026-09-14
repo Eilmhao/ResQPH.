@@ -1,13 +1,17 @@
-/* ==========================================
-   1. SHELL LAYOUT & ROOT WRAPPERS
-   ========================================== */
+/* ==========================================================================
+   ResQPH Dashboard — Modern, Clean, Intentional Field-Operations UI
+   ========================================================================== */
+
+/* ── 1. Shell Layout ─────────────────────────────────────────────────────── */
 .dash {
   display: flex;
   width: 100vw;
   height: 100vh;
-  background-color: #eef2f6;
+  background-color: #f8fafc;
   overflow: hidden;
   position: relative;
+  font-family: var(--font-body);
+  color: #0f172a;
 }
 
 .dash__main {
@@ -15,416 +19,482 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  min-height: 0;
   height: 100vh;
   width: 100%;
 }
 
 .dash__content {
-  padding: 1.5rem;
   flex: 1;
-  position: relative;
-  z-index: 1;
-}
-
-.resq-citizen-workspace {
-  flex: 1;
+  max-width: 1360px;
   width: 100%;
+  margin: 0 auto;
+  padding: 1.75rem 2rem 3rem;
+  box-sizing: border-box;
 }
 
 .sidebar-backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(3px);
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(2px);
   z-index: 90;
 }
 
-/* ==========================================
-   2. OFF-CANVAS NEUMORPHIC WHITE SIDEBAR
-   ========================================== */
-.neu-sidebar-white {
+/* ── 2. Sidebar ──────────────────────────────────────────────────────────── */
+.modern-sidebar {
   position: fixed;
   top: 0;
   left: 0;
-  width: 280px;
+  width: 260px;
   height: 100dvh;
-  background: #eef2f6 !important;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 0 0 1.2rem 0 !important;
-  overflow-y: auto;
   z-index: 100;
-  border-right: none;
-  box-shadow: 15px 0 30px rgba(163, 177, 198, 0.4);
   transform: translateX(-100%);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 4px 0 24px rgba(15, 23, 42, 0.08);
 }
 
-.neu-sidebar-white.is-open {
+.modern-sidebar.is-open {
   transform: translateX(0);
 }
 
-.sidebar-header-red {
-  background: linear-gradient(135deg, rgba(138, 3, 3, 0.92) 0%, rgba(100, 2, 2, 0.86) 100%),
-              url('/philippine-flood-rescue.jpg') center/cover no-repeat;
-  height: 135px;
-  padding: 1.5rem 1rem 0 1rem;
-  position: relative;
+.sidebar-header {
+  padding: 1.25rem 1.25rem 1rem;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  flex-shrink: 0;
-  clip-path: url(#sidebar-wave);
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .brand-wrapper {
   display: flex;
   align-items: center;
-  gap: 12px;
-  z-index: 2;
+  gap: 10px;
 }
 
 .logo-image-container {
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #ffffff;
-  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.25), 
-              inset -2px -2px 5px rgba(255, 255, 255, 0.8);
   flex-shrink: 0;
-  padding: 4px;
 }
 
 .brand-logo-img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  display: block;
 }
 
 .brand-title {
-  font-size: 1.3rem;
-  font-weight: 800;
-  color: #ffffff;
-  letter-spacing: -0.3px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.02em;
 }
 
 .mobile-close-btn {
   background: transparent;
   border: none;
-  font-size: 1.2rem;
-  color: #ffffff;
-  font-weight: 800;
+  font-size: 1rem;
+  color: #64748b;
   cursor: pointer;
-  padding: 4px;
-  z-index: 2;
+  padding: 6px;
+  border-radius: 6px;
+  line-height: 1;
+}
+
+.mobile-close-btn:hover {
+  color: #0f172a;
+  background: #f1f5f9;
 }
 
 .sidebar-body {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1rem;
   flex: 1;
-  padding: 0 1rem;
-  margin-top: 0.8rem;
+  padding: 1rem 0.85rem;
+  overflow-y: auto;
 }
 
 .user-role-container {
-  background: #ffffff;
-  padding: 0.85rem 1rem;
-  border-radius: 14px;
+  background: #f8fafc;
+  padding: 0.75rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid #f1f5f9;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  box-shadow: inset 4px 4px 8px rgba(163, 177, 198, 0.6), 
-              inset -4px -4px 8px #ffffff;
-  border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
 .role-label {
   font-size: 0.68rem;
   color: #64748b;
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.05em;
 }
 
 .role-value {
-  font-size: 0.9rem;
-  color: #8A0303;
-  font-weight: 800;
+  font-size: 0.88rem;
+  color: #0f172a;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sidebar-nav-list {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 3px;
 }
 
-.neu-nav-item {
+.modern-nav-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 0.8rem 1rem;
-  border-radius: 14px;
-  border: 1px solid #ffffff;
-  background: #ffffff;
-  color: #8A0303;
-  font-weight: 800;
-  font-size: 0.9rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #475569;
+  font-weight: 500;
+  font-size: 0.88rem;
   cursor: pointer;
-  box-shadow: 6px 6px 12px #c5d0e0, 
-              -6px -6px 12px #ffffff;
-  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
+  transition: all 0.15s ease;
+  text-align: left;
+  width: 100%;
 }
 
-.neu-nav-item svg {
-  color: #8A0303;
-  transition: color 0.2s ease;
+.modern-nav-item svg {
+  color: #64748b;
+  transition: color 0.15s ease;
+  flex-shrink: 0;
 }
 
-.neu-nav-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 8px 8px 16px #b8c4d6, 
-              -8px -8px 16px #ffffff;
+.modern-nav-item:hover {
+  background: #f1f5f9;
+  color: #0f172a;
 }
 
-.neu-nav-item.is-active,
-.neu-nav-item:active {
-  background: #8A0303;
-  color: #ffffff;
-  border-color: transparent;
-  transform: translateY(0);
-  box-shadow: inset 4px 4px 8px #5c0202, 
-              inset -4px -4px 8px #b80404;
+.modern-nav-item:hover svg {
+  color: #0f172a;
 }
 
-.neu-nav-item.is-active svg,
-.neu-nav-item:active svg {
-  color: #ffffff;
+.modern-nav-item.is-active {
+  background: rgba(220, 38, 38, 0.08);
+  color: #dc2626;
+  font-weight: 600;
 }
 
-.glowing-red-dot {
-  width: 9px;
-  height: 9px;
-  background-color: #ef4444;
+.modern-nav-item.is-active svg {
+  color: #dc2626;
+}
+
+.active-red-dot {
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
+  background-color: #dc2626;
   margin-left: auto;
-  display: inline-block;
-  box-shadow: 0 0 8px #ef4444, 0 0 12px #ef4444;
-  animation: pulseGlowingRed 1.6s infinite cubic-bezier(0.4, 0, 0.6, 1);
-}
-
-@keyframes pulseGlowingRed {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-    box-shadow: 0 0 8px #ef4444, 0 0 12px #ef4444;
-  }
-  50% {
-    opacity: 0.4;
-    transform: scale(0.85);
-    box-shadow: 0 0 2px #ef4444, 0 0 4px #ef4444;
-  }
 }
 
 .sidebar-footer {
-  padding: 0.8rem 1rem 0 1rem;
-  flex-shrink: 0;
+  padding: 0.85rem;
+  border-top: 1px solid #f1f5f9;
 }
 
-.neu-logout-btn {
-  width: 100%;
+.modern-logout-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 0.8rem 1rem;
-  border-radius: 14px;
-  border: 1px solid #ffffff;
-  background: #ffffff;
-  color: #8A0303;
-  font-weight: 800;
-  font-size: 0.9rem;
+  gap: 10px;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-weight: 500;
+  font-size: 0.88rem;
   cursor: pointer;
-  box-shadow: 6px 6px 12px #c5d0e0, 
-              -6px -6px 12px #ffffff;
-  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  transition: all 0.15s ease;
 }
 
-.neu-logout-btn svg {
-  color: #8A0303;
-  transition: color 0.2s ease;
+.modern-logout-btn:hover {
+  background: #fee2e2;
+  color: #dc2626;
 }
 
-.neu-logout-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 8px 8px 16px #b8c4d6, 
-              -8px -8px 16px #ffffff;
+.modern-logout-btn:hover svg {
+  color: #dc2626;
 }
 
-.neu-logout-btn:active {
-  background: #8A0303;
-  color: #ffffff;
-  border-color: transparent;
-  transform: translateY(0);
-  box-shadow: inset 4px 4px 8px #5c0202, 
-              inset -4px -4px 8px #b80404;
-}
-
-.neu-logout-btn:active svg {
-  color: #ffffff;
-}
-
-/* ==========================================
-   3. COMPACT DASHBOARD HEADER
-   ========================================== */
-.home-header-image {
-  position: relative;
+/* ── 3. Header ───────────────────────────────────────────────────────────── */
+.dash-header {
+  height: 64px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 105px;
-  padding: 0 2rem 1rem 2rem;
-  background: linear-gradient(135deg, rgba(138, 3, 3, 0.92) 0%, rgba(100, 2, 2, 0.86) 100%),
-              url('/philippine-flood-rescue.jpg') center/cover no-repeat !important;
-  clip-path: url(#header-wave);
-  z-index: 10;
+  gap: 1rem;
   flex-shrink: 0;
+  z-index: 10;
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: 14px;
-  z-index: 2;
+  gap: 12px;
+  min-width: 0;
 }
 
-.neu-burger-white {
+.btn-burger {
   background: #ffffff;
-  border: none;
-  border-radius: 12px;
-  padding: 0.65rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 7px;
   cursor: pointer;
-  color: #8A0303;
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.3), inset -2px -2px 5px rgba(255,255,255,0.8);
+  color: #475569;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   flex-shrink: 0;
 }
 
-.neu-burger-white:active {
-  box-shadow: inset 2px 2px 5px rgba(0,0,0,0.3);
-  transform: scale(0.96);
+.btn-burger:hover {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+.header-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.header-subtitle {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
 }
 
 .header-page-title {
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
   margin: 0;
   white-space: nowrap;
-  letter-spacing: -0.3px;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
 }
 
 .header-center {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-}
-
-.neu-logo-badge {
-  width: 48px;
-  height: 48px;
-  border-radius: 16px;
-  background: #ffffff;
-  box-shadow: 4px 4px 12px rgba(0,0,0,0.35), inset -2px -2px 5px rgba(255,255,255,0.8);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 5px;
+}
+
+.header-brand-badge {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .header-logo-img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  display: block;
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 14px;
-  z-index: 2;
+  gap: 12px;
+  flex-shrink: 0;
 }
 
-.neu-btn-role-switch {
-  background: #ffffff;
-  padding: 0.6rem 1.05rem;
-  border-radius: 14px;
-  border: none;
+.btn-role-switch {
+  background: #f8fafc;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
   cursor: pointer;
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.3), inset -2px -2px 5px rgba(255,255,255,0.8);
   display: flex;
   align-items: center;
   gap: 6px;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   user-select: none;
 }
 
-.neu-btn-role-switch:hover {
-  transform: translateY(-1px);
-}
-
-.neu-btn-role-switch:active {
-  box-shadow: inset 2px 2px 5px rgba(0,0,0,0.3);
-  transform: translateY(0);
+.btn-role-switch:hover {
+  border-color: #cbd5e1;
+  background: #f1f5f9;
 }
 
 .role-divider {
-  color: rgba(0, 0, 0, 0.25);
-  font-weight: 600;
-  font-size: 0.9rem;
+  color: #cbd5e1;
+  font-size: 0.75rem;
 }
 
 .role-option.is-active {
-  color: #8A0303;
-  font-weight: 900;
-  font-size: 0.88rem;
-  opacity: 1;
+  color: #dc2626;
+  font-weight: 700;
+  font-size: 0.8rem;
 }
 
 .role-option.is-inactive {
-  color: rgba(0, 0, 0, 0.45);
-  font-weight: 600;
-  font-size: 0.88rem;
-  opacity: 0.7;
+  color: #64748b;
+  font-weight: 500;
+  font-size: 0.8rem;
 }
 
-.neu-avatar-badge {
-  width: 42px;
-  height: 42px;
+.avatar-badge {
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  border: 2px solid #ffffff;
-  background: #ffffff;
-  color: #8A0303;
-  font-weight: 800;
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  background: rgba(220, 38, 38, 0.08);
+  color: #dc2626;
+  font-weight: 700;
+  font-size: 0.82rem;
   cursor: pointer;
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+.avatar-badge:hover {
+  transform: scale(1.05);
+}
+
+.avatar-badge img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── 4. Clean Structural Cards & Action Buttons ───────────────────────────── */
+/* Clean card container without card-in-card nesting */
+.neu-red-action-card,
+.modern-clean-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.neu-red-card {
+  background: #ffffff;
+  color: #0f172a;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.neu-red-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* SOS Hero Trigger */
+.sos-button-neat {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #dc2626;
+  color: #ffffff;
+  border: 4px solid #ffffff;
+  box-shadow: 0 4px 16px rgba(220, 38, 38, 0.35);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sos-button-neat:hover {
+  background: #b91c1c;
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.45);
+}
+
+.sos-button-neat:active {
+  transform: scale(0.97);
+}
+
+.glowing-emergency-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  color: #dc2626;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.glowing-red-dot-live {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #dc2626;
+}
+
+/* Profile form */
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.profile-avatar-editor {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.profile-avatar-editor__preview {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+  font-weight: 700;
+  font-size: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -432,129 +502,96 @@
   flex-shrink: 0;
 }
 
-.neu-avatar-badge img {
+.profile-avatar-editor__preview img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* ==========================================
-   4. SUNKEN RED NEUMORPHIC & SOS STYLES
-   ========================================== */
-.neu-red-action-card {
-  background: #eef2f6 !important;
-  box-shadow: 10px 10px 20px rgba(163, 177, 198, 0.6), 
-              -10px -10px 20px #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.8) !important;
-  color: #1e293b !important;
+.profile-avatar-editor strong {
+  display: block;
+  font-size: 0.95rem;
+  color: #0f172a;
 }
 
-.neu-red-card {
-  background: #8A0303 !important;
-  color: #ffffff !important;
-  box-shadow: inset 6px 6px 12px #5c0202, 
-              inset -6px -6px 12px #b80404 !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  transition: transform 0.2s ease;
+.profile-avatar-editor p {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 2px 0 8px 0;
 }
 
-.neu-red-card:hover {
-  transform: translateY(-1px);
+.profile-avatar-editor__input {
+  display: none;
 }
 
-.sos-button-neat {
-  width: 135px;
-  height: 135px;
-  border-radius: 50%;
-  background: #8A0303;
-  color: #ffffff;
-  border: 3px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 6px 6px 16px rgba(138, 3, 3, 0.4), 
-              inset 3px 3px 6px #b80404, 
-              inset -3px -3px 6px #5c0202;
-  cursor: pointer;
+.profile-form__field {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.15s ease;
+  gap: 4px;
 }
 
-.sos-button-neat:active {
-  transform: scale(0.96);
-  box-shadow: inset 4px 4px 8px #5c0202, 
-              inset -4px -4px 8px #b80404;
+.profile-form__field span {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #475569;
 }
 
-.glowing-emergency-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0.45rem 1.1rem;
-  border-radius: 30px;
-  background: rgba(138, 3, 3, 0.1);
-  border: 2px solid #8A0303;
-  color: #8A0303;
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
+.profile-form__field input {
+  padding: 0.6rem 0.85rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #0f172a;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.profile-form__field input:focus {
+  border-color: #dc2626;
+}
+
+.profile-form__section-label {
+  font-size: 0.8rem;
+  font-weight: 700;
   text-transform: uppercase;
-  animation: emergencyPillPulse 1.8s infinite ease-in-out;
+  letter-spacing: 0.04em;
+  color: #64748b;
+  margin-top: 0.5rem;
 }
 
-.glowing-red-dot-live {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background-color: #ef4444;
-  box-shadow: 0 0 8px #ef4444;
-  animation: dotFlash 1.2s infinite ease-in-out;
+.profile-form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
 }
 
-@keyframes emergencyPillPulse {
-  0%, 100% {
-    border-color: #8A0303;
-    box-shadow: 0 0 10px rgba(138, 3, 3, 0.3);
-  }
-  50% {
-    border-color: #ef4444;
-    box-shadow: 0 0 18px rgba(239, 68, 68, 0.6);
-  }
+.profile-form__error {
+  color: #dc2626;
+  font-size: 0.82rem;
+  margin: 0;
 }
 
-@keyframes dotFlash {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.3; transform: scale(0.75); }
-}
-
-/* ==========================================
-   5. RESPONSIVE BREAKPOINTS
-   ========================================== */
+/* ── 5. Responsive Breakpoints ───────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .home-header-image {
-    height: 95px;
-    padding: 0 1rem 0.8rem 1rem;
+  .dash-header {
+    padding: 0 1rem;
+    height: 56px;
   }
 
-  .header-page-title {
-    font-size: 1.1rem;
+  .dash__content {
+    padding: 1.25rem 1rem 2rem;
   }
 
-  .header-center {
+  .header-brand-badge {
     display: none;
   }
 
-  .neu-btn-role-switch {
-    padding: 0.5rem 0.8rem;
+  .header-page-title {
+    font-size: 0.95rem;
   }
 
-  .role-option.is-active,
-  .role-option.is-inactive {
-    font-size: 0.78rem;
-  }
-
-  .neu-avatar-badge {
-    width: 38px;
-    height: 38px;
+  .header-subtitle {
+    display: none;
   }
 }

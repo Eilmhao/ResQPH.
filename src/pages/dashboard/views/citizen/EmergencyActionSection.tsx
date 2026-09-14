@@ -18,24 +18,19 @@ export function EmergencyActionSection({
   const isVolunteer = mode === 'volunteer'
 
   return (
-    <div className="emergency-action-container neu-white-action-card">
+    <div className="emergency-action-container">
       {/* HEADER TITLE */}
       <div className="action-header">
         <div className="action-title-group">
-          <div className="action-icon-badge red-pulse">
-            <Icon name="alert" size={20} />
+          <div className="action-icon-badge">
+            <Icon name="alert" size={18} />
           </div>
           <div>
             <h2 className="action-heading">
               {isVolunteer
-                ? 'Active Citizen SOS Signals & Hazard Center'
+                ? 'Field Missions & Hazard Center'
                 : 'Emergency Dispatch & Hazard Center'}
             </h2>
-            {!isVolunteer && (
-              <p className="action-subheading">
-                Select an option below to initiate priority response or update ground situation logs.
-              </p>
-            )}
           </div>
         </div>
       </div>
@@ -52,7 +47,7 @@ export function EmergencyActionSection({
           }}
         >
           <div className="btn-icon-wrapper white-glow">
-            <Icon name={isVolunteer ? 'map-fold' : 'shield'} size={24} />
+            <Icon name={isVolunteer ? 'map-fold' : 'shield'} size={20} />
           </div>
           <div className="btn-text-content">
             <span className="btn-title">
@@ -60,11 +55,11 @@ export function EmergencyActionSection({
             </span>
             <span className="btn-desc">
               {isVolunteer
-                ? 'Track live field units and ongoing citizen distress routes'
-                : 'Priority triage dispatch for trapped or endangered citizens'}
+                ? 'Track live response units and route advisories'
+                : 'Priority dispatch for trapped or flood-affected citizens'}
             </span>
           </div>
-          <Icon name="arrow-right" size={20} className="btn-arrow" />
+          <Icon name="arrow-right" size={16} className="btn-arrow" />
         </button>
 
         {/* SECONDARY ACTION: REPORT LOCAL HAZARD */}
@@ -77,22 +72,22 @@ export function EmergencyActionSection({
           }}
         >
           <div className="btn-icon-wrapper red-soft-bg">
-            <Icon name="pin" size={24} />
+            <Icon name="pin" size={20} />
           </div>
           <div className="btn-text-content">
             <span className="btn-title">REPORT LOCAL HAZARD</span>
-            <span className="btn-desc">Submit crowdsourced flood levels, blocked roads, or powerlines</span>
+            <span className="btn-desc">Log flood depths, blocked roads, or powerlines</span>
           </div>
-          <Icon name="arrow-right" size={20} className="btn-arrow" />
+          <Icon name="arrow-right" size={16} className="btn-arrow" />
         </button>
       </div>
 
       {/* FOOTER NOTE (CITIZEN MODE ONLY) */}
       {!isVolunteer && (
-        <div className="action-footer-note neu-red-inset-box">
+        <div className="action-footer-note">
           <div className="note-left">
-            <Icon name="clock" size={16} />
-            <span>Average Response Time: <strong>8-12 Mins (Sampaloc Zone)</strong></span>
+            <Icon name="clock" size={14} />
+            <span>Avg Response: <strong>8–12 mins (Sampaloc Zone)</strong></span>
           </div>
           <span className="live-status-pill">● Dispatchers Online</span>
         </div>

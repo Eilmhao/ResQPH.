@@ -63,235 +63,161 @@ export function VolunteerView({
   const currentEtaMinutes = activeMission?.etaMinutes || 9
 
   return (
-    <div className="resq-citizen-wrapper">
-      <main className="resq-citizen-workspace">
-        <div
-          className="citizen-dashboard"
-          style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '1.25rem' }}
-        >
-          {/* ================= 1. OVERVIEW PAGE ================= */}
-          {navSection === 'overview' && (
-            <>
-              {/* WEATHER FORECAST */}
-              <LocalizedForecastWidget />
+    <div className="resq-citizen-workspace">
+      <div className="volunteer-flow-stack" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', width: '100%' }}>
+        
+        {/* ── 1. OVERVIEW TAB ─────────────────────────────────────────── */}
+        {navSection === 'overview' && (
+          <>
+            {/* Weather Forecast */}
+            <LocalizedForecastWidget />
 
-              {/* ACTION CENTER */}
-              <EmergencyActionSection
-                mode="volunteer"
-                onRequestRescue={() => onNavigateTab?.('inquiries')}
-                onReportHazard={() => setShowHazardModal(true)}
-              />
+            {/* Emergency Actions for Volunteer */}
+            <EmergencyActionSection
+              mode="volunteer"
+              onRequestRescue={() => onNavigateTab?.('inquiries')}
+              onReportHazard={() => setShowHazardModal(true)}
+            />
 
-              {hazardSubmittedAlert && (
-                <div className="alert-banner-success" style={{ width: '100%' }}>
-                  <Icon name="check" size={18} />
-                  <span>
-                    <strong>Hazard Report Logged!</strong> Central dispatch routing maps have been updated.
+            {hazardSubmittedAlert && (
+              <div className="alert-banner-success" style={{ width: '100%' }}>
+                <Icon name="check" size={18} />
+                <span>
+                  <strong>Hazard Report Logged.</strong> Central dispatch routing maps have been updated.
+                </span>
+              </div>
+            )}
+
+            {/* Volunteer Station Card */}
+            <div className="modern-clean-card" style={{ padding: '1rem 1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ color: '#dc2626', display: 'flex', alignItems: 'center' }}>
+                  <Icon name="navigation" size={18} />
+                </span>
+                <div>
+                  <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+                    Volunteer Station: Sampaloc Zone
+                  </h3>
+                  <span className="font-mono" style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                    14.6042 N · 120.9946 E
                   </span>
                 </div>
-              )}
-
-              {/* VOLUNTEER STATION CARD */}
-              <div style={{ width: '100%' }}>
-                <div
-                  className="neu-red-action-card"
-                  style={{
-                    width: '100%',
-                    padding: '1.5rem',
-                    borderRadius: '24px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '1.25rem',
-                  }}
-                >
-                  <div
-                    className="neu-red-card"
-                    style={{
-                      padding: '1rem 1.25rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      flexWrap: 'wrap',
-                      gap: '1rem',
-                      borderRadius: '18px',
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <div
-                        style={{
-                          background: 'rgba(255, 255, 255, 0.15)',
-                          padding: '10px',
-                          borderRadius: '12px',
-                          color: '#ffffff',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <Icon name="navigation" size={20} />
-                      </div>
-                      <div>
-                        <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff', margin: 0 }}>
-                          Volunteer Station: Sampaloc Zone
-                        </h3>
-                        <span
-                          className="font-mono"
-                          style={{ fontSize: '0.8rem', color: 'rgba(255, 255, 255, 0.8)', fontWeight: 600 }}
-                        >
-                          14.6042 N · 120.9946 E
-                        </span>
-                      </div>
-                    </div>
-
-                    <div
-                      style={{
-                        padding: '0.4rem 0.85rem',
-                        background: 'rgba(22, 163, 74, 0.2)',
-                        border: '1px solid rgba(22, 163, 74, 0.4)',
-                        borderRadius: '20px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                      }}
-                    >
-                      <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#4ade80' }} />
-                      <span
-                        style={{
-                          fontSize: '0.75rem',
-                          fontWeight: 800,
-                          color: '#4ade80',
-                          textTransform: 'uppercase',
-                        }}
-                      >
-                        Field Active
-                      </span>
-                    </div>
-                  </div>
-                </div>
               </div>
-            </>
-          )}
 
-          {/* ================= 2. TRACK SOS PAGE ================= */}
-          {navSection === 'inquiries' && (
-            <div style={{ width: '100%' }}>
-              <div
-                className="neu-red-action-card"
-                style={{
-                  width: '100%',
-                  padding: '1.5rem',
-                  borderRadius: '24px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1rem',
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '0.5rem' }}>
-                  <div
-                    style={{
-                      background: 'rgba(138, 3, 3, 0.1)',
-                      padding: '10px',
-                      borderRadius: '12px',
-                      color: '#8A0303',
-                    }}
-                  >
-                    <Icon name="alert" size={22} />
-                  </div>
-                  <div>
-                    <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#8A0303', margin: 0 }}>
-                      Active Citizen SOS Signals
-                    </h2>
-                    <p style={{ fontSize: '0.85rem', color: '#64748b', margin: 0 }}>
-                      Live telemetry for verified citizen distress calls in Sampaloc.
-                    </p>
-                  </div>
-                </div>
+              <div style={{ padding: '3px 9px', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#16a34a' }} />
+                <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#16a34a', textTransform: 'uppercase' }}>Field Active</span>
+              </div>
+            </div>
+          </>
+        )}
 
-                {activeReq ? (
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
-                    <div className="neu-red-card" style={{ padding: '1rem', borderRadius: '16px' }}>
-                      <span style={{ display: 'block', fontSize: '0.72rem', fontWeight: 800, color: '#fca5a5', textTransform: 'uppercase' }}>Target Location</span>
-                      <strong style={{ fontSize: '0.95rem', color: '#ffffff' }}>{activeReq.location.address}</strong>
+        {/* ── 2. TRACK SOS TAB ────────────────────────────────────────── */}
+        {navSection === 'inquiries' && (
+          <div style={{ width: '100%' }}>
+            <Section
+              title="Active Citizen SOS Signals"
+              subtitle="Live telemetry for verified citizen distress calls in Sampaloc."
+            >
+              {activeReq ? (
+                <div className="modern-clean-card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+                    <div style={{ padding: '0.75rem 1rem', background: '#f8fafc', borderRadius: '8px', border: '1px solid #f1f5f9' }}>
+                      <span style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Target Location</span>
+                      <strong style={{ fontSize: '0.92rem', color: '#0f172a' }}>{activeReq.location.address}</strong>
                     </div>
 
-                    <div className="neu-red-card" style={{ padding: '1rem', borderRadius: '16px' }}>
-                      <span style={{ display: 'block', fontSize: '0.72rem', fontWeight: 800, color: '#fca5a5', textTransform: 'uppercase' }}>Occupants & Priority</span>
-                      <strong style={{ fontSize: '0.95rem', color: '#ffffff', display: 'flex', alignItems: 'center', gap: '6px', margin: '4px 0' }}>
-                        👤 {activeReq.headcount} citizens
+                    <div style={{ padding: '0.75rem 1rem', background: '#f8fafc', borderRadius: '8px', border: '1px solid #f1f5f9' }}>
+                      <span style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Occupants & Priority</span>
+                      <strong style={{ fontSize: '0.92rem', color: '#0f172a', display: 'block', margin: '2px 0 4px 0' }}>
+                        {activeReq.headcount} Persons ({activeReq.severity.toUpperCase()})
                       </strong>
                       <VulnerabilitiesBadges vulns={activeReq.vulnerabilities} />
                     </div>
                   </div>
-                ) : (
-                  <div className="neu-red-card" style={{ padding: '2rem', textAlign: 'center', borderRadius: '16px' }}>
-                    <Icon name="alert" size={36} style={{ color: '#ffffff', marginBottom: '8px' }} />
-                    <p style={{ color: '#ffffff', fontWeight: 700, margin: 0 }}>No active SOS signals recorded in this district.</p>
+
+                  {/* Route Advisory */}
+                  <div className="enroute-reroute-explanation-card">
+                    <div className="reroute-header">
+                      <span className="live-indicator-dot" />
+                      <span className="reroute-title">ACTIVE DISPATCH ADVISORY</span>
+                      <span className="reroute-source">Central Dispatch</span>
+                    </div>
+                    <p className="reroute-message">"{currentRouteExplanation}"</p>
+                    <div className="reroute-eta-row">
+                      <span>Target ETA: <strong>{currentEtaMinutes} mins</strong></span>
+                      <span>Corridor: <strong>{activeMission?.activeRouteName || 'Jhocson St. Safe Corridor'}</strong></span>
+                    </div>
                   </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* ================= 3. HAZARD MAP PAGE WITH FLOOD-AWARE RESCUE MAP ================= */}
-          {navSection === 'map' && (
-            <div style={{ width: '100%' }}>
-              <Section
-                title="Volunteer Hazard & Flood Navigation Map"
-                subtitle="Field tracking of impassable roads and active rescue watercraft."
-              >
-                <InteractiveFloodMap
-                  activeStage={activeReq ? (activeReq.status as any) : 'en-route'}
-                  showAlternatives
-                  selectedRoute="primary"
-                  routeExplanation={currentRouteExplanation}
-                  etaMinutes={currentEtaMinutes}
-                />
-                <div className="hazard-map__preparedness" style={{ marginTop: '1rem' }}>
-                  <EmergencyPreparednessGuide />
                 </div>
-              </Section>
-            </div>
-          )}
+              ) : (
+                <div className="modern-clean-card" style={{ padding: '2.5rem 1.5rem', textAlign: 'center' }}>
+                  <p style={{ color: '#64748b', fontWeight: 600, margin: 0 }}>No active SOS signals in this sector.</p>
+                </div>
+              )}
+            </Section>
+          </div>
+        )}
 
-        </div>
-      </main>
+        {/* ── 3. MAP TAB ──────────────────────────────────────────────── */}
+        {navSection === 'map' && (
+          <div style={{ width: '100%' }}>
+            <Section
+              title="Volunteer Hazard & Flood Navigation Map"
+              subtitle="Field tracking of impassable roads and active rescue watercraft."
+            >
+              <InteractiveFloodMap
+                activeStage={activeReq ? (activeReq.status as any) : 'en-route'}
+                showAlternatives
+                selectedRoute="primary"
+                routeExplanation={currentRouteExplanation}
+                etaMinutes={currentEtaMinutes}
+              />
+              <div className="hazard-map__preparedness" style={{ marginTop: '1.25rem' }}>
+                <EmergencyPreparednessGuide />
+              </div>
+            </Section>
+          </div>
+        )}
+
+      </div>
 
       {/* HAZARD REPORT MODAL */}
       <Modal
         isOpen={showHazardModal}
         onClose={() => setShowHazardModal(false)}
-        title="Submit Volunteer Hazard Report"
-        subtitle="Log local street flooding or obstacle data."
+        title="Submit Field Hazard Report"
+        subtitle="Log local street flooding or impassable obstacles."
       >
-        <form onSubmit={handleHazardSubmit} className="hazard-form">
-          <div className="field">
-            <label className="field__label">Street Name / Landmark</label>
+        <form onSubmit={handleHazardSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <label className="profile-form__field">
+            <span>Street Name / Landmark</span>
             <input
               type="text"
               required
               value={hazardLocation}
               onChange={(e) => setHazardLocation(e.target.value)}
             />
-          </div>
-          <div className="field" style={{ marginTop: 12 }}>
-            <label className="field__label">Hazard Type</label>
+          </label>
+          <label className="profile-form__field">
+            <span>Hazard Type</span>
             <select
               value={hazardType}
               onChange={(e) => setHazardType(e.target.value as any)}
-              style={{ width: '100%', padding: '0.6rem', borderRadius: 8, border: '1px solid #cbd5e1' }}
+              style={{ width: '100%', padding: '0.6rem 0.85rem', borderRadius: 8, border: '1px solid #e2e8f0', background: '#ffffff', color: '#0f172a' }}
             >
               <option value="Impassable Flood">Impassable Flood</option>
               <option value="Blocked Road">Blocked Road</option>
               <option value="Submerged Obstacle">Submerged Obstacle</option>
               <option value="Live Electrical Wire">Live Electrical Wire</option>
             </select>
-          </div>
-          <div className="modal-footer" style={{ padding: 0, marginTop: 16 }}>
+          </label>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '0.5rem' }}>
             <Button variant="ghost" type="button" onClick={() => setShowHazardModal(false)}>
               Cancel
             </Button>
             <Button variant="primary" type="submit">
-              SUBMIT FIELD REPORT
+              Submit Hazard Report
             </Button>
           </div>
         </form>

@@ -172,6 +172,7 @@ export function SignupPage() {
 
           {/* Title */}
           <div className="signup-step-header">
+            <h1 className="visually-hidden">Create an account</h1>
             <h2 className="signup-step-title">{meta.title}</h2>
             <p className="signup-step-subtitle">{meta.subtitle}</p>
           </div>
@@ -186,7 +187,7 @@ export function SignupPage() {
                     className="auth-pill-input"
                     type="text"
                     placeholder="First name"
-                    aria-label="First name"
+                    aria-label="First name / full name"
                     autoComplete="given-name"
                     autoFocus
                     value={firstName}

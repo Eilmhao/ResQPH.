@@ -115,19 +115,6 @@ export function DashboardPage() {
 
   return (
     <div className={`dash${menuOpen ? ' dash--menu-open' : ''}`}>
-      {/* SVG CLIP PATHS */}
-      <svg width="0" height="0" style={{ position: 'absolute' }}>
-        <defs>
-          <clipPath id="sidebar-wave" clipPathUnits="objectBoundingBox">
-            <path d="M 0,0 L 1,0 L 1,0.70 C 0.72,1.05 0.32,0.40 0,0.85 Z" />
-          </clipPath>
-
-          <clipPath id="header-wave" clipPathUnits="objectBoundingBox">
-            <path d="M 0,0 L 1,0 L 1,0.82 C 0.75,1.0 0.30,0.70 0,0.88 Z" />
-          </clipPath>
-        </defs>
-      </svg>
-
       {/* OVERLAY BACKDROP */}
       {menuOpen && (
         <div 
@@ -138,8 +125,8 @@ export function DashboardPage() {
       )}
 
       {/* SIDEBAR */}
-      <aside className={`dash__side neu-sidebar-white ${menuOpen ? 'is-open' : ''}`}>
-        <div className="sidebar-header-red">
+      <aside className={`dash__side modern-sidebar ${menuOpen ? 'is-open' : ''}`}>
+        <div className="sidebar-header">
           <div className="brand-wrapper">
             <div className="logo-image-container">
               <img 
@@ -148,7 +135,7 @@ export function DashboardPage() {
                 className="brand-logo-img"
               />
             </div>
-            <span className="brand-title">ResQPH Portal</span>
+            <span className="brand-title">ResQPH</span>
           </div>
 
           <button 
@@ -172,7 +159,7 @@ export function DashboardPage() {
           <nav className="sidebar-nav-list">
             <button
               type="button"
-              className={`neu-nav-item ${activeNav === 'overview' ? 'is-active' : ''}`}
+              className={`modern-nav-item ${activeNav === 'overview' ? 'is-active' : ''}`}
               onClick={() => { setActiveNav('overview'); setMenuOpen(false) }}
             >
               <Icon name="pin" size={18} />
@@ -182,20 +169,20 @@ export function DashboardPage() {
             {/* NAV ITEM: "Track SOS" FOR VOLUNTEER, "Inquiries" FOR CITIZEN */}
             <button
               type="button"
-              className={`neu-nav-item ${activeNav === 'inquiries' ? 'is-active' : ''}`}
+              className={`modern-nav-item ${activeNav === 'inquiries' ? 'is-active' : ''}`}
               onClick={() => { setActiveNav('inquiries'); setMenuOpen(false) }}
             >
               <Icon name="alert" size={18} />
               <span>{activeRole === 'volunteer' ? 'Track SOS' : 'Inquiries'}</span>
               
               {activeRole === 'volunteer' && (
-                <span className="glowing-red-dot" title="Live SOS Activity" />
+                <span className="active-red-dot" title="Live SOS Activity" />
               )}
             </button>
 
             <button
               type="button"
-              className={`neu-nav-item ${activeNav === 'map' ? 'is-active' : ''}`}
+              className={`modern-nav-item ${activeNav === 'map' ? 'is-active' : ''}`}
               onClick={() => { setActiveNav('map'); setMenuOpen(false) }}
             >
               <Icon name="shield" size={18} />
@@ -205,7 +192,7 @@ export function DashboardPage() {
         </div>
 
         <div className="sidebar-footer">
-          <button className="neu-logout-btn" type="button" onClick={handleLogout}>
+          <button className="modern-logout-btn" type="button" onClick={handleLogout}>
             <Icon name="logout" size={18} />
             <span>Sign Out</span>
           </button>
@@ -214,21 +201,30 @@ export function DashboardPage() {
 
       {/* MAIN WORKSPACE */}
       <div className="dash__main">
-        <header className="home-header-image">
+        <header className="dash-header">
           <div className="header-left">
             <button
-              className="neu-burger-white"
+              className="btn-burger"
               type="button"
               aria-label="Toggle navigation menu"
               onClick={() => setMenuOpen((prev) => !prev)}
             >
               <Icon name="menu" size={20} />
             </button>
-            <h1 className="header-page-title">Home Dashboard</h1>
+            <div className="header-title-group">
+              <span className="header-subtitle">
+                {ROLE_LABELS[user.role]} Console · Metro Manila
+              </span>
+              <h1 className="header-page-title">
+                {user.role === 'citizen' && 'Citizen Distress & Volunteer Portal'}
+                {user.role === 'rescuer' && 'Field Rescuer Mobile Guidance'}
+                {user.role === 'coordinator' && 'Disaster Response Dispatcher Oversight'}
+              </h1>
+            </div>
           </div>
 
           <div className="header-center">
-            <div className="neu-logo-badge">
+            <div className="header-brand-badge">
               <img 
                 src="/resQPHLogo.png" 
                 alt="ResQPH Logo" 
@@ -238,22 +234,25 @@ export function DashboardPage() {
           </div>
 
           <div className="header-right">
-            <button 
-              type="button" 
-              className="neu-btn-role-switch"
-              onClick={toggleRoleSwitch}
-              title="Click to toggle active role view"
-            >
-              <span className={`role-option ${activeRole === 'citizen' ? 'is-active' : 'is-inactive'}`}>
-                Citizen
-              </span>
-              <span className="role-divider">/</span>
-              <span className={`role-option ${activeRole === 'volunteer' ? 'is-active' : 'is-inactive'}`}>
-                Volunteer
-              </span>
-            </button>
+            {user.role === 'citizen' && (
+              <button 
+                type="button" 
+                className="btn-role-switch"
+                onClick={toggleRoleSwitch}
+                aria-label="Switch portal"
+                title="Switch portal view"
+              >
+                <span className={`role-option ${activeRole === 'citizen' ? 'is-active' : 'is-inactive'}`}>
+                  Citizen
+                </span>
+                <span className="role-divider">/</span>
+                <span className={`role-option ${activeRole === 'volunteer' ? 'is-active' : 'is-inactive'}`}>
+                  Volunteer
+                </span>
+              </button>
+            )}
 
-            <button className="neu-avatar-badge" type="button" onClick={openProfile} aria-label="Edit profile">
+            <button className="avatar-badge" type="button" onClick={openProfile} aria-label="Edit profile">
               {user.avatarUrl ? <img src={user.avatarUrl} alt="" /> : initials || 'RQ'}
             </button>
           </div>

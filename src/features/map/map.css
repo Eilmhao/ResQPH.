@@ -87,8 +87,8 @@
   align-items: center;
   gap: 12px;
   padding: 12px 18px;
-  background: rgb(214 40 40 / 14%);
-  border-bottom: 1px solid rgb(214 40 40 / 30%);
+  background: rgb(220 38 38 / 8%);
+  border-bottom: 1px solid rgb(220 38 38 / 20%);
   color: var(--text-primary);
   animation: fadeIn 0.2s ease-out;
 }
