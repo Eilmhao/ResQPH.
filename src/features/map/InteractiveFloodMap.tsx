@@ -23,15 +23,15 @@ const TILE_PROVIDERS = {
   },
   dark: {
     name: 'Tactical Dark OSM',
-    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors &copy; CARTO',
+    url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors',
     maxZoom: 19,
   },
   satellite: {
     name: 'Satellite View',
-    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, OpenStreetMap contributors',
-    maxZoom: 19,
+    url: 'https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+    attribution: 'Imagery &copy; Google; map data &copy; OpenStreetMap contributors',
+    maxZoom: 20,
   },
 }
 
@@ -156,7 +156,7 @@ export function InteractiveFloodMap({
     }
   }, [])
 
-  // Switch Base Tile Layer when mapLayerMode changes
+  // Switch Base Tile Layer when mapLayerMode changes & Invalidate Map Size to prevent vanishing bug
   useEffect(() => {
     const map = mapInstanceRef.current
     if (!map) return
@@ -173,6 +173,24 @@ export function InteractiveFloodMap({
       }).addTo(map)
 
       currentTileLayerRef.current = newTileLayer
+
+      newTileLayer.once('load', () => map.invalidateSize())
+      newTileLayer.once('tileerror', () => {
+        // Keep the map usable when a third-party style endpoint is unavailable.
+        if (currentTileLayerRef.current !== newTileLayer) return
+        const fallback = L.tileLayer(TILE_PROVIDERS.osm.url, {
+          attribution: TILE_PROVIDERS.osm.attribution,
+          maxZoom: TILE_PROVIDERS.osm.maxZoom,
+        }).addTo(map)
+        map.removeLayer(newTileLayer)
+        currentTileLayerRef.current = fallback
+      })
+
+      // Fix disappearing map bug by forcing tile refresh and size calculation after switching layers
+      setTimeout(() => {
+        map.invalidateSize()
+        newTileLayer.redraw()
+      }, 100)
     } catch (err) {
       console.warn('Failed to switch tile layer:', err)
     }
@@ -345,6 +363,7 @@ export function InteractiveFloodMap({
   function handleRecenter() {
     if (mapInstanceRef.current) {
       mapInstanceRef.current.setView([14.6485, 121.0860], 14)
+      mapInstanceRef.current.invalidateSize()
     }
   }
 

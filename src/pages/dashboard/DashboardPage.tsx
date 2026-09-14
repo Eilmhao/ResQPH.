@@ -36,19 +36,32 @@ export function DashboardPage() {
 
   useQuery({ queryKey: ['api-health'], queryFn: getApiHealth })
 
+  // Safely compute the view component without risking unmounted rendering crashes
   const view = useMemo(() => {
     if (user?.role === 'coordinator') {
-      return <CoordinatorView navSection={activeNav} />
+      return <CoordinatorView key="coordinator-view" navSection={activeNav} />
     }
     if (user?.role === 'rescuer') {
-      return <RescuerView navSection={activeNav} />
+      return <RescuerView key="rescuer-view" navSection={activeNav} />
     }
 
     if (activeRole === 'volunteer') {
-      return <VolunteerView navSection={activeNav} onNavigateTab={(section) => setActiveNav(section)} />
+      return (
+        <VolunteerView
+          key="volunteer-view"
+          navSection={activeNav}
+          onNavigateTab={(section) => setActiveNav(section)}
+        />
+      )
     }
 
-    return <CitizenView navSection={activeNav} onNavigateTab={(section) => setActiveNav(section)} />
+    return (
+      <CitizenView
+        key="citizen-view"
+        navSection={activeNav}
+        onNavigateTab={(section) => setActiveNav(section)}
+      />
+    )
   }, [user?.role, activeRole, activeNav])
 
   function handleLogout() {
@@ -56,8 +69,14 @@ export function DashboardPage() {
     navigate('/', { replace: true })
   }
 
-  function toggleRoleSwitch() {
-    setActiveRole((prev) => (prev === 'citizen' ? 'volunteer' : 'citizen'))
+  function handleSwitchToVolunteer() {
+    setActiveNav('overview')
+    setActiveRole('volunteer')
+  }
+
+  function handleSwitchToCitizen() {
+    setActiveNav('overview')
+    setActiveRole('citizen')
   }
 
   function openProfile() {
@@ -216,7 +235,7 @@ export function DashboardPage() {
                 {ROLE_LABELS[user.role]} Console · Metro Manila
               </span>
               <h1 className="header-page-title">
-                {user.role === 'citizen' && 'Citizen Distress & Volunteer Portal'}
+                {user.role === 'citizen' && (activeRole === 'volunteer' ? 'Volunteer Field Operations Portal' : 'Citizen Distress & Volunteer Portal')}
                 {user.role === 'rescuer' && 'Field Rescuer Mobile Guidance'}
                 {user.role === 'coordinator' && 'Disaster Response Dispatcher Oversight'}
               </h1>
@@ -235,21 +254,27 @@ export function DashboardPage() {
 
           <div className="header-right">
             {user.role === 'citizen' && (
-              <button 
-                type="button" 
-                className="btn-role-switch"
-                onClick={toggleRoleSwitch}
-                aria-label="Switch portal"
-                title="Switch portal view"
-              >
-                <span className={`role-option ${activeRole === 'citizen' ? 'is-active' : 'is-inactive'}`}>
-                  Citizen
-                </span>
+              <div className="btn-role-switch" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <button
+                  type="button"
+                  onClick={handleSwitchToCitizen}
+                  style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}
+                >
+                  <span className={`role-option ${activeRole === 'citizen' ? 'is-active' : 'is-inactive'}`}>
+                    Citizen
+                  </span>
+                </button>
                 <span className="role-divider">/</span>
-                <span className={`role-option ${activeRole === 'volunteer' ? 'is-active' : 'is-inactive'}`}>
-                  Volunteer
-                </span>
-              </button>
+                <button
+                  type="button"
+                  onClick={handleSwitchToVolunteer}
+                  style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}
+                >
+                  <span className={`role-option ${activeRole === 'volunteer' ? 'is-active' : 'is-inactive'}`}>
+                    Volunteer
+                  </span>
+                </button>
+              </div>
             )}
 
             <button className="avatar-badge" type="button" onClick={openProfile} aria-label="Edit profile">
@@ -260,7 +285,9 @@ export function DashboardPage() {
 
         <OfflineIndicator />
 
-        <main className="dash__content">{view}</main>
+        <main className="dash__content" style={{ display: 'flex', flexDirection: 'column', width: '100%', flex: 1 }}>
+          {view}
+        </main>
       </div>
 
       {/* PROFILE MODAL */}

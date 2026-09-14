@@ -207,7 +207,7 @@ export function CoordinatorView({ navSection = 'overview' }: { navSection?: NavS
       )}
 
       {/* INQUIRIES — Rescue inquiry queue & detail inspector */}
-      {activeTab === 'queue' && (
+      {activeTab === 'queue' && navSection !== 'map' && (
         <div className="dash-grid-2">
           {/* List of Requests */}
           <Section

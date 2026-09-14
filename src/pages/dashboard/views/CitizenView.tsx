@@ -86,40 +86,40 @@ export function CitizenView({
     <div className="resq-citizen-workspace">
       <div className="citizen-flow-stack" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', width: '100%' }}>
         
-        {/* Weather Forecast */}
-        <LocalizedForecastWidget />
+        {/* Weather Forecast (Only on Overview) */}
+        {navSection === 'overview' && <LocalizedForecastWidget />}
 
         {/* ── OVERVIEW TAB ─────────────────────────────────────────────── */}
         {navSection === 'overview' && (
           <div className="citizen-overview-layout" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', width: '100%' }}>
             
             {/* Location & GPS Status Bar */}
-            <div className="modern-clean-card" style={{ padding: '0.9rem 1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
+            <div className="modern-clean-card gps-status-container" style={{ padding: '0.9rem 1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ color: '#dc2626', display: 'flex', alignItems: 'center' }}>
+                <span style={{ color: '#ffffff', display: 'flex', alignItems: 'center' }}>
                   <Icon name="navigation" size={18} />
                 </span>
                 <div>
-                  <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+                  <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#ffffff', margin: 0 }}>
                     Brgy. Tumana, Marikina City
                   </h3>
-                  <span className="font-mono" style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                  <span className="font-mono" style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)' }}>
                     14.6532 N · 121.0912 E
                   </span>
                 </div>
               </div>
 
-              <div style={{ padding: '3px 9px', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <div style={{ padding: '3px 9px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#16a34a' }} />
-                <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#16a34a', textTransform: 'uppercase' }}>GPS Lock</span>
+                <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#ffffff', textTransform: 'uppercase' }}>GPS Lock</span>
               </div>
             </div>
 
-            {/* Main SOS Trigger Hero */}
-            <div className="modern-clean-card" style={{ padding: '2.5rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '1.25rem' }}>
+            {/* Rounded Square Neumorphic #040720 Emergency Hero Container */}
+            <div className="emergency-hero-circle-container">
               <div className="glowing-emergency-pill">
                 <span className="glowing-red-dot-live" />
-                <span>Emergency Channel Active</span>
+                <span style={{ color: '#ffffff' }}>Emergency Channel Active</span>
               </div>
 
               <button
@@ -128,28 +128,28 @@ export function CitizenView({
                 onClick={() => handleStartRequest('Emergency SOS')}
                 aria-label="REQUEST EMERGENCY RESCUE"
               >
-                <span style={{ fontSize: '1.85rem', fontWeight: 900, letterSpacing: '0.04em', lineHeight: 1 }}>SOS</span>
-                <span style={{ fontSize: '0.62rem', fontWeight: 700, opacity: 0.9, letterSpacing: '0.04em', marginTop: '4px' }}>DISPATCH</span>
+                <span style={{ fontSize: '1.75rem', fontWeight: 900, letterSpacing: '0.04em', lineHeight: 1, color: '#ffffff' }}>SOS</span>
+                <span style={{ fontSize: '0.6rem', fontWeight: 700, opacity: 0.95, letterSpacing: '0.04em', marginTop: '3px', color: '#ffffff' }}>DISPATCH</span>
               </button>
 
-              <p style={{ fontSize: '0.88rem', color: '#64748b', maxWidth: '380px', margin: 0 }}>
+              <p>
                 Transmits your GPS location and household details to the nearest rescue team.
               </p>
 
               <button
                 type="button"
-                style={{ background: '#ffffff', padding: '0.55rem 1.1rem', borderRadius: '8px', border: '1px solid #e2e8f0', color: '#0f172a', fontWeight: 600, fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
+                className="hotline-btn-neumorphic"
                 onClick={() => setShowHotlinesModal(true)}
               >
-                <Icon name="phone" size={14} style={{ color: '#dc2626' }} />
+                <Icon name="phone" size={13} style={{ color: '#ffffff' }} />
                 <span>Direct 911 Hotline</span>
               </button>
             </div>
 
             {/* Request Assistance Services Grid */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div className="citizen-neu-section citizen-services-section" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <h3 style={{ fontSize: '0.92rem', fontWeight: 700, color: '#0f172a', margin: 0, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                <h3 className="neu-section-title" style={{ fontSize: '0.92rem', margin: 0 }}>
                   Request Assistance
                 </h3>
                 <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 600 }}>4 Services Available</span>
@@ -159,7 +159,7 @@ export function CitizenView({
                 {[
                   { name: 'Flood Rescue', tag: 'Boat Team', icon: 'shield' },
                   { name: 'Evacuation', tag: 'Transport', icon: 'map-fold' },
-                  { name: 'Medical Aid', tag: 'First Response', icon: 'heart' },
+                  { name: 'Medical Aid', tag: 'First Response', icon: 'medical-kit' },
                   { name: 'Relief Goods', tag: 'Supplies', icon: 'package' },
                 ].map((service) => (
                   <button
@@ -169,7 +169,7 @@ export function CitizenView({
                     style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '6px', cursor: 'pointer', textAlign: 'left', background: '#ffffff' }}
                     onClick={() => handleStartRequest(service.name)}
                   >
-                    <div style={{ color: '#dc2626', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+                    <div className="citizen-service-icon" style={{ color: '#040720', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
                       <Icon name={service.icon as any} size={20} />
                     </div>
                     <strong style={{ fontSize: '0.9rem', color: '#0f172a' }}>{service.name}</strong>
@@ -180,14 +180,14 @@ export function CitizenView({
             </div>
 
             {/* Nearest Responders */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div className="citizen-neu-section citizen-responders-section" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <h3 style={{ fontSize: '0.92rem', fontWeight: 700, color: '#0f172a', margin: 0, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                <h3 className="neu-section-title" style={{ fontSize: '0.92rem', margin: 0 }}>
                   Nearest Responders
                 </h3>
                 <button
                   type="button"
-                  style={{ border: 'none', background: 'transparent', color: '#dc2626', fontWeight: 600, fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                  style={{ border: 'none', background: 'transparent', color: '#040720', fontWeight: 600, fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
                   onClick={() => onNavigateTab?.('map')}
                 >
                   <span>Hazard map</span>
@@ -202,7 +202,7 @@ export function CitizenView({
                 ].map((responder) => (
                   <div key={responder.name} className="neu-red-card" style={{ padding: '0.85rem 1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <span style={{ color: '#dc2626' }}>
+                      <span style={{ color: '#040720' }}>
                         <Icon name="map-fold" size={18} />
                       </span>
                       <div>
@@ -211,7 +211,7 @@ export function CitizenView({
                       </div>
                     </div>
 
-                    <span className="font-mono" style={{ fontSize: '0.78rem', fontWeight: 700, color: '#0f172a', background: '#f1f5f9', padding: '3px 8px', borderRadius: '6px' }}>
+                    <span className="eta-badge-neu">
                       {responder.eta}
                     </span>
                   </div>
@@ -220,12 +220,12 @@ export function CitizenView({
             </div>
 
             {/* Live Alerts */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div className="citizen-neu-section citizen-alerts-section" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <h3 style={{ fontSize: '0.92rem', fontWeight: 700, color: '#0f172a', margin: 0, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                <h3 className="neu-section-title" style={{ fontSize: '0.92rem', margin: 0 }}>
                   Live Alerts
                 </h3>
-                <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 600 }}>Auto-updating</span>
+                <span className="live-alerts-auto-text" style={{ fontSize: '0.72rem' }}>Auto-updating</span>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>

@@ -44,6 +44,7 @@ interface MissionContextValue {
   toggleOffline: () => void
   createRescueRequest: (req: Omit<RescueRequest, 'id' | 'status' | 'submittedAt'>) => RescueRequest
   updateRequestStatus: (id: string, status: RequestStatus) => void
+  cancelRescueRequest: (id: string) => void
   assignMission: (
     requestId: string,
     teamId: string,
@@ -188,6 +189,11 @@ export function MissionProvider({ children }: { children: ReactNode }) {
       if (isOffline) setPendingSyncCount((c) => c + 1)
     },
     [isOffline],
+  )
+
+  const cancelRescueRequest = useCallback(
+    (id: string) => updateRequestStatus(id, 'cancelled'),
+    [updateRequestStatus],
   )
 
   const assignMission = useCallback(
@@ -471,6 +477,7 @@ export function MissionProvider({ children }: { children: ReactNode }) {
       toggleOffline,
       createRescueRequest,
       updateRequestStatus,
+      cancelRescueRequest,
       assignMission,
       updateMissionStatus,
       overrideRoute,
@@ -495,6 +502,7 @@ export function MissionProvider({ children }: { children: ReactNode }) {
       toggleOffline,
       createRescueRequest,
       updateRequestStatus,
+      cancelRescueRequest,
       assignMission,
       updateMissionStatus,
       overrideRoute,

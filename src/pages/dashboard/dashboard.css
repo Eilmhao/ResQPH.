@@ -1,8 +1,8 @@
 /* ==========================================================================
-   ResQPH Dashboard — Modern, Clean, Intentional Field-Operations UI
+   ResQPH Dashboard — True Neumorphic Dark Theme (#040720 Base)
    ========================================================================== */
 
-/* ── 1. Shell Layout ─────────────────────────────────────────────────────── */
+/* ── 1. Shell Layout ────────────────────────────────────────────────────── */
 .dash {
   display: flex;
   width: 100vw;
@@ -68,7 +68,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #f1f5f9;
+  background: #040720;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .brand-wrapper {
@@ -85,7 +86,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   flex-shrink: 0;
 }
 
@@ -98,7 +100,7 @@
 .brand-title {
   font-size: 1.15rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #ffffff;
   letter-spacing: -0.02em;
 }
 
@@ -106,7 +108,7 @@
   background: transparent;
   border: none;
   font-size: 1rem;
-  color: #64748b;
+  color: #94a3b8;
   cursor: pointer;
   padding: 6px;
   border-radius: 6px;
@@ -114,8 +116,8 @@
 }
 
 .mobile-close-btn:hover {
-  color: #0f172a;
-  background: #f1f5f9;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-body {
@@ -243,8 +245,8 @@
 /* ── 3. Header ───────────────────────────────────────────────────────────── */
 .dash-header {
   height: 64px;
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+  background: #040720;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   padding: 0 2rem;
   display: flex;
   align-items: center;
@@ -257,50 +259,62 @@
 .header-left {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   min-width: 0;
 }
 
 .btn-burger {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 7px;
+  background: #040720;
+  border: none;
+  border-radius: 10px;
+  padding: 8px;
   cursor: pointer;
-  color: #475569;
+  color: #ffffff;
+  box-shadow: 4px 4px 10px #02030f, 
+              -4px -4px 10px #060b31;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
   flex-shrink: 0;
 }
 
 .btn-burger:hover {
-  background: #f8fafc;
-  color: #0f172a;
-  border-color: #cbd5e1;
+  box-shadow: 5px 5px 12px #02030f, 
+              -5px -5px 12px #060b31;
+}
+
+.btn-burger:active {
+  box-shadow: inset 2px 2px 5px #02030f, 
+              inset -2px -2px 5px #060b31;
 }
 
 .header-title-group {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 2px;
   min-width: 0;
+  background: #040720;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 12px;
+  box-shadow: 4px 4px 10px #02030f, 
+              -4px -4px 10px #060b31;
 }
 
 .header-subtitle {
-  font-size: 0.68rem;
-  font-weight: 600;
-  color: #64748b;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #94a3b8;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   line-height: 1.2;
 }
 
 .header-page-title {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #0f172a;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #ffffff;
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -316,11 +330,17 @@
 }
 
 .header-brand-badge {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #040720;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 4px 4px 10px #02030f, 
+              -4px -4px 10px #060b31;
+  padding: 4px;
 }
 
 .header-logo-img {
@@ -332,53 +352,60 @@
 .header-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   flex-shrink: 0;
 }
 
 .btn-role-switch {
-  background: #f8fafc;
-  padding: 5px 12px;
+  background: #040720;
+  padding: 6px 14px;
   border-radius: 20px;
-  border: 1px solid #e2e8f0;
+  border: none;
+  box-shadow: 4px 4px 10px #02030f, 
+              -4px -4px 10px #060b31;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
-  transition: all 0.15s ease;
+  gap: 8px;
+  transition: all 0.2s ease;
   user-select: none;
 }
 
 .btn-role-switch:hover {
-  border-color: #cbd5e1;
-  background: #f1f5f9;
+  box-shadow: 5px 5px 12px #02030f, 
+              -5px -5px 12px #060b31;
+}
+
+.btn-role-switch:active {
+  box-shadow: inset 2px 2px 5px #02030f, 
+              inset -2px -2px 5px #060b31;
 }
 
 .role-divider {
-  color: #cbd5e1;
+  color: rgba(255, 255, 255, 0.3);
   font-size: 0.75rem;
 }
 
 .role-option.is-active {
-  color: #dc2626;
-  font-weight: 700;
-  font-size: 0.8rem;
+  color: #ff6b6b;
+  font-weight: 800;
+  font-size: 0.82rem;
 }
 
 .role-option.is-inactive {
-  color: #64748b;
-  font-weight: 500;
-  font-size: 0.8rem;
+  color: #94a3b8;
+  font-weight: 600;
+  font-size: 0.82rem;
 }
 
 .avatar-badge {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  border: 1px solid rgba(220, 38, 38, 0.25);
-  background: rgba(220, 38, 38, 0.08);
-  color: #dc2626;
-  font-weight: 700;
+  border: none;
+  background: #040720;
+  color: #ffffff;
+  font-weight: 800;
   font-size: 0.82rem;
   cursor: pointer;
   display: flex;
@@ -386,6 +413,8 @@
   justify-content: center;
   overflow: hidden;
   flex-shrink: 0;
+  box-shadow: 4px 4px 10px #02030f, 
+              -4px -4px 10px #060b31;
   transition: transform 0.15s ease;
 }
 
@@ -400,7 +429,6 @@
 }
 
 /* ── 4. Clean Structural Cards & Action Buttons ───────────────────────────── */
-/* Clean card container without card-in-card nesting */
 .neu-red-action-card,
 .modern-clean-card {
   background: #ffffff;
@@ -408,6 +436,24 @@
   border-radius: 12px;
   color: #0f172a;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* Shared field-operations depth: raised surfaces with restrained contrast. */
+.stat-card,
+.item-card,
+.inspector-panel,
+.dispatcher-delay-updater,
+.enroute-reroute-explanation-card,
+.target-card,
+.route-card {
+  box-shadow: 5px 5px 12px rgba(148, 163, 184, 0.22), -5px -5px 12px rgba(255, 255, 255, 0.95);
+}
+
+.stat-card:hover,
+.item-card:hover,
+.route-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 7px 7px 16px rgba(148, 163, 184, 0.26), -6px -6px 14px rgba(255, 255, 255, 0.98);
 }
 
 .neu-red-card {
@@ -421,55 +467,6 @@
 .neu-red-card:hover {
   border-color: #cbd5e1;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-}
-
-/* SOS Hero Trigger */
-.sos-button-neat {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: #dc2626;
-  color: #ffffff;
-  border: 4px solid #ffffff;
-  box-shadow: 0 4px 16px rgba(220, 38, 38, 0.35);
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
-}
-
-.sos-button-neat:hover {
-  background: #b91c1c;
-  transform: scale(1.03);
-  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.45);
-}
-
-.sos-button-neat:active {
-  transform: scale(0.97);
-}
-
-.glowing-emergency-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  background: rgba(220, 38, 38, 0.08);
-  border: 1px solid rgba(220, 38, 38, 0.2);
-  color: #dc2626;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.glowing-red-dot-live {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #dc2626;
 }
 
 /* Profile form */
@@ -574,6 +571,10 @@
 
 /* ── 5. Responsive Breakpoints ───────────────────────────────────────────── */
 @media (max-width: 768px) {
+  html {
+    min-width: 0;
+  }
+
   .dash-header {
     padding: 0 1rem;
     height: 56px;
@@ -594,4 +595,547 @@
   .header-subtitle {
     display: none;
   }
+
+  .dash__main {
+    width: 100%;
+  }
+
+  .header-left {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .header-right {
+    gap: 8px;
+  }
+
+  .btn-role-switch {
+    padding: 5px 9px;
+  }
+
+  .role-option {
+    font-size: 0.74rem !important;
+  }
+
+  .emergency-hero-circle-container {
+    min-height: 390px;
+    padding: 2rem 1.25rem !important;
+    border-radius: 24px !important;
+  }
+
+  .forecast-widget {
+    padding: 1rem !important;
+    gap: 0.85rem;
+  }
+
+  .forecast-main {
+    align-items: flex-start;
+  }
+
+  .forecast-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .forecast-metric-chip {
+    min-width: 0;
+    padding: 0.5rem;
+  }
+
+  .forecast-metric-val {
+    font-size: 0.78rem;
+  }
+
+  .citizen-neu-section .neu-red-card {
+    padding: 0.85rem !important;
+  }
+
+  .medical-emergency-alert,
+  .impassable-alert-box {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .medical-emergency-alert > svg {
+    margin-bottom: 0.1rem;
+  }
+
+  .route-comparison-grid,
+  .target-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .target-card:first-child {
+    grid-column: auto;
+  }
+
+  .route-card-head,
+  .reroute-header,
+  .reroute-eta-row {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .reroute-source {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .mission-actions-bar {
+    width: 100%;
+  }
+
+  .mission-actions-bar .btn {
+    width: 100%;
+    min-height: 44px;
+    white-space: normal;
+  }
+}
+
+/* ── Custom Theme & Dark Neumorphic Additions (#040720 Backgrounds) ──────── */
+
+/* True Dark Neumorphic GPS Status Container (#040720) */
+.gps-status-container {
+  background: #040720 !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: 6px 6px 16px #02030f, 
+              -6px -6px 16px #060b31 !important;
+}
+
+.resq-citizen-workspace .gps-status-container,
+.resq-citizen-workspace .forecast-widget {
+  box-shadow: 8px 8px 18px rgba(148, 163, 184, 0.28), -8px -8px 18px rgba(255, 255, 255, 0.98) !important;
+}
+
+.resq-citizen-workspace .forecast-widget {
+  border-color: rgba(220, 38, 38, 0.18);
+}
+.gps-status-container h3,
+.gps-status-container span {
+  color: #ffffff !important;
+}
+
+/* True Dark Neumorphic Rounded Square SOS Hero Container (#040720) */
+.emergency-hero-circle-container {
+  background: #040720 !important;
+  color: #ffffff !important;
+  border-radius: 32px !important;
+  width: 100% !important;
+  max-width: 520px;
+  height: auto !important;
+  min-height: 440px;
+  margin: 0 auto;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  text-align: center !important;
+  padding: 3rem 2rem !important;
+  border: none !important;
+  box-shadow: 10px 10px 24px #02030f, 
+              -10px -10px 24px #060b31 !important;
+  box-sizing: border-box;
+  gap: 1.25rem;
+}
+
+.emergency-hero-circle-container p {
+  color: rgba(255, 255, 255, 0.75) !important;
+  font-size: 0.85rem !important;
+  max-width: 320px !important;
+  margin: 0.75rem 0 !important;
+  line-height: 1.4;
+}
+
+/* Emergency Channel Active Pill (Dark Neumorphic #040720) */
+.glowing-emergency-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 20px;
+  background: #040720 !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  box-shadow: 4px 4px 10px #02030f, -4px -4px 10px #060b31 !important;
+}
+
+@keyframes blink-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+.glowing-red-dot-live {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #2A4038 !important;
+  animation: blink-dot 1.2s infinite ease-in-out;
+}
+
+/* Concave / Convex Dark Neumorphic #950606 SOS Dispatch Button */
+.sos-button-neat {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: #950606 !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 6px 6px 14px #02030f, 
+              -6px -6px 14px #060b31, 
+              inset 3px 3px 6px rgba(0, 0, 0, 0.45) !important;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+  margin: 0.5rem 0;
+}
+
+.sos-button-neat:active {
+  transform: scale(0.96);
+  box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Direct 911 Hotline Button (Dark Neumorphic #040720) */
+.hotline-btn-neumorphic {
+  background: #040720 !important;
+  color: #ffffff !important;
+  padding: 0.5rem 1.25rem !important;
+  border-radius: 20px !important;
+  border: none !important;
+  box-shadow: 4px 4px 10px #02030f, -4px -4px 10px #060b31 !important;
+  font-weight: 700;
+  font-size: 0.78rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.hotline-btn-neumorphic:active {
+  box-shadow: inset 2px 2px 5px #02030f, inset -2px -2px 5px #060b31 !important;
+}
+
+/* Neumorphic Section Titles (#040720 with soft neumorphic depth) */
+.neu-section-title {
+  color: #040720 !important;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: #ffffff !important;
+  padding: 6px 12px;
+  border-radius: 8px;
+  box-shadow: 3px 3px 8px #cbd5e1, -3px -3px 8px #ffffff !important;
+  border: 1px solid #e2e8f0;
+  display: inline-block;
+}
+
+/* Dark Neumorphic ETA Badge Style (#040720 with matching dark neumorphic shadow) */
+.eta-badge-neu {
+  background: #040720 !important;
+  color: #ffffff !important;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: none !important;
+  box-shadow: 3px 3px 8px #02030f, -3px -3px 8px #060b31 !important;
+}
+
+.resq-citizen-workspace .eta-badge-neu {
+  box-shadow: 4px 4px 9px #cbd5e1, -4px -4px 9px #ffffff !important;
+}
+
+.citizen-neu-section > .neu-section-title {
+  align-self: flex-start;
+}
+
+.citizen-neu-section .neu-red-card {
+  box-shadow: 5px 5px 12px rgba(148, 163, 184, 0.28), -5px -5px 12px rgba(255, 255, 255, 0.98);
+  border-color: #e2e8f0;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+}
+
+.citizen-neu-section .neu-red-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(220, 38, 38, 0.3);
+  box-shadow: 7px 7px 16px rgba(148, 163, 184, 0.3), -6px -6px 14px rgba(255, 255, 255, 0.98);
+}
+
+.citizen-service-icon {
+  width: 38px;
+  height: 38px;
+  padding: 9px;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #dc2626 !important;
+  box-shadow: inset 2px 2px 5px rgba(148, 163, 184, 0.2), inset -2px -2px 5px #ffffff;
+}
+
+.citizen-responders-section .eta-badge-neu {
+  box-shadow: 3px 3px 8px #cbd5e1, -3px -3px 8px #ffffff !important;
+}
+
+.volunteer-sos-action,
+.volunteer-sos-action * {
+  color: #ffffff !important;
+}
+
+/* Rescuer mission layout */
+.rescuer-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+.rescuer-view .dash-section {
+  margin-bottom: 0.5rem;
+}
+
+.mission-actions-bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.target-details-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.medical-emergency-alert {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.8rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid #fecaca;
+  border-left: 4px solid #dc2626;
+  border-radius: 10px;
+  background: #fff7f7;
+  color: #7f1d1d;
+  box-shadow: 4px 4px 10px rgba(148, 163, 184, 0.2), -4px -4px 10px #ffffff;
+}
+
+.medical-emergency-alert > svg {
+  color: #dc2626;
+  margin-top: 0.1rem;
+}
+
+.medical-emergency-alert strong {
+  display: block;
+  color: #b91c1c;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+}
+
+.medical-emergency-alert p {
+  margin-top: 0.3rem;
+  color: #7f1d1d;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.target-details-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.target-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 1.15rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.target-card-label,
+.target-gps {
+  color: #64748b;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.target-address,
+.target-card h4 {
+  color: #0f172a;
+  font-size: 1rem;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.target-landmark,
+.target-house-desc,
+.depth-explanation {
+  color: #475569;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.target-gps {
+  margin-top: auto;
+  color: #64748b;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.headcount-hero {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.headcount-num {
+  color: #dc2626;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.headcount-label {
+  color: #64748b;
+  font-size: 0.74rem;
+}
+
+.vuln-breakdown-list {
+  min-height: 2rem;
+}
+
+.citizen-contact-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f1f5f9;
+  color: #334155;
+  font-size: 0.8rem;
+}
+
+.citizen-phone-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.flood-severity-gauge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.impassable-alert-box {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.85rem;
+  align-items: start;
+  padding: 1rem 1.15rem;
+  border: 1px solid #fed7aa;
+  border-left: 4px solid #f97316;
+  border-radius: 10px;
+  background: #fffaf5;
+}
+
+.impassable-icon {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 8px;
+  background: #ffedd5;
+  color: #ea580c;
+}
+
+.impassable-tag,
+.route-badge-recommended,
+.route-badge-alternative {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.impassable-tag { color: #c2410c; }
+.impassable-body h4 { margin: 0.25rem 0; color: #431407; font-size: 0.95rem; }
+.impassable-body p { margin: 0; color: #7c2d12; font-size: 0.8rem; line-height: 1.5; }
+
+.route-comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.route-card {
+  min-width: 0;
+  padding: 1.1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+}
+
+.route-card.is-selected { border-color: #16a34a; box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.16), 5px 5px 12px rgba(148, 163, 184, 0.22); }
+.route-card-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
+.route-badge-recommended { color: #15803d; }
+.route-badge-alternative { color: #b45309; }
+.route-score { color: #64748b; font-family: var(--font-mono); font-size: 0.7rem; }
+.route-card h4 { margin: 0.7rem 0 0.5rem; color: #0f172a; font-size: 1rem; }
+.route-metrics { display: flex; gap: 0.75rem; flex-wrap: wrap; color: #475569; font-size: 0.75rem; }
+.route-explanation { margin: 0.7rem 0 0; color: #64748b; font-size: 0.8rem; line-height: 1.5; }
+
+@media (max-width: 900px) {
+  .target-details-grid,
+  .route-comparison-grid { grid-template-columns: 1fr 1fr; }
+  .target-card:first-child { grid-column: 1 / -1; }
+}
+
+@media (max-width: 620px) {
+  .target-details-grid,
+  .route-comparison-grid { grid-template-columns: 1fr; }
+  .target-card:first-child { grid-column: auto; }
+  .mission-actions-bar { justify-content: stretch; }
+  .mission-actions-bar .btn { width: 100%; white-space: normal; }
+}
+
+/* Live Alerts Auto-updating text color */
+.live-alerts-auto-text {
+  color: #2A4038 !important;
+  font-weight: 700;
+}
+
+/* Scoped Overrides to Prevent Global Selector Bleed on Volunteer View Track SOS */
+.resq-citizen-workspace .volunteer-flow-stack [class*="modern-clean-card"]:not(.volunteer-active-missions-container) {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+.resq-citizen-workspace .volunteer-flow-stack [class*="modern-clean-card"]:not(.volunteer-active-missions-container) * {
+  color: inherit;
 }

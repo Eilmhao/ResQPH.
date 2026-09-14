@@ -266,7 +266,14 @@
   z-index: 1;
 }
 
-.leaflet-theme-dark .leaflet-tile {
+/* The global image rule collapses Leaflet's absolutely positioned tile images. */
+.flood-map-leaflet-canvas .leaflet-tile {
+  width: 256px;
+  height: 256px;
+  max-width: none;
+}
+
+.leaflet-theme-dark .leaflet-tile-pane .leaflet-tile {
   filter: brightness(0.7) invert(1) contrast(3) hue-rotate(200deg) saturate(0.35);
 }
 

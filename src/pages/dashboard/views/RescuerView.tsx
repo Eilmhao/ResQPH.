@@ -97,6 +97,24 @@ export function RescuerView(_props: { navSection?: NavSection }) {
   const alternativeRoute = mission.suggestedRoute.alternative
   const impassableRoad = mission.suggestedRoute.impassable
 
+  if (_props.navSection === 'map') {
+    return (
+      <Section
+        title="Flood-Aware Routing Oversight"
+        subtitle="Automated cost function excludes flooded streets (Loyola 1.4m) and maintains safe corridors."
+      >
+        <InteractiveFloodMap
+          activeStage={mission.status}
+          showAlternatives
+          selectedRoute={selectedRouteKey}
+          onSelectRoute={(route) => setSelectedRouteKey(route)}
+          routeExplanation={mission.routeDelayExplanation}
+          etaMinutes={mission.etaMinutes}
+        />
+      </Section>
+    )
+  }
+
   return (
     <div className="rescuer-view">
       <WeatherAlertBanner />

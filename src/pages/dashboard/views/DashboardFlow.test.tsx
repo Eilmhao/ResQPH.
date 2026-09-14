@@ -137,6 +137,14 @@ describe('Citizen / Volunteer Dashboard Flows', () => {
     expect(screen.getByText(/ACTIVE SAFE ROUTE/i)).toBeInTheDocument()
   })
 
+  it('keeps Flood-Aware Routing Oversight on the Dispatcher Hazard Map page', () => {
+    renderWithProviders(<CoordinatorView navSection="map" />, 'coordinator')
+
+    expect(screen.getByRole('heading', { name: 'Flood-Aware Routing Oversight' })).toBeInTheDocument()
+    expect(document.getElementById('openmap-hazard-map')).toBeInTheDocument()
+    expect(screen.queryByText('Citizen Rescue Inquiries')).not.toBeInTheDocument()
+  })
+
 
 
   it('opens severity-adaptive form and shows Step A triage with all 5 flood levels', () => {
@@ -227,6 +235,14 @@ describe('Field Rescuer Mobile Dashboard Flows', () => {
     // The default route delay explanation should appear
     expect(screen.getAllByText(/All possible shortcuts are flooded/i).length).toBeGreaterThanOrEqual(1)
   })
+
+  it('shows Dispatcher-style Routing Oversight on the Rescuer Hazard Map page', () => {
+    renderWithProviders(<RescuerView navSection="map" />, 'rescuer')
+
+    expect(screen.getByRole('heading', { name: 'Flood-Aware Routing Oversight' })).toBeInTheDocument()
+    expect(document.getElementById('openmap-hazard-map')).toBeInTheDocument()
+    expect(screen.queryByText(/HIGH PRIORITY MEDICAL ALERT AT TARGET/i)).not.toBeInTheDocument()
+  })
 })
 
 describe('Dispatcher / Coordinator Dashboard Flows', () => {
@@ -267,6 +283,16 @@ describe('Dashboard Prototype Controls', () => {
 
     expect(screen.getByText(/Citizen Distress & Volunteer Portal/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Switch portal/i })).toBeInTheDocument()
+  })
+
+  it('renders Volunteer View after switching portals', () => {
+    renderWithProviders(<DashboardPage />, 'citizen')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Volunteer' }))
+
+    expect(screen.getByText('Volunteer Field Operations Portal')).toBeInTheDocument()
+    expect(screen.getByText('Active Field Missions')).toBeInTheDocument()
+    expect(screen.getByText('Volunteer Field Operations')).toBeInTheDocument()
   })
 })
 

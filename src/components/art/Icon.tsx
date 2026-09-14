@@ -29,6 +29,8 @@ export type IconName =
   | 'user'
   | 'chevron-right'
   | 'medical'
+  | 'medical-kit'
+  | 'package'
   | 'refresh'
   | 'eye'
   | 'eye-off'
@@ -184,6 +186,19 @@ const paths: Record<IconName, ReactNode> = {
     <>
       <path d="M12 4v16" />
       <path d="M4 12h16" />
+    </>
+  ),
+  'medical-kit': (
+    <>
+      <rect x="3" y="7" width="18" height="13" rx="2" />
+      <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+      <path d="M12 10v6M9 13h6" />
+    </>
+  ),
+  package: (
+    <>
+      <path d="m4 7 8-4 8 4v10l-8 4-8-4z" />
+      <path d="m4 7 8 4 8-4M12 11v10" />
     </>
   ),
   refresh: (
