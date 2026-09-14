@@ -159,7 +159,7 @@
 
 .role-value {
   font-size: 0.9rem;
-  color: #8A0303;
+  color: #334155;
   font-weight: 800;
 }
 
@@ -175,37 +175,34 @@
   gap: 12px;
   padding: 0.8rem 1rem;
   border-radius: 14px;
-  border: 1px solid #ffffff;
+  border: 1px solid #f1f5f9;
   background: #ffffff;
-  color: #8A0303;
+  color: #334155;
   font-weight: 800;
   font-size: 0.9rem;
   cursor: pointer;
-  box-shadow: 6px 6px 12px #c5d0e0, 
-              -6px -6px 12px #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 }
 
 .neu-nav-item svg {
-  color: #8A0303;
+  color: #475569;
   transition: color 0.2s ease;
 }
 
 .neu-nav-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 8px 8px 16px #b8c4d6, 
-              -8px -8px 16px #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .neu-nav-item.is-active,
 .neu-nav-item:active {
-  background: #8A0303;
+  background: #1e293b;
   color: #ffffff;
   border-color: transparent;
   transform: translateY(0);
-  box-shadow: inset 4px 4px 8px #5c0202, 
-              inset -4px -4px 8px #b80404;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
 .neu-nav-item.is-active svg,
@@ -250,35 +247,32 @@
   gap: 8px;
   padding: 0.8rem 1rem;
   border-radius: 14px;
-  border: 1px solid #ffffff;
+  border: 1px solid #f1f5f9;
   background: #ffffff;
-  color: #8A0303;
+  color: #475569;
   font-weight: 800;
   font-size: 0.9rem;
   cursor: pointer;
-  box-shadow: 6px 6px 12px #c5d0e0, 
-              -6px -6px 12px #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .neu-logout-btn svg {
-  color: #8A0303;
+  color: #475569;
   transition: color 0.2s ease;
 }
 
 .neu-logout-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 8px 8px 16px #b8c4d6, 
-              -8px -8px 16px #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .neu-logout-btn:active {
-  background: #8A0303;
+  background: #1e293b;
   color: #ffffff;
   border-color: transparent;
   transform: translateY(0);
-  box-shadow: inset 4px 4px 8px #5c0202, 
-              inset -4px -4px 8px #b80404;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
 .neu-logout-btn:active svg {
@@ -315,8 +309,8 @@
   border-radius: 12px;
   padding: 0.65rem;
   cursor: pointer;
-  color: #8A0303;
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.3), inset -2px -2px 5px rgba(255,255,255,0.8);
+  color: #334155;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -402,7 +396,7 @@
 }
 
 .role-option.is-active {
-  color: #8A0303;
+  color: #1e293b;
   font-weight: 900;
   font-size: 0.88rem;
   opacity: 1;
@@ -421,10 +415,10 @@
   border-radius: 50%;
   border: 2px solid #ffffff;
   background: #ffffff;
-  color: #8A0303;
+  color: #334155;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -442,19 +436,17 @@
    4. SUNKEN RED NEUMORPHIC & SOS STYLES
    ========================================== */
 .neu-red-action-card {
-  background: #eef2f6 !important;
-  box-shadow: 10px 10px 20px rgba(163, 177, 198, 0.6), 
-              -10px -10px 20px #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  background: #ffffff !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06) !important;
+  border: 1px solid #e2e8f0 !important;
   color: #1e293b !important;
 }
 
 .neu-red-card {
-  background: #8A0303 !important;
+  background: #1e293b !important;
   color: #ffffff !important;
-  box-shadow: inset 6px 6px 12px #5c0202, 
-              inset -6px -6px 12px #b80404 !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
   transition: transform 0.2s ease;
 }
 

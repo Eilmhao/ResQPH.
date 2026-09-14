@@ -42,6 +42,11 @@
   --_amber-400:    #f59e0b;
   --_blue-400:     #60a5fa;
 
+  --_slate-600:    #475569;
+  --_slate-700:    #334155;
+  --_slate-800:    #1e293b;
+  --_slate-900:    #0f172a;
+
   /* ── Semantic: Brand ─────────────────────────────────────────────── */
   --color-brand:          var(--_red-500);
   --color-brand-hover:    var(--_red-400);
@@ -49,6 +54,13 @@
   --color-brand-subtle:   rgb(214 40 40 / 10%);
   --color-brand-border:   rgb(214 40 40 / 35%);
   --color-brand-glow:     rgb(214 40 40 / 28%);
+
+  /* ── Semantic: Neutral UI chrome (nav, labels, cards) ──────────── */
+  --color-nav:             var(--_slate-700);
+  --color-nav-active:      var(--_slate-800);
+  --color-nav-subtle:      rgb(51 65 85 / 10%);
+  --color-heading:         var(--_slate-800);
+  --surface-card:          var(--_slate-800);
 
   /* ── Semantic: Status ────────────────────────────────────────────── */
   --color-danger:          var(--_red-400);
@@ -185,12 +197,21 @@ img, svg { display: block; max-width: 100%; }
   --_green-400: #2f7d5a;
   --_amber-400: #ad6d12;
   --_blue-400: #2e6d9d;
+  --_slate-600: #475569;
+  --_slate-700: #334155;
+  --_slate-800: #1e293b;
+  --_slate-900: #0f172a;
   --color-brand: var(--_red-500);
   --color-brand-hover: var(--_red-600);
   --color-brand-deep: var(--_red-700);
   --color-brand-subtle: rgb(201 54 45 / 9%);
   --color-brand-border: rgb(201 54 45 / 26%);
   --color-brand-glow: rgb(201 54 45 / 18%);
+  --color-nav: var(--_slate-700);
+  --color-nav-active: var(--_slate-800);
+  --color-nav-subtle: rgb(51 65 85 / 8%);
+  --color-heading: var(--_slate-800);
+  --surface-card: var(--_slate-800);
   --color-danger: var(--_red-500);
   --color-danger-text: var(--_red-700);
   --color-danger-surface: rgb(201 54 45 / 9%);
